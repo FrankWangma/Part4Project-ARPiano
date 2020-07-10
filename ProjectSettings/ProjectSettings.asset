@@ -566,7 +566,8 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: ZED_STEAM_VR;ZED_SVR_2_0_INPUT;ZED_OPENCV_FOR_UNITY
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

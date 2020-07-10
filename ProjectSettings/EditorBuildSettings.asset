@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Broken scenes (on purpose)/LoadScore.unity
+    guid: 8fddc40b24f5449e29a10f11adae4f60
+  - enabled: 1
+    path: Assets/Scenes/Broken scenes (on purpose)/DrawScore.unity
+    guid: 8c927fccddb1d438e93d8e33e347a4d5
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 9e0c431a545f1c040b36beb727b206e4,
       type: 2}

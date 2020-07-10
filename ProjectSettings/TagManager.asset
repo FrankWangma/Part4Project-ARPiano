@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - HelpObject
+  - FxTemporaire
+  - zomBunny
+  - ZedCamera
   layers:
   - Default
   - TransparentFX
@@ -21,6 +25,7 @@ TagManager:
   - 
   - 
   - 
+  - tagInvisibleToZED
   - 
   - 
   - 
@@ -34,8 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - arlayer
   - 
   m_SortingLayers:
   - name: Default
