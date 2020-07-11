@@ -10,6 +10,7 @@ namespace control
     public class CanvasControl : MonoBehaviour
     {
         private CommonParams _commonParams = CommonParams.GetInstance();
+        private GameObject parentObject;
 
         public GameObject _canvasScore;
         public GameObject _loadScore;
@@ -17,10 +18,12 @@ namespace control
         // Use this for initialization
         private void Start()
         {
-//        DrawScore("Assets/Materials/example.xml");
+            //        DrawScore("Assets/Materials/example.xml");
             string scoreName = _commonParams.GetScoreName();
-	        DrawScore(scoreName);
-//            DrawScore("Assets/Materials/MusicXml/印第安鼓.xml");
+            parentObject = GameObject.Find("Canvas_Score");
+            DrawScore(scoreName);
+
+            //            DrawScore("Assets/Materials/MusicXml/印第安鼓.xml");
         }
 
         // Update is called once per frame
@@ -28,6 +31,23 @@ namespace control
         {
 
         }
+
+        private void OnDisable()
+        {
+            foreach (Transform child in parentObject.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+
+        private void OnEnable()
+        {
+            string scoreName = _commonParams.GetScoreName();
+            parentObject = GameObject.Find("Canvas_Score");
+            DrawScore(scoreName);
+        }
+
+
 
         private void DrawScore(string filename)
         {
@@ -37,9 +57,8 @@ namespace control
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
             List<List<Measure>> scoreList = scoreGenerator.Generate(xmlFacade.GetMeasureList(), Screen.width - 67);
-
+            Debug.Log(filename);
             // 准备绘制乐谱对象及其他参数
-            GameObject parentObject = GameObject.Find("Canvas_Score");
             List<float> screenSize = new List<float>();
             screenSize.Add(Screen.width);
             screenSize.Add(Screen.height);
