@@ -31,6 +31,7 @@ namespace symbol
         private void Init()
         {
             OnDraw();
+            changeChildren(_parentObject.transform);
         }
 
         private void OnDraw()
@@ -55,8 +56,7 @@ namespace symbol
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
                 //rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
-                //rect.position = new Vector3(paragraphPosition.x, paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i, paragraphPosition.z);
-
+                rect.position = new Vector3(rect.position.x - 10.75f, rect.position.y - 2 * i, rect.position.z);
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图
                 ParagraphView para = new ParagraphView(_scoreList[i], paragraphObject);
@@ -81,7 +81,7 @@ namespace symbol
             textObject.transform.SetParent(_parentObject.transform);
             RectTransform rect = textObject.GetComponent<RectTransform>();
             //rect.sizeDelta = new Vector2(500, 100);
-            //rect.position = new Vector3(position.x, position.y, 0);
+            rect.position = new Vector3(rect.position.x, rect.position.y + 6f, 0);
             rect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             Text objectText = textObject.GetComponent<Text>();
             objectText.fontSize = fontSize;
@@ -127,6 +127,22 @@ namespace symbol
             {
                 Application.Quit();
             });
+        }
+
+        private void changeChildren(Transform parent) 
+        {
+            if (parent.childCount != 0)
+            {
+                foreach(Transform child in parent.transform)
+                {
+                    Debug.Log(child.name.StartsWith("Prefab_Text"));
+                    if(!(child.name.StartsWith("Prefab_Text") || child.name.StartsWith("Prefab_FileButton")))
+                    {
+                        child.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    }
+                    changeChildren(child);
+                }
+            }
         }
     }
 }
