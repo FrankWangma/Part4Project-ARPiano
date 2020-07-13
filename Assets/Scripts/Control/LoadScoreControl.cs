@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿                    using System.IO;
 using util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +19,7 @@ namespace control
         private void Awake()
         {
             // 初始化一些参数
+            //Create the prefabs from the already defined resources in the file structure
             _prefabSymbol = (GameObject)Resources.Load("Prefabs/Prefab_Symbol");
             _prefabText = (GameObject)Resources.Load("Prefabs/Prefab_Text");
             _prefabLine = (GameObject)Resources.Load("Prefabs/Prefab_Line");
@@ -49,14 +50,21 @@ namespace control
 
         private void LoadScore()
         {
-            // 获取Canvas
+            // Find the canvas we want to load the menu on
             GameObject canvasObject = GameObject.Find("Canvas_Menu");
+            RectTransform rt = (RectTransform)canvasObject.transform;
+            float width = rt.rect.width;
+            float height = rt.rect.height;
+            Debug.Log(width);
+            Debug.Log(height);
 
             // 遍历musicxml目录里的所有xml文件
+            // Get the XML file?
             DirectoryInfo xmlFolder = new DirectoryInfo(_commonParams.GetXmlFolderPath());
 
             int xmlFileCount = 0;
-            Vector3 buttonPosition = new Vector3(Screen.width/2, Screen.height - 100, 0);
+            //Vector3 newButtonPosition = new Vector3(width/2, height/2, 0);
+            //Vector3 buttonPosition = new Vector3(Screen.width/2, Screen.height - 100, 0);
             foreach (FileInfo xmlFile in xmlFolder.GetFiles())
             {
                 if (xmlFile.Extension == ".xml")
@@ -73,10 +81,10 @@ namespace control
                     buttonObject.name = buttonName;
                     buttonObject.transform.SetParent(canvasObject.transform);
                     RectTransform rect = buttonObject.GetComponent<RectTransform>();
+                    buttonObject.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
                     // 设置位置为以画布左下角为坐标原点
-                    rect.position = new Vector3(buttonPosition.x,
-                        buttonPosition.y - 50 * xmlFileCount,
-                        buttonPosition.z);
+                    //Move the button down with each xml file 
+                    rect.position = new Vector3(rect.position.x, rect.position.y - (1 * xmlFileCount) + 7, rect.position.z);
                     Text btnText = buttonObject.GetComponentInChildren<Text>();
                     btnText.text = xmlFile.Name.Replace(xmlFile.Extension, ""); // 设置button显示文字为去掉扩展名的文件名
 

@@ -59,8 +59,7 @@ namespace symbol
                 string objName = "Set" + (i + 1);
                 GameObject setObject = new GameObject(objName);
                 setObject.transform.SetParent(_parentObject.transform);
-                setObject.transform.localPosition = new Vector3(setPosition.x + setLength * i + shift,
-                    setPosition.y, setPosition.z);
+                //setObject.transform.localPosition = new Vector3(setPosition.x + setLength * i + shift, setPosition.y, setPosition.z);
 
                 // 将Set对象赋为下一层的父对象
                 // 绘制Set视图

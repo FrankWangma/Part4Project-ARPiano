@@ -54,14 +54,12 @@ namespace symbol
                 paragraphCanvas.transform.SetParent(_parentObject.transform);
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
-                rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.position = new Vector3(paragraphPosition.x,
-                    paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i,
-                    paragraphPosition.z);
+                //rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
+                //rect.position = new Vector3(paragraphPosition.x, paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i, paragraphPosition.z);
 
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图
-                ParagraphView paragraphView = new ParagraphView(_scoreList[i], paragraphObject);
+                ParagraphView para = new ParagraphView(_scoreList[i], paragraphObject);
             }
         }
 
@@ -82,8 +80,9 @@ namespace symbol
                 _commonParams.GetPrefabText().transform.rotation);
             textObject.transform.SetParent(_parentObject.transform);
             RectTransform rect = textObject.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(500, 100);
-            rect.position = new Vector3(position.x, position.y, 0);
+            //rect.sizeDelta = new Vector2(500, 100);
+            //rect.position = new Vector3(position.x, position.y, 0);
+            rect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             Text objectText = textObject.GetComponent<Text>();
             objectText.fontSize = fontSize;
             objectText.text = text;
@@ -97,8 +96,10 @@ namespace symbol
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             backButtonObject.transform.SetParent(_parentObject.transform);
             RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
-            backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
-            backRect.sizeDelta = new Vector2(50, 30);
+            //backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
+            //backRect.sizeDelta = new Vector2(50, 30);
+            backRect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            backRect.position = new Vector3(backRect.position.x - 10, backRect.position.y + 6, backRect.position.z);
             Text backText = backButtonObject.GetComponentInChildren<Text>();
             backText.text = "Back";
             Button backButton = backButtonObject.GetComponent<Button>();
@@ -115,8 +116,10 @@ namespace symbol
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             exitButtonObject.transform.SetParent(_parentObject.transform);
             RectTransform exitRect = exitButtonObject.GetComponent<RectTransform>();
-            exitRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
-            exitRect.sizeDelta = new Vector2(50, 30);
+            //exitRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
+            //exitRect.sizeDelta = new Vector2(50, 30);
+            exitRect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            exitRect.position = new Vector3(exitRect.position.x + 10, exitRect.position.y + 6, exitRect.position.z);
             Text exitText = exitButtonObject.GetComponentInChildren<Text>();
             exitText.text = "Exit";
             Button exitButton = exitButtonObject.GetComponent<Button>();
