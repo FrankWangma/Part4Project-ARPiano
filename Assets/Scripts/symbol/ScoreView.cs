@@ -82,7 +82,6 @@ namespace symbol
             RectTransform rect = textObject.GetComponent<RectTransform>();
             //rect.sizeDelta = new Vector2(500, 100);
             rect.position = new Vector3(rect.position.x, rect.position.y + 6f, 0);
-            rect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             Text objectText = textObject.GetComponent<Text>();
             objectText.fontSize = fontSize;
             objectText.text = text;
@@ -91,6 +90,7 @@ namespace symbol
         // 放置两个button按钮作为返回上一个场景，以及退出
         private void PlaceButton()
         {
+         
             // 返回按钮
             GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
@@ -98,10 +98,10 @@ namespace symbol
             RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
             //backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
             //backRect.sizeDelta = new Vector2(50, 30);
-            backRect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            backRect.position = new Vector3(backRect.position.x - 10, backRect.position.y + 6, backRect.position.z);
+            backRect.position = new Vector3(backRect.position.x + 0.15f, backRect.position.y + 0.08f, backRect.position.z);
             Text backText = backButtonObject.GetComponentInChildren<Text>();
             backText.text = "Back";
+            backButtonObject.transform.eulerAngles = new Vector3(0,180,0);
             Button backButton = backButtonObject.GetComponent<Button>();
             backButton.onClick.AddListener(delegate
             {
@@ -118,10 +118,10 @@ namespace symbol
             RectTransform exitRect = exitButtonObject.GetComponent<RectTransform>();
             //exitRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
             //exitRect.sizeDelta = new Vector2(50, 30);
-            exitRect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            exitRect.position = new Vector3(exitRect.position.x + 10, exitRect.position.y + 6, exitRect.position.z);
+            exitRect.position = new Vector3(exitRect.position.x - 0.15f, exitRect.position.y + 0.08f, exitRect.position.z);
             Text exitText = exitButtonObject.GetComponentInChildren<Text>();
             exitText.text = "Exit";
+            exitButtonObject.transform.eulerAngles = new Vector3(0, 180, 0);
             Button exitButton = exitButtonObject.GetComponent<Button>();
             exitButton.onClick.AddListener(delegate
             {
@@ -135,11 +135,7 @@ namespace symbol
             {
                 foreach(Transform child in parent.transform)
                 {
-                    Debug.Log(child.name.StartsWith("Prefab_Text"));
-                    if(!(child.name.StartsWith("Prefab_Text") || child.name.StartsWith("Prefab_FileButton")))
-                    {
-                        child.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    }
+                    child.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                     changeChildren(child);
                 }
             }
