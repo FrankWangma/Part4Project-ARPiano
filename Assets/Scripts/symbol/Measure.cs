@@ -19,6 +19,10 @@ namespace symbol
             _measureSymbolList = measureSymbolList;
         }
 
+        //Method to set the measure symbol list
+        //Used to dynamically change the measure
+        public void SetMeasureSymbolList(List<List<List<Symbol>>> measureSymbolList) { _measureSymbolList = measureSymbolList; }
+
         public List<List<List<Symbol>>> GetMeasureSymbolList() { return _measureSymbolList; }
 
         public bool HasHead() { return _hasHead; }

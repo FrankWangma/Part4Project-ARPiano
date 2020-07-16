@@ -60,7 +60,8 @@ namespace symbol
                     paragraphPosition.z);
 
                 // 将paragraph画布对象赋为下一层的父对象
-                // 绘制每一行的视图
+                // 绘制每一行的视图'
+                Debug.Log(_scoreList.Count);
                 ParagraphView paragraphView = new ParagraphView(_scoreList[i], paragraphObject);
             }
         }

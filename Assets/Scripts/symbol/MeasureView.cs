@@ -26,6 +26,14 @@ namespace symbol
             OnDraw();
         }
 
+        //Method to modify a measure
+        public void ModifyMeasure(Measure measure, GameObject parentObject)
+        {
+            _measure = measure;
+            _parentObject = parentObject;
+            OnDraw();
+        }
+
         private void OnDraw()
         {
             // 绘制小节的五线谱

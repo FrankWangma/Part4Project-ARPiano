@@ -35,7 +35,9 @@ namespace symbol
 
                 // 将Measure对象对象赋为下一层的父对象
                 // 绘制Measure视图
+                Debug.Log("Paragraph" + _paragraphList.Count);
                 MeasureView measureView = new MeasureView(_paragraphList[i], measureObject);
+                measureView.ModifyMeasure(_paragraphList[i], measureObject);
 
                 // 调整下一个小节的起始横坐标
                 measurePosition.x += _paragraphList[i].GetMeasureLength();
