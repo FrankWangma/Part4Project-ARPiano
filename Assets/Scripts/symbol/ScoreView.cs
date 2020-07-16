@@ -55,8 +55,8 @@ namespace symbol
                 paragraphCanvas.transform.SetParent(_parentObject.transform);
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
-                //rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.position = new Vector3(rect.position.x - 10.75f, rect.position.y - 2 * i, rect.position.z);
+                rect.anchorMin = Vector2.zero; rect.anchorMax = new Vector2(1.0f, 1.0f); rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition3D = new Vector3(rect.anchoredPosition3D.x, rect.anchoredPosition3D.y, 0);
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图
                 ParagraphView para = new ParagraphView(_scoreList[i], paragraphObject);
@@ -81,7 +81,7 @@ namespace symbol
             textObject.transform.SetParent(_parentObject.transform);
             RectTransform rect = textObject.GetComponent<RectTransform>();
             //rect.sizeDelta = new Vector2(500, 100);
-            rect.position = new Vector3(rect.position.x, rect.position.y + 6f, 0);
+            rect.position = new Vector3(rect.position.x, rect.position.y, rect.position.z);
             Text objectText = textObject.GetComponent<Text>();
             objectText.fontSize = fontSize;
             objectText.text = text;
