@@ -60,6 +60,8 @@ namespace symbol
                 setLength /= _measure.GetMeasureSymbolList().Count;
             }
 
+            Debug.Log("Measure SymbolList " + _measure.GetMeasureSymbolList().Count);
+
             // 遍历一个小节中的所有组队，绘制每个组队
             for (int i = 0; i < _measure.GetMeasureSymbolList().Count; i++)
             {
@@ -72,6 +74,7 @@ namespace symbol
 
                 // 将Set对象赋为下一层的父对象
                 // 绘制Set视图
+                //SetView setView = new SetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
                 SetView setView = new SetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
             }
         }

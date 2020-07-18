@@ -31,6 +31,10 @@ namespace symbol
 
         private void OnDraw()
         {
+            Debug.Log("Set List" + _setList.Count);
+            Debug.Log("HighSymbolList " + _highSymbolList.Count);
+            Debug.Log("LowSymbolList " + _lowSymbolList.Count);
+
             Vector3 notePosition = Vector3.zero;
             float noteLength = _setLength;
             int maxCount = Math.Max(_highSymbolList.Count, _lowSymbolList.Count);

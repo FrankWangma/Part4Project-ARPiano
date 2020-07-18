@@ -11,6 +11,7 @@ namespace symbol
         protected int Dot;      //  附点
         protected int SymbolWidth;  //  符号视图宽度
         protected bool isChord;  //  是否是和弦
+        protected bool isHigh; //Checks if the symbol is high or low
         protected SymbolView symbolView;
 
         public int GetDuration() { return Duration; }
@@ -38,6 +39,10 @@ namespace symbol
         public bool IsChord() { return isChord; }
 
         public void SetChord(bool chord) { isChord = chord; }
+
+        public bool IsHigh() { return isHigh;  }
+
+        public void SetHigh(bool high) { isHigh = high; }
 
         public void ChangeColor(Color color) { GetSymbolView().SetColor(color); }
 
