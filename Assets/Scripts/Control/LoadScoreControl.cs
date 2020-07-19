@@ -95,6 +95,8 @@ namespace control
                     });
                 }
             }
+
+            //add new button here
         }
     }
 }

@@ -107,6 +107,8 @@ namespace xmlParser
                                 _isChord = true; break;
                         }
                     }
+                    //EndElement is returned when xml reader gets to the end of an element, therefore, when it is just
+                    //Element the xmlreader continues reading
                     else if (xmlReader.NodeType == XmlNodeType.EndElement)
                     {
                         if (xmlReader.Name.Equals("time"))
@@ -234,6 +236,7 @@ namespace xmlParser
                             _measureList.Add(measure);
 
                             // 将相应List清零，下一个小节再重新赋值
+                            //Clear measure list and get ready for next section
                             _highSymbolMeasure = new List<Symbol>();
                             _lowSymbolMeasure = new List<Symbol>();
                             _measureSymbolList = new List<List<List<Symbol>>>();

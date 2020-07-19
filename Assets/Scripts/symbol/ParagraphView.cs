@@ -8,6 +8,9 @@ namespace symbol
         private List<Measure> _paragraphList;
         private GameObject _parentObject;
 
+        //Test to add a single symbol
+        private Symbol _symbol;
+
         public ParagraphView(List<Measure> paragraphList, GameObject parentObject)
         {
             _paragraphList = paragraphList;
@@ -42,6 +45,7 @@ namespace symbol
 
                 Measure myMeasure = _paragraphList[i];
                 List<List<List<Symbol>>> myMeasureSymbolList = myMeasure.GetMeasureSymbolList();
+                
 
                 //measureView.ModifyMeasure(myMeasure, measureObject);
 
