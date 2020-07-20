@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using symbol;
 using util;
+using UnityEngine;
 
 namespace xmlParser
 {
@@ -15,6 +16,7 @@ namespace xmlParser
         private string _filename; //  musicXML document content
         private string _workTitle = ""; //  Title of work
         private string _creator = ""; 
+        //256 default?
         private string _divisions = ""; 
         private string _fifths = ""; 
         private string _beats = ""; 
@@ -22,10 +24,15 @@ namespace xmlParser
         private string _clef = "";
         private string _sign = "";
         private string _line = "";
+        //The note (E.g. a C, or D)
         private string _step = ""; 
+        //The octave the note is on
         private string _octave = ""; 
+        //256 equals a quarter
         private string _duration = "";
+        //quarter, half, whole
         private string _type = "";
+        //Sharp, flats, etc
         private string _accidental = "";
         private string _staff = ""; 
         private string _stem = ""; 
@@ -78,18 +85,18 @@ namespace xmlParser
                         {
                             case "work-title": _workTitle = xmlReader.ReadString(); break;
                             case "creator": _creator = xmlReader.ReadString(); break;
-                            case "divisions": _divisions = xmlReader.ReadString(); break;
+                            case "divisions": _divisions = xmlReader.ReadString(); Debug.Log("Divisions " + _divisions); break;
                             case "fifths": _fifths = xmlReader.ReadString(); break;
                             case "beats": _beats = xmlReader.ReadString(); break;
                             case "beat-type": _beatType = xmlReader.ReadString(); break;
                             case "clef": _clef = xmlReader.GetAttribute("number"); break;
                             case "sign": _sign = xmlReader.ReadString(); break;
                             case "line": _line = xmlReader.ReadString(); break;
-                            case "step": _step = xmlReader.ReadString(); break;
-                            case "octave": _octave = xmlReader.ReadString(); break;
-                            case "duration": _duration = xmlReader.ReadString(); break;
-                            case "type": _type = xmlReader.ReadString(); break;
-                            case "accidental": _accidental = xmlReader.ReadString(); break;
+                            case "step": _step = xmlReader.ReadString(); Debug.Log("Step " + _step); break;
+                            case "octave": _octave = xmlReader.ReadString(); Debug.Log("Octave " + _octave); break;
+                            case "duration": _duration = xmlReader.ReadString(); Debug.Log("Duration " + _duration);break;
+                            case "type": _type = xmlReader.ReadString(); Debug.Log("Type " + _type);break;
+                            case "accidental": _accidental = xmlReader.ReadString();Debug.Log("Accidental " + _accidental); break;
                             case "staff": _staff = xmlReader.ReadString(); break;
                             case "stem": _stem = xmlReader.ReadString(); break;
                             case "beam":
@@ -151,12 +158,14 @@ namespace xmlParser
                         if (xmlReader.Name.Equals("note"))
                         {
                             //  音符，包括音符及休止符
+                            //Debug.Log("If divisions " + _divisions);
                             _symbol.SetDuration(_divisions, _duration);
                             _symbol.SetType(_type);
 
                             bool isNote = _symbol is Note;
                             if (isNote)
                             {
+                                Debug.Log("If acccidental " + _accidental);
                                 ((Note) _symbol).SetAccidental(_accidental);
                                 _accidental = "";
                                 if (_stem.Equals("up")) ((Note) _symbol).SetUpOrDown(true);

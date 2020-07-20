@@ -15,6 +15,8 @@ namespace control
         private GameObject _prefabFileButton;
         public GameObject _canvasScore;
         public GameObject _loadScore;
+        //Test canvas to show dynamically changing template. Merge with _canvasScore later for overlay
+        public GameObject _testCanvas;
 
         private void Awake()
         {
@@ -56,16 +58,17 @@ namespace control
             DirectoryInfo xmlFolder = new DirectoryInfo(_commonParams.GetXmlFolderPath());
 
             int xmlFileCount = 0;
-            Vector3 buttonPosition = new Vector3(Screen.width/2, Screen.height - 100, 0);
+            Vector3 buttonPosition = new Vector3(Screen.width / 2, Screen.height - 100, 0);
             foreach (FileInfo xmlFile in xmlFolder.GetFiles())
             {
                 if (xmlFile.Extension == ".xml")
                 {
-                    xmlFileCount += 1;
-                    if (xmlFileCount >= 10) //TODO 设置一页最长放置个数，后续完善成滚动加载
+                    if (xmlFileCount >= 9) //TODO If theres too many button, not all buttons show
                     {
                         break;
                     }
+
+                    xmlFileCount += 1;
 
                     string buttonName = "Button" + xmlFileCount;
                     GameObject buttonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
@@ -84,19 +87,34 @@ namespace control
                     button.onClick.AddListener(delegate
                     {
                         _commonParams.SetScoreName(xmlFile.FullName);
-
-                        //Alternates setting which canvas is active
-                        //BUG if u select a song and go back and select a new song. it shows the OLD song
                         _canvasScore.SetActive(true);
                         _loadScore.SetActive(false);
-                        // 设置要加载的xml文件名
-                        //SceneManager.LoadScene("DrawScore", LoadSceneMode.Additive);
-                        //SceneManager.UnloadSceneAsync("LoadScore");
                     });
                 }
             }
 
             //add new button here
+            ///Increment the button so it is positioned correclty
+            xmlFileCount += 1;
+            GameObject blankButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
+                canvasObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            blankButtonObject.name = "Button" + xmlFileCount;
+            blankButtonObject.transform.SetParent(canvasObject.transform);
+            RectTransform blankRect = blankButtonObject.GetComponent<RectTransform>();
+            // 设置位置为以画布左下角为坐标原点
+            blankRect.position = new Vector3(buttonPosition.x,
+                buttonPosition.y - 50 * xmlFileCount,
+                buttonPosition.z);
+
+            Text blankBtnText = blankButtonObject.GetComponentInChildren<Text>();
+            blankBtnText.text = "Blank Button";
+
+            Button blankButton = blankButtonObject.GetComponent<Button>();
+            blankButton.onClick.AddListener(delegate
+            {
+                _testCanvas.SetActive(true);
+                _loadScore.SetActive(false);
+            });
         }
     }
 }

@@ -3,10 +3,11 @@ using util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using symbol;
 
-namespace symbol
+namespace overlay
 {
-    public class ScoreView
+    public class OverlayScoreView
     {
         private List<List<Measure>> _scoreList;
         private GameObject _parentObject;
@@ -16,8 +17,14 @@ namespace symbol
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject _canvasScore;
         private GameObject _loadScore;
+        private OverlayParagraph _overlayParagraph;
+        private OverlayMaster _overlayMaster = OverlayMaster.GetInstance();
 
-        public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
+        //testing purposes
+        private Symbol _symbol;
+        private int position = 0;
+
+        public OverlayScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
         {
             _parentObject = parentObject;
             _scoreList = scoreList;
@@ -30,6 +37,12 @@ namespace symbol
 
         private void Init()
         {
+            //_symbol =new Note("D", "5");
+            _symbol =new Note("D", "4");
+            _symbol.SetChord(false);
+            _symbol.SetDuration("256", "256");
+            _symbol.SetType("quarter");
+            //((Note) _symbol).SetUpOrDown(false);
             OnDraw();
         }
 
@@ -61,9 +74,10 @@ namespace symbol
 
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图'
-                Debug.Log("ScoreList" + _scoreList.Count);
-                ParagraphView paragraphView = new ParagraphView(_scoreList[i], paragraphObject);
+                //Debug.Log("ScoreList" + _scoreList.Count);
+               _overlayParagraph = new OverlayParagraph(_scoreList[i], paragraphObject);
             }
+            _overlayMaster.SetScoreView(this);
         }
 
         // 绘制乐谱信息
@@ -94,10 +108,10 @@ namespace symbol
         private void PlaceButton()
         {
             // 返回按钮
-            //Not working?
             GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             backButtonObject.transform.SetParent(_parentObject.transform);
+
             RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
             backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
             backRect.sizeDelta = new Vector2(50, 30);
@@ -125,6 +139,22 @@ namespace symbol
             exitButton.onClick.AddListener(delegate
             {
                 Application.Quit();
+            });
+
+            //Button to create single note
+            GameObject noteButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
+                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            noteButtonObject.transform.SetParent(_parentObject.transform);
+            RectTransform noteRect = noteButtonObject.GetComponent<RectTransform>();
+            noteRect.position = new Vector3(_screenSize[0]/2, _screenSize[1] - 500, 0);
+            noteRect.sizeDelta = new Vector2(50, 30);
+            Text noteText = noteButtonObject.GetComponentInChildren<Text>();
+            noteText.text = "Add Note";
+            Button noteButton = noteButtonObject.GetComponent<Button>();
+            noteButton.onClick.AddListener(delegate
+            {
+                _overlayMaster.ModifySetView(position, _symbol, true);
+                position++;
             });
         }
     }
