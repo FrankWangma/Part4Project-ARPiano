@@ -137,7 +137,9 @@ namespace symbol
                 foreach(Transform child in parent.transform)
                 {
                     child.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    child.transform.eulerAngles = new Vector3(0, 180, 0);
+                    Vector3 rot = new Vector3(0, 180, 0);
+                    child.transform.rotation = Quaternion.Euler(rot);
+
                     changeChildren(child);
                 }
             }
