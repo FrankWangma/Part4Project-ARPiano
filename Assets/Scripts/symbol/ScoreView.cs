@@ -57,10 +57,13 @@ namespace symbol
                 // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = new Vector2(0.5f, 0.5f); rect.anchorMax = new Vector2(0.5f, 0.5f); rect.pivot = new Vector2(0.0f, 0.0f);
                 rect.anchoredPosition3D = new Vector3(700, i * -150 + 100, 0);
+                // Change Rotations
                 rect.localEulerAngles = new Vector3(0,180,0);
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图
                 ParagraphView para = new ParagraphView(_scoreList[i], paragraphObject);
+
+                // Used to make sure children of the Paragraph object are not rotated whatsoever
                 foreach(Transform child in paragraphObject.transform)
                 {
                     child.transform.localEulerAngles = new Vector3(0,0,0);
@@ -87,6 +90,7 @@ namespace symbol
             RectTransform rect = textObject.GetComponent<RectTransform>();
             //rect.sizeDelta = new Vector2(500, 100);
             rect.anchoredPosition3D = new Vector3(800,700, 0);
+            // Change Rotations
             textObject.transform.localEulerAngles = new Vector3(0,180,0);
 
             Text objectText = textObject.GetComponent<Text>();
@@ -108,6 +112,7 @@ namespace symbol
             backRect.anchoredPosition3D = new Vector3(1100, 700, 0);
             Text backText = backButtonObject.GetComponentInChildren<Text>();
             backText.text = "Back";
+            // Change Rotations
             backButtonObject.transform.localEulerAngles = new Vector3(0,180,0);
             Button backButton = backButtonObject.GetComponent<Button>();
             backButton.onClick.AddListener(delegate
@@ -128,6 +133,7 @@ namespace symbol
             exitRect.anchoredPosition3D = new Vector3(400, 700, 0);
             Text exitText = exitButtonObject.GetComponentInChildren<Text>();
             exitText.text = "Exit";
+            // Change Rotations
             exitButtonObject.transform.localEulerAngles = new Vector3(0,180,0);
             Button exitButton = exitButtonObject.GetComponent<Button>();
             exitButton.onClick.AddListener(delegate
