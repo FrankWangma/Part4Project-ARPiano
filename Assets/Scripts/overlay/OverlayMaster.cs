@@ -31,23 +31,22 @@ namespace overlay
 
         public OverlayMeasure GetMeasure(int i) { return _overlayMeasures[i]; }
 
-        public void ModifySetView(int position, Symbol symbol, Boolean upper){
-            symbol.SetStartTime(0);
-            symbol.SetStopTime(symbol.GetDuration());
+        public void ModifySetView(int position, Symbol symbol, Boolean upper, int startTime){
+            //hard coded
+            symbol.SetStartTime(8);
+
+            Debug.Log("start " + startTime);
+            Debug.Log("position" + position);
+
             symbol = SetShift((Note) symbol);
             List<List<Symbol>> setList = _overlaySetViews[position].GetSetList();
-            Debug.Log("total size " + setList.Count);
             if (upper){
                 setList[0].Add(symbol);
-                Debug.Log("upper " + setList[0].Count);
             } 
             else
             {
                 setList[1].Add(symbol);
-                Debug.Log("lower " + setList[1].Count);
             }
-            Debug.Log("high measure size " + setList[0].Count);
-            Debug.Log("low measure size " + setList[1].Count);
             _overlaySetViews[position].ModifySetView(setList);
         }
 

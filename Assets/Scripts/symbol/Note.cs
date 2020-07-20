@@ -23,6 +23,10 @@ namespace symbol
             _octave = octave;
         }
 
+        public void SetStep(string step) { _step = step;  }
+
+        public void SetOctave(string octave) { _octave = octave;  }
+
         public string GetStep() { return _step; }
 
         public string GetOctave() { return _octave; }

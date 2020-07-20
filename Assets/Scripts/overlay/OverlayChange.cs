@@ -4,18 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using MidiJack;
+using symbol;
 
 namespace overlay
 {
     public class OverlayChange : MonoBehaviour
     {
         //Gets note text object from canvas
-        public GameObject note;
+        //public GameObject note;
+
+        //Get overlay master
+        private OverlayMaster _overlayMaster = OverlayMaster.GetInstance();
+
+        private Symbol _symbol;
+        private int position = 0;
+        private int startTime = 8;
 
         // Start is called before the first frame update
         void Start()
         {
-
+            _symbol = new Note("D", "4");
+            _symbol.SetChord(false);
+            _symbol.SetDuration("256", "256");
+            _symbol.SetType("quarter");
+            ((Note)_symbol).SetUpOrDown(true);
         }
 
         int noteStatus;
@@ -25,14 +37,14 @@ namespace overlay
         int release = 128;
         int press = 144;
         //HashSet to keep track of current notes pressed
-        //HashSet<int> notesPressed = new HashSet<int>();
+        HashSet<int> notesPressed = new HashSet<int>();
 
         // Update is called once per frame
         void Update()
         {
             //HashSet to keep track of current notes pressed    
             //Reset the list each time
-            HashSet<int> notesPressed = new HashSet<int>();
+            //HashSet<int> notesPressed = new HashSet<int>();
 
             //Get queue of notes played
             Queue<MidiJack.MidiMessage> myQueue = MidiDriver.Instance.History;
@@ -52,14 +64,15 @@ namespace overlay
                 //Otherwise, if it detects the note is released, then remove the note from the hashset
                 if (noteStatus == press)
                 {
+                    if (!notesPressed.Contains(noteNumber))
+                    {
+                        updateSheetMusic(noteNumber);
+                    }
                     notesPressed.Add(noteNumber);
                 }
-
-                //Only update the symbol list if there a new notes pressed
-                if (notesPressed.Count == 0)
+                else if (noteStatus == release)
                 {
-                    //Update display to show current notes pressed
-                    ChangeText(notesPressed);
+                    notesPressed.Remove(noteNumber);
                 }
             }
         }
@@ -69,7 +82,7 @@ namespace overlay
         {
             if (notes.Count == 0)
             {
-                note.GetComponent<TextMeshProUGUI>().text = "0";
+                //note.GetComponent<TextMeshProUGUI>().text = "0";
             }
             else
             {
@@ -79,15 +92,38 @@ namespace overlay
 
                     notesPlaying += " " + note.ToString();
                 }
-                note.GetComponent<TextMeshProUGUI>().text = notesPlaying;
+                //note.GetComponent<TextMeshProUGUI>().text = notesPlaying;
             }
 
         }
 
         //Method to update the setview list
-        public void updateSheetMusic()
+        public void updateSheetMusic(int noteNumber)
         {
+ 
+            Debug.Log("note " + noteNumber);
+            int octave = (noteNumber - 12) / 12;
+            int stepNum = noteNumber - 12 - (octave * 12);
+            string step = "";
 
+            switch (stepNum)
+            {
+                case 0: step = "C"; break;
+                case 2: step = "D"; break;
+                case 4: step = "E"; break;
+                case 5: step = "F"; break;
+                case 7: step = "G"; break;
+                case 9: step = "A"; break;
+                case 11: step = "B"; break;
+            }
+            Debug.Log("stempnum " + stepNum);
+            Debug.Log("Octave" + octave);
+            Debug.Log("Step " + step);
+
+            ((Note) _symbol).SetOctave(octave.ToString());
+            ((Note)_symbol).SetStep(step);
+            _overlayMaster.ModifySetView(position, _symbol, true, startTime);
+            position++;
         }
     }
 }

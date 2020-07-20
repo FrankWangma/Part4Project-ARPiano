@@ -23,6 +23,7 @@ namespace overlay
         //testing purposes
         private Symbol _symbol;
         private int position = 0;
+        private int startTime = 8;
 
         public OverlayScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
         {
@@ -153,8 +154,14 @@ namespace overlay
             Button noteButton = noteButtonObject.GetComponent<Button>();
             noteButton.onClick.AddListener(delegate
             {
-                _overlayMaster.ModifySetView(position, _symbol, true);
-                position++;
+                _overlayMaster.ModifySetView(position, _symbol, true, startTime);
+                //position++;
+                //startTime = startTime + 8;
+                //if (startTime >= 64)
+                //{
+                //    position++;
+                //    startTime = 0;
+                //}
             });
         }
     }

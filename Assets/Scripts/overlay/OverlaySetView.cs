@@ -67,7 +67,10 @@ namespace overlay
                 // 将Set对象赋为下一层的父对象
                 if (_highSymbolList[i] is Note)
                 {
-                    NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
+                    //NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
+                    //temp fix
+                    Debug.Log("PARAM " + _paramsGetter.GetSymbolStart());
+                    NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _highSymbolList[i].GetStartTime(), highNoteObj);
                     _highSymbolList[i].SetSymbolView(noteView);
                 }
                 else if (_highSymbolList[i] is Rest)
