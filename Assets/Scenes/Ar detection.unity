@@ -565,7 +565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   markerID: 0
-  disableWhenNotSeen: 0
+  disableWhenNotSeen: 1
   missedFramesUntilDisabled: 3
   smoothedFrames: 4
 --- !u!4 &711591022
