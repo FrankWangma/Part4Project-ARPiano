@@ -55,8 +55,6 @@ namespace control
             RectTransform rt = (RectTransform)canvasObject.transform;
             float width = rt.rect.width;
             float height = rt.rect.height;
-            Debug.Log(width);
-            Debug.Log(height);
 
             // 遍历musicxml目录里的所有xml文件
             // Get the XML file?
@@ -88,9 +86,7 @@ namespace control
                     rect.position = new Vector3(rect.position.x, rect.position.y - (0.02f * xmlFileCount) + 0.1f, rect.position.z);
                     Text btnText = buttonObject.GetComponentInChildren<Text>();
                     btnText.text = xmlFile.Name.Replace(xmlFile.Extension, ""); // 设置button显示文字为去掉扩展名的文件名
-
-                    _canvasScore.SetActive(true);
-                    _loadScore.SetActive(false);
+                    
                     Button button = buttonObject.GetComponent<Button>();
                     button.onClick.AddListener(delegate
                     {
