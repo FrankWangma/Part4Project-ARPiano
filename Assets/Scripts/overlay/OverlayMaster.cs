@@ -54,7 +54,7 @@ namespace overlay
          private Note SetShift(Note note)
         {
             ParamsGetter paramsGetter = ParamsGetter.GetInstance();
-            int shift = -(GetDigitizedPitch("E", "4") - GetDigitizedPitch(note.GetStep(), note.GetOctave())) *
+            int shift = -(GetDigitizedPitch("B", "4") - GetDigitizedPitch(note.GetStep(), note.GetOctave())) *
                         paramsGetter.GetPitchPositionDiff();
             note.SetShift(shift);
             return note;

@@ -42,7 +42,7 @@ namespace overlay
             _symbol.SetChord(false);
             _symbol.SetDuration("256", "256");
             _symbol.SetType("quarter");
-            //((Note) _symbol).SetUpOrDown(false);
+            ((Note) _symbol).SetUpOrDown(true);
             OnDraw();
         }
 
