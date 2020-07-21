@@ -31,6 +31,7 @@ namespace symbol
         private void Init()
         {
             OnDraw();
+            changeChildren(_parentObject.transform);
         }
 
         private void OnDraw()
@@ -54,12 +55,19 @@ namespace symbol
                 paragraphCanvas.transform.SetParent(_parentObject.transform);
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
-                //rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
-                //rect.position = new Vector3(paragraphPosition.x, paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i, paragraphPosition.z);
-
+                rect.anchorMin = new Vector2(0.5f, 0.5f); rect.anchorMax = new Vector2(0.5f, 0.5f); rect.pivot = new Vector2(0.0f, 0.0f);
+                rect.anchoredPosition3D = new Vector3(700, i * -150 + 100, 0);
+                // Change Rotations
+                rect.localEulerAngles = new Vector3(0,180,0);
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图
                 ParagraphView para = new ParagraphView(_scoreList[i], paragraphObject);
+
+                // Used to make sure children of the Paragraph object are not rotated whatsoever
+                foreach(Transform child in paragraphObject.transform)
+                {
+                    child.transform.localEulerAngles = new Vector3(0,0,0);
+                }
             }
         }
 
@@ -81,8 +89,10 @@ namespace symbol
             textObject.transform.SetParent(_parentObject.transform);
             RectTransform rect = textObject.GetComponent<RectTransform>();
             //rect.sizeDelta = new Vector2(500, 100);
-            //rect.position = new Vector3(position.x, position.y, 0);
-            rect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            rect.anchoredPosition3D = new Vector3(800,700, 0);
+            // Change Rotations
+            textObject.transform.localEulerAngles = new Vector3(0,180,0);
+
             Text objectText = textObject.GetComponent<Text>();
             objectText.fontSize = fontSize;
             objectText.text = text;
@@ -91,6 +101,7 @@ namespace symbol
         // 放置两个button按钮作为返回上一个场景，以及退出
         private void PlaceButton()
         {
+         
             // 返回按钮
             GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
@@ -98,10 +109,11 @@ namespace symbol
             RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
             //backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
             //backRect.sizeDelta = new Vector2(50, 30);
-            backRect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            backRect.position = new Vector3(backRect.position.x - 10, backRect.position.y + 6, backRect.position.z);
+            backRect.anchoredPosition3D = new Vector3(1100, 700, 0);
             Text backText = backButtonObject.GetComponentInChildren<Text>();
             backText.text = "Back";
+            // Change Rotations
+            backButtonObject.transform.localEulerAngles = new Vector3(0,180,0);
             Button backButton = backButtonObject.GetComponent<Button>();
             backButton.onClick.AddListener(delegate
             {
@@ -118,15 +130,29 @@ namespace symbol
             RectTransform exitRect = exitButtonObject.GetComponent<RectTransform>();
             //exitRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
             //exitRect.sizeDelta = new Vector2(50, 30);
-            exitRect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            exitRect.position = new Vector3(exitRect.position.x + 10, exitRect.position.y + 6, exitRect.position.z);
+            exitRect.anchoredPosition3D = new Vector3(400, 700, 0);
             Text exitText = exitButtonObject.GetComponentInChildren<Text>();
             exitText.text = "Exit";
+            // Change Rotations
+            exitButtonObject.transform.localEulerAngles = new Vector3(0,180,0);
             Button exitButton = exitButtonObject.GetComponent<Button>();
             exitButton.onClick.AddListener(delegate
             {
                 Application.Quit();
             });
+        }
+
+        private void changeChildren(Transform parent) 
+        {
+            if (parent.childCount != 0)
+            {
+                foreach(Transform child in parent.transform)
+                {
+                    child.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+                    changeChildren(child);
+                }
+            }
         }
     }
 }

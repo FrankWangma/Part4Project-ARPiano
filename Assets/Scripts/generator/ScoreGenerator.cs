@@ -33,7 +33,7 @@ namespace generator
                 }
 
                 List<Measure> paragraphList = new List<Measure>(); // 一行
-                int measureRest = scoreWidth;
+                int measureRest = scoreWidth - 1000;
                 for (int j = i; j < i + 4 && j < measureList.Count; j++)
                 {
                     if (measureList[j].HasHead()) // 去掉谱号长度

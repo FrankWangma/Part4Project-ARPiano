@@ -30,12 +30,13 @@ namespace symbol
                 string objName = "Measure" + (i + 1);
                 GameObject measureObject = new GameObject(objName);
                 measureObject.transform.SetParent(_parentObject.transform);
-                //measureObject.transform.localPosition = new Vector3(measurePosition.x, measurePosition.y, measurePosition.z);
+                measureObject.transform.localPosition = new Vector3(measurePosition.x, measurePosition.y, measurePosition.z);
 
                 // 将Measure对象对象赋为下一层的父对象
                 // 绘制Measure视图
                 MeasureView measureView = new MeasureView(_paragraphList[i], measureObject);
 
+                
                 // 调整下一个小节的起始横坐标
                 measurePosition.x += _paragraphList[i].GetMeasureLength();
             }

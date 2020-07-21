@@ -55,8 +55,6 @@ namespace control
             RectTransform rt = (RectTransform)canvasObject.transform;
             float width = rt.rect.width;
             float height = rt.rect.height;
-            Debug.Log(width);
-            Debug.Log(height);
 
             // 遍历musicxml目录里的所有xml文件
             // Get the XML file?
@@ -79,15 +77,16 @@ namespace control
                     GameObject buttonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                         canvasObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
                     buttonObject.name = buttonName;
-                    buttonObject.transform.SetParent(canvasObject.transform);
+                    buttonObject.transform.SetParent(canvasObject.transform); 
                     RectTransform rect = buttonObject.GetComponent<RectTransform>();
-                    buttonObject.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                    buttonObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    buttonObject.transform.eulerAngles = new Vector3(0,180,0);
                     // 设置位置为以画布左下角为坐标原点
                     //Move the button down with each xml file 
-                    rect.position = new Vector3(rect.position.x, rect.position.y - (1 * xmlFileCount) + 7, rect.position.z);
+                    rect.position = new Vector3(rect.position.x, rect.position.y - (0.02f * xmlFileCount) + 0.1f, rect.position.z);
                     Text btnText = buttonObject.GetComponentInChildren<Text>();
                     btnText.text = xmlFile.Name.Replace(xmlFile.Extension, ""); // 设置button显示文字为去掉扩展名的文件名
-
+                    
                     Button button = buttonObject.GetComponent<Button>();
                     button.onClick.AddListener(delegate
                     {

@@ -70,6 +70,7 @@ public class MarkerObject_MoveToMarker : MarkerObject
 
         rotationStack.Push(worldrotation);
         transform.rotation = GetAverageRotation();
+        disableWhenNotSeen = false;
     }
 
     public override void MarkerNotDetected()
