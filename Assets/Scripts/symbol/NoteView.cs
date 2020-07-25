@@ -28,6 +28,7 @@ namespace symbol
         protected override void OnDraw()
         {
             // 绘制定位线
+            //This if statement isn't entered
             if (Cursor)
             {
                 int tempStart = Start - 2 + Num * _note.GetSymbolWidth();
@@ -48,17 +49,21 @@ namespace symbol
                 DrawPoint(Start + ParamsGetter.GetDotePosition(), yPosition);
             }
 
-            if (Type == 1) // 全音符
+            if (Type == 1) // Whole Note
             {
                 DrawSymbol("\uE12B", Start, yPosition);
                 if (_note.HasChord()) DrawChord();
             }
             else
             {
-                if (Type == 2) // 二分之一音符
+                if (Type == 2) // Half Note
+                {
                     DrawSymbol("\uE12C", Start, yPosition);
+                }
                 else // 其余的所有
+                {
                     DrawSymbol("\uE12D", Start, yPosition);
+                }
 
                 if (_note.IsUpOrDown())
                 {

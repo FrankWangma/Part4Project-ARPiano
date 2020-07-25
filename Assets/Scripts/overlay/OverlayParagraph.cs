@@ -8,10 +8,10 @@ namespace overlay
     {
         private List<Measure> _paragraphList;
         private GameObject _parentObject;
-        private List<OverlayMeasure> _overlayMeasures = new List<OverlayMeasure>();
 
         //Test to add a single symbol
         private Symbol _symbol;
+        private OverlayMaster _overlayMaster = OverlayMaster.GetInstance();
 
         public OverlayParagraph(List<Measure> paragraphList, GameObject parentObject)
         {
@@ -44,18 +44,26 @@ namespace overlay
                 //Create blank measures
                 List<List<List<Symbol>>> symbolList = _paragraphList[i].GetMeasureSymbolList();
 
-                foreach (List<List<Symbol>> measure in symbolList){
-                    for(int j = 0 ; j < measure.Count; j++){
+                Debug.Log("Before " + symbolList.Count);
+
+                foreach (List<List<Symbol>> measure in symbolList)
+                {
+                    for (int j = 0; j < measure.Count; j++)
+                    {
                         measure[j] = new List<Symbol>();
                     }
                 }
 
+                Debug.Log("After " + symbolList.Count);
+                Debug.Log("Paragraph count " + _paragraphList.Count);
                 _paragraphList[i].SetMeasureSymbolList(symbolList);
+
+                float noteLength = _overlayMaster.GetScoreSetView(_overlayMaster.GetGlobalMeasure()).GetNoteLength();
+                _overlayMaster.incrementGlobalMeasure();
 
                 // 将Measure对象对象赋为下一层的父对象
                 // 绘制Measure视图
-                OverlayMeasure measureView = new OverlayMeasure(_paragraphList[i], measureObject);
-                _overlayMeasures.Add(measureView);
+                OverlayMeasure measureView = new OverlayMeasure(_paragraphList[i], measureObject, noteLength);
 
                 // 调整下一个小节的起始横坐标
                 measurePosition.x += _paragraphList[i].GetMeasureLength();

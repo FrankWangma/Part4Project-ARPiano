@@ -13,6 +13,8 @@ namespace symbol
         private GameObject _parentObject;
         private float _setLength;
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
+        private float _noteLength;
+        private int _maxCount;
 
         public SetView(List<List<Symbol>> setList, GameObject parentObject, float setLength)
         {
@@ -36,33 +38,38 @@ namespace symbol
             Debug.Log("LowSymbolList " + _lowSymbolList.Count);
 
             Vector3 notePosition = Vector3.zero;
-            float noteLength = _setLength;
-            int maxCount = Math.Max(_highSymbolList.Count, _lowSymbolList.Count);
+            _noteLength = _setLength;
+            _maxCount = Math.Max(_highSymbolList.Count, _lowSymbolList.Count);
             if (_setList.Count != 0)
             {
-                noteLength = _setLength / maxCount;
+                //Note length dynamically changes based on number of notes in a measure
+                _noteLength = _setLength / _maxCount;
             }
+
+            Debug.Log("Note Length " + _noteLength);
 
             for (int i = 0; i < _highSymbolList.Count; i++)
             {
-                // 新建HighNote对象作为目录
+                //新建HighNote对象作为目录
                 string objName = "HighNote" + (i + 1);
                 GameObject highNoteObj = new GameObject(objName);
                 highNoteObj.transform.SetParent(_parentObject.transform);
                 highNoteObj.transform.localPosition = new Vector3(
-                    notePosition.x + _paramsGetter.GetBeatWidth() + noteLength * i,
+                    notePosition.x + _paramsGetter.GetBeatWidth() + _noteLength * i,
                     notePosition.y + _paramsGetter.GetTotalHeight(),
                     notePosition.z);
+
+                Debug.Log("Noteposition " + notePosition.x);
 
                 // 将Set对象赋为下一层的父对象
                 if (_highSymbolList[i] is Note)
                 {
-                    NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
+                    NoteView noteView = new NoteView(_highSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
                     _highSymbolList[i].SetSymbolView(noteView);
                 }
                 else if (_highSymbolList[i] is Rest)
                 {
-                    RestView restView = new RestView(_highSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
+                    RestView restView = new RestView(_highSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
                     _highSymbolList[i].SetSymbolView(restView);
                 }
             }
@@ -73,22 +80,25 @@ namespace symbol
                 GameObject lowNoteObj = new GameObject(objName);
                 lowNoteObj.transform.SetParent(_parentObject.transform);
                 lowNoteObj.transform.localPosition = new Vector3(
-                    notePosition.x + _paramsGetter.GetBeatWidth() + noteLength * i,
+                    notePosition.x + _paramsGetter.GetBeatWidth() + _noteLength * i,
                     notePosition.y,
                     notePosition.z);
 
                 // 将Set对象赋为下一层的父对象
                 if (_lowSymbolList[i] is Note)
                 {
-                    NoteView noteView = new NoteView(_lowSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);
+                    NoteView noteView = new NoteView(_lowSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);
                     _lowSymbolList[i].SetSymbolView(noteView);
                 }
                 else if (_lowSymbolList[i] is Rest)
                 {
-                    RestView restView = new RestView(_lowSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);
+                    RestView restView = new RestView(_lowSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);
                     _lowSymbolList[i].SetSymbolView(restView);
                 }
             }
         }
+
+        public float GetNoteLength() { return _noteLength; }
+        public int GetMaxCount() { return _maxCount; }
     }
 }

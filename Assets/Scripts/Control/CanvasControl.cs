@@ -11,11 +11,12 @@ namespace control
     {
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject parentObject;
+        private GameObject _overlayObject;
 
         public GameObject _canvasScore;
         public GameObject _loadScore;
 
-        
+
 
         // Called when the object is disabled 
         private void OnDisable()
@@ -54,12 +55,13 @@ namespace control
             scoreInfo.Add(xmlFacade.GetCreator()); // 1
 
             // 绘制乐谱视图
-            ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore);
 
+
+            ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore);
             // 更改乐符颜色
-//        Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
-//        SymbolControl symbolControl = new SymbolControl(symbol);
-//        symbolControl.SetColor(Color.red);
+            //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
+            //    SymbolControl symbolControl = new SymbolControl(symbol);
+            //    symbolControl.SetColor(Color.red);
         }
     }
 }

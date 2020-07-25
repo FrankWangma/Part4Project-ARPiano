@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using util;
 using UnityEngine;
 using UnityEngine.UI;
+using overlay;
 
 namespace symbol
 {
@@ -13,6 +14,7 @@ namespace symbol
         private GameObject _measureLines;
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private CommonParams _commonParams = CommonParams.GetInstance();
+        private OverlayMaster _overlayMaster = OverlayMaster.GetInstance();
 
         public MeasureView(Measure measure, GameObject parentObject)
         {
@@ -60,7 +62,7 @@ namespace symbol
                 setLength /= _measure.GetMeasureSymbolList().Count;
             }
 
-            Debug.Log("Measure SymbolList " + _measure.GetMeasureSymbolList().Count);
+            Debug.Log("Measure Set length " + setLength);
 
             // 遍历一个小节中的所有组队，绘制每个组队
             for (int i = 0; i < _measure.GetMeasureSymbolList().Count; i++)
@@ -72,10 +74,13 @@ namespace symbol
                 setObject.transform.localPosition = new Vector3(setPosition.x + setLength * i + shift,
                     setPosition.y, setPosition.z);
 
+                Debug.Log("Measure Symbol count " + _measure.GetMeasureSymbolList().Count);
+
                 // 将Set对象赋为下一层的父对象
                 // 绘制Set视图
                 //SetView setView = new SetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
                 SetView setView = new SetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
+                _overlayMaster.AddScoreSetView(setView);
             }
         }
 
@@ -102,7 +107,7 @@ namespace symbol
             {
                 // 竖线的纵坐标起点为五条横线的最下面一条线的纵坐标
                 float startY = _paramsGetter.GetTotalHeight() + _paramsGetter.GetStaffCenterPosition() - 2 * _paramsGetter.GetUnit();
-                float stopY = _paramsGetter.GetTotalHeight()+ _paramsGetter.GetStaffCenterPosition() + 2 * _paramsGetter.GetUnit();
+                float stopY = _paramsGetter.GetTotalHeight() + _paramsGetter.GetStaffCenterPosition() + 2 * _paramsGetter.GetUnit();
                 // 设置线段宽高，竖线，宽度为1，高度五线谱高度
                 DrawLine(measureLength * i, startY, measureLength * i, stopY);
             }

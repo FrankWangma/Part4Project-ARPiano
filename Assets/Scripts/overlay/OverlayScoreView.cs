@@ -12,7 +12,6 @@ namespace overlay
         private List<List<Measure>> _scoreList;
         private GameObject _parentObject;
         private List<float> _screenSize;
-        private List<string> _scoreInfo;
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject _canvasScore;
@@ -25,12 +24,11 @@ namespace overlay
         private int position = 0;
         private int startTime = 8;
 
-        public OverlayScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
+        public OverlayScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, GameObject canvasScore, GameObject loadScore)
         {
             _parentObject = parentObject;
             _scoreList = scoreList;
             _screenSize = screenSize;
-            _scoreInfo = scoreInfo;
             _canvasScore = canvasScore;
             _loadScore = loadScore;
             Init();
@@ -38,12 +36,6 @@ namespace overlay
 
         private void Init()
         {
-            //_symbol =new Note("D", "5");
-            _symbol =new Note("D", "4");
-            _symbol.SetChord(false);
-            _symbol.SetDuration("256", "256");
-            _symbol.SetType("quarter");
-            ((Note) _symbol).SetUpOrDown(true);
             OnDraw();
         }
 
@@ -51,8 +43,6 @@ namespace overlay
         {
             // 放置两个按钮
             PlaceButton();
-            // 绘制乐谱信息
-            DrawScoreInfo();
 
             // 绘制乐谱内容
             float startX = 67f / 2;
@@ -76,33 +66,9 @@ namespace overlay
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图'
                 //Debug.Log("ScoreList" + _scoreList.Count);
-               _overlayParagraph = new OverlayParagraph(_scoreList[i], paragraphObject);
+                _overlayParagraph = new OverlayParagraph(_scoreList[i], paragraphObject);
             }
             _overlayMaster.SetScoreView(this);
-        }
-
-        // 绘制乐谱信息
-        private void DrawScoreInfo()
-        {
-            Vector2 worktitlePosition = new Vector2(_screenSize[0] / 2, _screenSize[1] - 50);
-            Vector2 creatorPosition = new Vector2(_screenSize[0] - 50, _screenSize[1] - 75);
-
-            DrawText(_scoreInfo[0], worktitlePosition, 30);
-            DrawText(_scoreInfo[1], creatorPosition, 10);
-        }
-
-        private void DrawText(string text, Vector2 position, int fontSize)
-        {
-            GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText(),
-                _parentObject.transform.position,
-                _commonParams.GetPrefabText().transform.rotation);
-            textObject.transform.SetParent(_parentObject.transform);
-            RectTransform rect = textObject.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(500, 100);
-            rect.position = new Vector3(position.x, position.y, 0);
-            Text objectText = textObject.GetComponent<Text>();
-            objectText.fontSize = fontSize;
-            objectText.text = text;
         }
 
         // 放置两个button按钮作为返回上一个场景，以及退出
@@ -147,13 +113,18 @@ namespace overlay
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             noteButtonObject.transform.SetParent(_parentObject.transform);
             RectTransform noteRect = noteButtonObject.GetComponent<RectTransform>();
-            noteRect.position = new Vector3(_screenSize[0]/2, _screenSize[1] - 500, 0);
+            noteRect.position = new Vector3(_screenSize[0] / 2, _screenSize[1] - 500, 0);
             noteRect.sizeDelta = new Vector2(50, 30);
             Text noteText = noteButtonObject.GetComponentInChildren<Text>();
             noteText.text = "Add Note";
             Button noteButton = noteButtonObject.GetComponent<Button>();
             noteButton.onClick.AddListener(delegate
             {
+                _symbol = new Note("D", "4");
+                _symbol.SetChord(false);
+                _symbol.SetDuration("256", "256");
+                _symbol.SetType("quarter");
+                ((Note)_symbol).SetUpOrDown(true);
                 _overlayMaster.ModifySetView(position, _symbol, true, startTime);
                 //position++;
                 //startTime = startTime + 8;

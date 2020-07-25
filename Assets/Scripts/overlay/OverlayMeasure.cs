@@ -16,25 +16,20 @@ namespace overlay
         private CommonParams _commonParams = CommonParams.GetInstance();
         private OverlayMaster _overlayMaster = OverlayMaster.GetInstance();
         private int _shift = 0;
+        private float _noteLength;
 
 
-        public OverlayMeasure(Measure measure, GameObject parentObject)
+        public OverlayMeasure(Measure measure, GameObject parentObject, float noteLength)
         {
             _measure = measure;
             _parentObject = parentObject;
+            _noteLength = noteLength;
             Init();
         }
 
         private void Init()
         {
             OnDraw();
-        }
-
-        //Method to modify a measure
-        public void ModifyMeasure(Measure measure)
-        {
-            _measure = measure;
-            Redraw();
         }
 
         private void OnDraw()
@@ -62,6 +57,8 @@ namespace overlay
                 setLength /= _measure.GetMeasureSymbolList().Count;
             }
 
+            Debug.Log("Overlay Set length " + setLength);
+
             //Debug.Log("Measure SymbolList " + _measure.GetMeasureSymbolList().Count);
 
             // 遍历一个小节中的所有组队，绘制每个组队
@@ -74,35 +71,18 @@ namespace overlay
                 setObject.transform.localPosition = new Vector3(setPosition.x + setLength * i + _shift,
                     setPosition.y, setPosition.z);
 
+                float noteLength = _overlayMaster.GetScoreSetView(i).GetNoteLength();
+
+                Debug.Log("HI HI" + _measure.GetMeasureSymbolList().Count);
+
+                Debug.Log("Overlay length " + _noteLength);
+
                 // 将Set对象赋为下一层的父对象
                 // 绘制Set视图
-                OverlaySetView setView = new OverlaySetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
+                OverlaySetView setView = new OverlaySetView(_measure.GetMeasureSymbolList()[i], setObject, setLength, _noteLength);
                 _overlayMaster.AddSetView(setView);
+                Debug.Log("Size " + _overlayMaster.GetSetViews().Count);
             }
-        }
-
-        private void Redraw()
-        {
-            float setLength = _measure.GetMeasureLength() - _shift;
-            Vector3 setPosition = Vector3.zero;
-            if (_measure.GetMeasureSymbolList().Count != 0)
-            {
-                setLength /= _measure.GetMeasureSymbolList().Count;
-            }
-            for (int i = 0; i < _measure.GetMeasureSymbolList().Count; i++)
-            {
-                // 新建Set对象作为目录
-                string objName = "Set" + (i + 1);
-                GameObject setObject = new GameObject(objName);
-                setObject.transform.SetParent(_parentObject.transform);
-                setObject.transform.localPosition = new Vector3(setPosition.x + setLength * i + _shift,
-                    setPosition.y, setPosition.z);
-
-                // 将Set对象赋为下一层的父对象
-                // 绘制Set视图
-                OverlaySetView setView = new OverlaySetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
-            }
-
         }
 
         // 绘制一行乐谱线，根据小节数来绘制

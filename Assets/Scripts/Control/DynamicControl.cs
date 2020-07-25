@@ -34,7 +34,6 @@ namespace control
         {
             string scoreName = _commonParams.GetScoreName();
             parentObject = GameObject.Find("Test_Canvas");
-            Debug.Log("parent " + parentObject);
             DrawScore(scoreName);
         }
 
@@ -50,18 +49,14 @@ namespace control
             List<float> screenSize = new List<float>();
             screenSize.Add(Screen.width);
             screenSize.Add(Screen.height);
-            List<string> scoreInfo = new List<string>();
-            // 乐谱名称和作者信息
-            scoreInfo.Add(xmlFacade.GetWorkTitle()); // 0
-            scoreInfo.Add(xmlFacade.GetCreator()); // 1
 
             // 绘制乐谱视图
-            OverlayScoreView scoreView = new OverlayScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore);
+            OverlayScoreView scoreView = new OverlayScoreView(scoreList, parentObject, screenSize, _canvasScore, _loadScore);
 
             // 更改乐符颜色
-//        Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
-//        SymbolControl symbolControl = new SymbolControl(symbol);
-//        symbolControl.SetColor(Color.red);
+    //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
+    //    SymbolControl symbolControl = new SymbolControl(symbol);
+    //    symbolControl.SetColor(Color.red);
         }
     }
 }

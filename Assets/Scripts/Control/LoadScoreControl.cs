@@ -89,6 +89,8 @@ namespace control
                         _commonParams.SetScoreName(xmlFile.FullName);
                         _canvasScore.SetActive(true);
                         _loadScore.SetActive(false);
+                        //Add overlay canvas
+                        _testCanvas.SetActive(true);
                     });
                 }
             }
@@ -114,6 +116,7 @@ namespace control
             {
                 _testCanvas.SetActive(true);
                 _loadScore.SetActive(false);
+                _canvasScore.SetActive(true);
             });
         }
     }

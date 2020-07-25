@@ -12,7 +12,7 @@ namespace symbol
         protected int SymbolWidth;  //  符号视图宽度
         protected bool isChord;  //  是否是和弦
         protected bool isHigh; //Checks if the symbol is high or low
-        protected SymbolView symbolView;
+        protected SymbolView symbolView = null;
 
         public int GetDuration() { return Duration; }
 
