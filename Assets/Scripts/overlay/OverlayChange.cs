@@ -27,7 +27,6 @@ namespace overlay
             _symbol.SetChord(false);
             _symbol.SetDuration("256", "256");
             _symbol.SetType("quarter");
-            ((Note)_symbol).SetUpOrDown(true);
         }
 
         int noteStatus;
@@ -122,7 +121,15 @@ namespace overlay
 
             ((Note) _symbol).SetOctave(octave.ToString());
             ((Note)_symbol).SetStep(step);
-            _overlayMaster.ModifySetView(position, _symbol, true, startTime);
+            if(octave >= 4)
+            {
+                ((Note)_symbol).SetUpOrDown(true);
+                _overlayMaster.ModifySetView(position, _symbol, true);
+            }
+            else
+            {
+                _overlayMaster.ModifySetView(position, _symbol, false);
+            }
             position++;
         }
     }

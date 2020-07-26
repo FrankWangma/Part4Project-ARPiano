@@ -45,9 +45,9 @@ namespace overlay
         public void AddScoreSetView(SetView setView) { _scoreSetViews.Add(setView); }
         public SetView GetScoreSetView(int i) {return _scoreSetViews[i]; }
 
-        public void ModifySetView(int position, Symbol symbol, Boolean upper, int startTime)
+        public void ModifySetView(int position, Symbol symbol, Boolean upper)
         {
-            symbol = SetShift((Note)symbol);
+            symbol = SetShift((Note)symbol, upper);
             Debug.Log("To Modify " + _toModify);
             List<List<Symbol>> setList = _overlaySetViews[_toModify].GetSetList();
             if (upper)
@@ -71,11 +71,18 @@ namespace overlay
             }
         }
 
-        private Note SetShift(Note note)
+        private Note SetShift(Note note, Boolean upper)
         {
             ParamsGetter paramsGetter = ParamsGetter.GetInstance();
-            int shift = -(GetDigitizedPitch("B", "4") - GetDigitizedPitch(note.GetStep(), note.GetOctave())) *
-                        paramsGetter.GetPitchPositionDiff();
+            int shift;
+            if (upper)
+            {
+                shift = -(GetDigitizedPitch("B", "4") - GetDigitizedPitch(note.GetStep(), note.GetOctave())) * paramsGetter.GetPitchPositionDiff();
+            }
+            else
+            {
+                shift = -(GetDigitizedPitch("D", "3") - GetDigitizedPitch(note.GetStep(), note.GetOctave())) * paramsGetter.GetPitchPositionDiff();
+            }
             note.SetShift(shift);
             return note;
         }

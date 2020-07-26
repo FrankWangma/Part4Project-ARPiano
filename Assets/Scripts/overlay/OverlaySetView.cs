@@ -103,6 +103,7 @@ namespace overlay
                 if (_lowSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_lowSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);
+                    noteView.SetColor(Color.red);
                     _lowSymbolList[i].SetSymbolView(noteView);
                 }
                 else if (_lowSymbolList[i] is Rest)
