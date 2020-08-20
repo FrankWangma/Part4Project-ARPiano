@@ -31,7 +31,7 @@ namespace symbol
             for (int i = 0; i < _paragraphList.Count; i++)
             {
 
-                Debug.Log("Paragraph " + _paragraphList.Count);
+                //Debug.Log("Paragraph " + _paragraphList.Count);
                 // 新建Measure对象作为目录
                 string objName = "Measure" + (i + 1);
                 GameObject measureObject = new GameObject(objName);

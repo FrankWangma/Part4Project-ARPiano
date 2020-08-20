@@ -17,6 +17,7 @@ namespace symbol
         private GameObject _canvasScore;
         private GameObject _loadScore;
 
+
         public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
         {
             _parentObject = parentObject;

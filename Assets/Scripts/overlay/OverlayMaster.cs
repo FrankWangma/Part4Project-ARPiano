@@ -48,7 +48,7 @@ namespace overlay
         public void ModifySetView(int position, Symbol symbol, Boolean upper)
         {
             symbol = SetShift((Note)symbol, upper);
-            Debug.Log("To Modify " + _toModify);
+            //Debug.Log("To Modify " + _toModify);
             List<List<Symbol>> setList = _overlaySetViews[_toModify].GetSetList();
             if (upper)
             {
@@ -62,8 +62,8 @@ namespace overlay
 
             int currentCount = Math.Max(setList[0].Count, setList[1].Count);
 
-            Debug.Log("Max Count " + GetScoreSetView(_toModify).GetMaxCount());
-            Debug.Log("Master Note length " + GetScoreSetView(_toModify).GetNoteLength());
+            //Debug.Log("Max Count " + GetScoreSetView(_toModify).GetMaxCount());
+            //Debug.Log("Master Note length " + GetScoreSetView(_toModify).GetNoteLength());
 
             if(currentCount >= GetScoreSetView(_toModify).GetMaxCount())
             {

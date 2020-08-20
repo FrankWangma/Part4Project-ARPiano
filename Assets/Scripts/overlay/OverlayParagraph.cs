@@ -44,7 +44,7 @@ namespace overlay
                 //Create blank measures
                 List<List<List<Symbol>>> symbolList = _paragraphList[i].GetMeasureSymbolList();
 
-                Debug.Log("Before " + symbolList.Count);
+                //Debug.Log("Before " + symbolList.Count);
 
                 foreach (List<List<Symbol>> measure in symbolList)
                 {
@@ -54,8 +54,8 @@ namespace overlay
                     }
                 }
 
-                Debug.Log("After " + symbolList.Count);
-                Debug.Log("Paragraph count " + _paragraphList.Count);
+                //Debug.Log("After " + symbolList.Count);
+                //Debug.Log("Paragraph count " + _paragraphList.Count);
                 _paragraphList[i].SetMeasureSymbolList(symbolList);
 
                 float noteLength = _overlayMaster.GetScoreSetView(_overlayMaster.GetGlobalMeasure()).GetNoteLength();

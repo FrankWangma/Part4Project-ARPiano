@@ -12,7 +12,8 @@ namespace symbol
         protected int SymbolWidth;  //  符号视图宽度
         protected bool isChord;  //  是否是和弦
         protected bool isHigh; //Checks if the symbol is high or low
-        protected SymbolView symbolView = null;
+        protected SymbolView _symbolView = null;
+        private Color _color = Color.black; //Controls the color which the note is rendered in
 
         public int GetDuration() { return Duration; }
 
@@ -40,18 +41,29 @@ namespace symbol
 
         public void SetChord(bool chord) { isChord = chord; }
 
-        public bool IsHigh() { return isHigh;  }
+        public bool IsHigh() { return isHigh; }
 
         public void SetHigh(bool high) { isHigh = high; }
 
         public void ChangeColor(Color color) { GetSymbolView().SetColor(color); }
 
-        public SymbolView GetSymbolView() { return symbolView; }
+        public SymbolView GetSymbolView() { return _symbolView; }
 
-        public void SetSymbolView(SymbolView symbolview) { symbolView = symbolview; }
+        public void SetSymbolView(SymbolView symbolview) { _symbolView = symbolview; }
 
         public abstract void SetType(string type);
 
         public abstract int GetRate();
+        public void SetColor(Color color)
+        {
+            _color = color;
+            if (_symbolView != null)
+            {
+                _symbolView.SetColor(_color); // Updates color when color is set (hopefully)
+            }
+
+        }
+        public Color GetColor() { return _color; }
+
     }
 }

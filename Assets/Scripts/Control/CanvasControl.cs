@@ -4,6 +4,7 @@ using generator;
 using symbol;
 using util;
 using xmlParser;
+using Pattern;
 
 namespace control
 {
@@ -15,6 +16,8 @@ namespace control
 
         public GameObject _canvasScore;
         public GameObject _loadScore;
+
+        private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
 
 
 
@@ -55,7 +58,7 @@ namespace control
             scoreInfo.Add(xmlFacade.GetCreator()); // 1
 
             // 绘制乐谱视图
-
+            _noteDatabase.AddScoreList(scoreList);
 
             ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore);
             // 更改乐符颜色

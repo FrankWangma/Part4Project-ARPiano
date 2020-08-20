@@ -33,9 +33,9 @@ namespace symbol
 
         private void OnDraw()
         {
-            Debug.Log("Set List" + _setList.Count);
-            Debug.Log("HighSymbolList " + _highSymbolList.Count);
-            Debug.Log("LowSymbolList " + _lowSymbolList.Count);
+            //Debug.Log("Set List" + _setList.Count);
+            //Debug.Log("HighSymbolList " + _highSymbolList.Count);
+            //Debug.Log("LowSymbolList " + _lowSymbolList.Count);
 
             Vector3 notePosition = Vector3.zero;
             _noteLength = _setLength;
@@ -46,7 +46,7 @@ namespace symbol
                 _noteLength = _setLength / _maxCount;
             }
 
-            Debug.Log("Note Length " + _noteLength);
+            //Debug.Log("Note Length " + _noteLength);
 
             for (int i = 0; i < _highSymbolList.Count; i++)
             {
@@ -59,7 +59,7 @@ namespace symbol
                     notePosition.y + _paramsGetter.GetTotalHeight(),
                     notePosition.z);
 
-                Debug.Log("Noteposition " + notePosition.x);
+                //Debug.Log("Noteposition " + notePosition.x);
 
                 // 将Set对象赋为下一层的父对象
                 if (_highSymbolList[i] is Note)

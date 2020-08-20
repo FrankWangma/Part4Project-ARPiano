@@ -145,7 +145,7 @@ namespace overlay
                 {
                     NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
                     //temp fix
-                    Debug.Log("PARAM " + _paramsGetter.GetSymbolStart());
+                    //Debug.Log("PARAM " + _paramsGetter.GetSymbolStart());
                     //NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _highSymbolList[i].GetStartTime(), highNoteObj);
                     _highSymbolList[i].SetSymbolView(noteView);
                 }

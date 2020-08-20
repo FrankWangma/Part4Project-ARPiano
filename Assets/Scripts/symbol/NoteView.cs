@@ -23,6 +23,7 @@ namespace symbol
         private void Init()
         {
             OnDraw();
+            SetColor(_note.GetColor());
         }
 
         protected override void OnDraw()

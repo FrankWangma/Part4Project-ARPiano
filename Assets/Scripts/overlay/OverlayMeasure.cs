@@ -57,7 +57,7 @@ namespace overlay
                 setLength /= _measure.GetMeasureSymbolList().Count;
             }
 
-            Debug.Log("Overlay Set length " + setLength);
+            //Debug.Log("Overlay Set length " + setLength);
 
             //Debug.Log("Measure SymbolList " + _measure.GetMeasureSymbolList().Count);
 
@@ -73,15 +73,15 @@ namespace overlay
 
                 float noteLength = _overlayMaster.GetScoreSetView(i).GetNoteLength();
 
-                Debug.Log("HI HI" + _measure.GetMeasureSymbolList().Count);
+                //Debug.Log("HI HI" + _measure.GetMeasureSymbolList().Count);
 
-                Debug.Log("Overlay length " + _noteLength);
+                //Debug.Log("Overlay length " + _noteLength);
 
                 // 将Set对象赋为下一层的父对象
                 // 绘制Set视图
                 OverlaySetView setView = new OverlaySetView(_measure.GetMeasureSymbolList()[i], setObject, setLength, _noteLength);
                 _overlayMaster.AddSetView(setView);
-                Debug.Log("Size " + _overlayMaster.GetSetViews().Count);
+                //Debug.Log("Size " + _overlayMaster.GetSetViews().Count);
             }
         }
 

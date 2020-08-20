@@ -100,7 +100,7 @@ namespace overlay
         public void updateSheetMusic(int noteNumber)
         {
  
-            Debug.Log("note " + noteNumber);
+            //Debug.Log("note " + noteNumber);
             int octave = (noteNumber - 12) / 12;
             int stepNum = noteNumber - 12 - (octave * 12);
             string step = "";
@@ -115,9 +115,9 @@ namespace overlay
                 case 9: step = "A"; break;
                 case 11: step = "B"; break;
             }
-            Debug.Log("stempnum " + stepNum);
-            Debug.Log("Octave" + octave);
-            Debug.Log("Step " + step);
+            //Debug.Log("stempnum " + stepNum);
+            //Debug.Log("Octave" + octave);
+            //Debug.Log("Step " + step);
 
             ((Note) _symbol).SetOctave(octave.ToString());
             ((Note)_symbol).SetStep(step);

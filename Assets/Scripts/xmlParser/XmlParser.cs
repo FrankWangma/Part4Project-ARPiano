@@ -85,18 +85,18 @@ namespace xmlParser
                         {
                             case "work-title": _workTitle = xmlReader.ReadString(); break;
                             case "creator": _creator = xmlReader.ReadString(); break;
-                            case "divisions": _divisions = xmlReader.ReadString(); Debug.Log("Divisions " + _divisions); break;
+                            case "divisions": _divisions = xmlReader.ReadString(); break; //Debug.Log("Divisions " + _divisions); break;
                             case "fifths": _fifths = xmlReader.ReadString(); break;
                             case "beats": _beats = xmlReader.ReadString(); break;
                             case "beat-type": _beatType = xmlReader.ReadString(); break;
                             case "clef": _clef = xmlReader.GetAttribute("number"); break;
                             case "sign": _sign = xmlReader.ReadString(); break;
                             case "line": _line = xmlReader.ReadString(); break;
-                            case "step": _step = xmlReader.ReadString(); Debug.Log("Step " + _step); break;
-                            case "octave": _octave = xmlReader.ReadString(); Debug.Log("Octave " + _octave); break;
-                            case "duration": _duration = xmlReader.ReadString(); Debug.Log("Duration " + _duration);break;
-                            case "type": _type = xmlReader.ReadString(); Debug.Log("Type " + _type);break;
-                            case "accidental": _accidental = xmlReader.ReadString();Debug.Log("Accidental " + _accidental); break;
+                            case "step": _step = xmlReader.ReadString(); break; //Debug.Log("Step " + _step); break;
+                            case "octave": _octave = xmlReader.ReadString(); break; //Debug.Log("Octave " + _octave); break;
+                            case "duration": _duration = xmlReader.ReadString(); break; //Debug.Log("Duration " + _duration);break;
+                            case "type": _type = xmlReader.ReadString(); break; //Debug.Log("Type " + _type);break;
+                            case "accidental": _accidental = xmlReader.ReadString(); break; //Debug.Log("Accidental " + _accidental); break;
                             case "staff": _staff = xmlReader.ReadString(); break;
                             case "stem": _stem = xmlReader.ReadString(); break;
                             case "beam":
@@ -165,7 +165,7 @@ namespace xmlParser
                             bool isNote = _symbol is Note;
                             if (isNote)
                             {
-                                Debug.Log("If acccidental " + _accidental);
+                                //Debug.Log("If acccidental " + _accidental);
                                 ((Note) _symbol).SetAccidental(_accidental);
                                 _accidental = "";
                                 if (_stem.Equals("up")) ((Note) _symbol).SetUpOrDown(true);
