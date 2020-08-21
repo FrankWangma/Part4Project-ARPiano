@@ -29,7 +29,11 @@ namespace Pattern
             SortScoreList();
 
             //Test code to check method works
-            ChangeNoteColor(0, 0, Color.green, true);
+            ChangeNoteColor(1, 0, Color.green, false);
+
+
+            //When we are looking at a chord, check if is chord using .HasChord(), then use .GetChordList() to get list of notes that make up the chord
+            //Debug.Log("note " + _lowNotes[1][0].GetChordList()[1].GetStep());
         }
 
         //Adds notes to their corresponding bar, in order and based on measure
@@ -66,6 +70,10 @@ namespace Pattern
                 _lowNotes.Add(measureLowNotes);
             }
         }
+
+        public List<List<Note>> GetHighNotes(){ return _highNotes; }
+
+        public List<List<Note>> GetLowNotes(){ return _lowNotes; }
 
         public void ChangeNoteColor(int measurePosition, int notePosition, Color color, Boolean highNote){
             if(highNote){

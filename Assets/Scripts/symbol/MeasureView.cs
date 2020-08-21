@@ -65,6 +65,8 @@ namespace symbol
             //Debug.Log("Measure Set length " + setLength);
 
             // 遍历一个小节中的所有组队，绘制每个组队
+            Debug.Log("Measure Symbol count " + _measure.GetMeasureSymbolList().Count);
+
             for (int i = 0; i < _measure.GetMeasureSymbolList().Count; i++)
             {
                 // 新建Set对象作为目录
@@ -73,9 +75,7 @@ namespace symbol
                 setObject.transform.SetParent(_parentObject.transform);
                 setObject.transform.localPosition = new Vector3(setPosition.x + setLength * i + shift,
                     setPosition.y, setPosition.z);
-
-                Debug.Log("Measure Symbol count " + _measure.GetMeasureSymbolList().Count);
-
+                    
                 // 将Set对象赋为下一层的父对象
                 // 绘制Set视图
                 //SetView setView = new SetView(_measure.GetMeasureSymbolList()[i], setObject, setLength);
