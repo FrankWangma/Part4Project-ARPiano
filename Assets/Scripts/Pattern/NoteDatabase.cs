@@ -29,11 +29,14 @@ namespace Pattern
             SortScoreList();
 
             //Test code to check method works
-            ChangeNoteColor(1, 0, Color.green, false);
+            ///ChangeNoteColor(1, 0, Color.green, false);
 
 
             //When we are looking at a chord, check if is chord using .HasChord(), then use .GetChordList() to get list of notes that make up the chord
-            //Debug.Log("note " + _lowNotes[1][0].GetChordList()[1].GetStep());
+            //Debug.Log("note " + _lowNotes[1][0].GetChordList()[1].Get()Step + );
+             //Debug.Log("note " + _highNotes[2][3].GetStep() );
+            //Accidental is empty if no accidental
+             //Debug.Log("Accidental " + _highNotes[2][3].GetAccidental() );
         }
 
         //Adds notes to their corresponding bar, in order and based on measure
