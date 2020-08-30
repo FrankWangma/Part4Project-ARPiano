@@ -32,6 +32,11 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
         public void DrawPatterns()
         {
+            HashSet<String> test = new HashSet<string>();
+            test.Add("C");
+            test.Add("E");
+            test.Add("G");
+            Debug.Log("chord " + _chordDatabase.IdentifyChord(test));
             _lowNotes = _noteDatabase.GetLowNotes();
             _highNotes = _noteDatabase.GetHighNotes();
             LoopThrough(_lowNotes);
@@ -42,6 +47,10 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             foreach (List<Note> measure in notes)
             {
                 List<Note> separateMeasure = SeparateNotes(measure);
+                foreach (Note note in separateMeasure)
+                {
+                    //Debug.Log("Note " + note.GetStep());
+                }
                 FindPattern(separateMeasure);
             }
         }
@@ -50,7 +59,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         {
             List<Note> separateNotes = new List<Note>();
 
-            foreach (Note note in separateNotes)
+            foreach (Note note in measure)
             {
 
                 //CURRENT BUG IN CHORD FUNCTIONALITY. IS CHORD NOT WORKING PROPERLY
@@ -95,7 +104,8 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 {
                     if (myChord.Count >= 3)
                     {
-                        chords.Add(myChord);
+                        HashSet<String> copy = new HashSet<string>(myChord);
+                        chords.Add(copy);
                         notes.Add(myNotes);
                         myNotes.Clear();
                         myChord.Clear();
@@ -119,7 +129,8 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             //Add to chords if the number is correct
             if (myChord.Count >= 3)
             {
-                chords.Add(myChord);
+                HashSet<String> copy = new HashSet<string>(myChord);
+                chords.Add(copy);
                 notes.Add(myNotes);
                 myChord.Clear();
                 duplicates.Clear();
@@ -166,12 +177,15 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 //If still can't create new chord, checks if it's a seventh
                 if (notChord)
                 {
-                    myChord.UnionWith(chords[chords.Count - 1]);
-                    if (!(_chordDatabase.IdentifyChord(myChord) == null))
+                    if (chords.Count >= 1)
                     {
-                        //If it is a seventh, assign it over the previous chord
-                        chords[chords.Count - 1] = myChord;
-                        notes[notes.Count - 1].AddRange(myNotes);
+                        myChord.UnionWith(chords[chords.Count - 1]);
+                        if (!(_chordDatabase.IdentifyChord(myChord) == null))
+                        {
+                            //If it is a seventh, assign it over the previous chord
+                            chords[chords.Count - 1] = myChord;
+                            notes[notes.Count - 1].AddRange(myNotes);
+                        }
                     }
                 }
             }
@@ -181,11 +195,25 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
         private void CheckPattern(List<HashSet<String>> chords, List<List<Note>> notes)
         {
+            foreach (List<Note> note in notes)
+            {
+                String output = "";
+                foreach (Note n in note)
+                {
+                    output = output + " " + n.GetStep();
+                }
+                //Debug.Log("notes" + output);
+            }
+
             for (int i = 0; i < chords.Count; i++)
             {
+                Debug.Log("chordSize " + chords[i].Count);
+                Debug.Log("notes " + notes[i].Count);
+                Debug.Log("chord " + _chordDatabase.IdentifyChord(chords[i]));
                 if (!(_chordDatabase.IdentifyChord(chords[i]) == null))
                 {
                     //GET THE TYPE CHORD HERE AND DO SOMETHING WITH IT
+                    Debug.Log("SET CHORD COLOR");
                     SetChordColor(notes[i]);
                 }
             }
@@ -244,8 +272,9 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 case 2: myColor = Color.yellow; break;
             }
 
-            _color ++;
-            if(_color > 2){
+            _color++;
+            if (_color > 2)
+            {
                 _color = 0;
             }
 

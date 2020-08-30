@@ -65,7 +65,7 @@ namespace symbol
             //Debug.Log("Measure Set length " + setLength);
 
             // 遍历一个小节中的所有组队，绘制每个组队
-            Debug.Log("Measure Symbol count " + _measure.GetMeasureSymbolList().Count);
+            //Debug.Log("Measure Symbol count " + _measure.GetMeasureSymbolList().Count);
 
             for (int i = 0; i < _measure.GetMeasureSymbolList().Count; i++)
             {

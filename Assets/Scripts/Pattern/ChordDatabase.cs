@@ -9,7 +9,7 @@ namespace Pattern
 {
     public class ChordDatabase
     {
-        private Dictionary<HashSet<String>, String> _chordDatabase = new Dictionary<HashSet<String>, String>();
+        private Dictionary<String, HashSet<String>> _chordDatabase = new Dictionary<String, HashSet<String>>();
 
         private static ChordDatabase instance = new ChordDatabase();
 
@@ -29,7 +29,7 @@ namespace Pattern
             chord.Add(secondNote);
             chord.Add(thirdNote);
 
-            _chordDatabase.Add(chord, chordName);
+            _chordDatabase.Add(chordName, chord);
         }
 
         
@@ -40,17 +40,20 @@ namespace Pattern
             chord.Add(thirdNote);
             chord.Add(fourthNote);
 
-            _chordDatabase.Add(chord, chordName);
+            _chordDatabase.Add(chordName, chord);
         }      
 
         public String IdentifyChord(HashSet<String> notes){
-            String output;
+            //String output;
             //Check if key exists, if it does give output string the key value
             //If key does not exist, method returns null
-            if (!_chordDatabase.TryGetValue(notes, out output)){
-                return null;
+            foreach (String major in _chordDatabase.Keys){
+                HashSet<String> chordToCheck = _chordDatabase[major];
+                if(chordToCheck.SetEquals(notes)){
+                    return major;
+                }
             }
-            return output;
+            return null;
         }
 
         public void addMajorChords() {
@@ -58,7 +61,7 @@ namespace Pattern
             addChord("C", "Fsharp", "A", "D Major");
             addChord("E", "Gsharp", "B", "E Major");
             addChord("F", "G", "C", "F Major");
-            addChord("G", "B", "D", "D Major");
+            addChord("G", "B", "D", "G Major");
             addChord("A", "Csharp", "E", "A Major");
             addChord("B", "Dsharp", "Fsharp", "B Major");
             addChord("Csharp", "F", "Gsharp", "C Sharp Major");
