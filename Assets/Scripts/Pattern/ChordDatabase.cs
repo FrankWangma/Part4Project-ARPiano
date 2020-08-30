@@ -30,7 +30,18 @@ namespace Pattern
             chord.Add(thirdNote);
 
             _chordDatabase.Add(chord, chordName);
-        }   
+        }
+
+        
+        private void addChord(String firstNote, String secondNote, String thirdNote, String fourthNote, String chordName){
+            HashSet<String> chord = new HashSet<string>();
+            chord.Add(firstNote);
+            chord.Add(secondNote);
+            chord.Add(thirdNote);
+            chord.Add(fourthNote);
+
+            _chordDatabase.Add(chord, chordName);
+        }      
 
         public String IdentifyChord(HashSet<String> notes){
             String output;
