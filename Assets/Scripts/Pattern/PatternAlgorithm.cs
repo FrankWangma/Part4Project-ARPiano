@@ -32,14 +32,10 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
         public void DrawPatterns()
         {
-            HashSet<String> test = new HashSet<string>();
-            test.Add("C");
-            test.Add("E");
-            test.Add("G");
-            Debug.Log("chord " + _chordDatabase.IdentifyChord(test));
             _lowNotes = _noteDatabase.GetLowNotes();
             _highNotes = _noteDatabase.GetHighNotes();
             LoopThrough(_lowNotes);
+            LoopThrough(_highNotes);
         }
 
         private void LoopThrough(List<List<Note>> notes)
@@ -63,8 +59,9 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             {
 
                 //CURRENT BUG IN CHORD FUNCTIONALITY. IS CHORD NOT WORKING PROPERLY
-                if (note.IsChord())
+                if (note.GetChordList().Count > 0)
                 {
+                    separateNotes.Add(note);
                     foreach (Note chordNote in note.GetChordList())
                     {
                         separateNotes.Add(chordNote);
@@ -207,13 +204,13 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
             for (int i = 0; i < chords.Count; i++)
             {
-                Debug.Log("chordSize " + chords[i].Count);
-                Debug.Log("notes " + notes[i].Count);
-                Debug.Log("chord " + _chordDatabase.IdentifyChord(chords[i]));
+                //Debug.Log("chordSize " + chords[i].Count);
+                //Debug.Log("notes " + notes[i].Count);
+                //Debug.Log("chord " + _chordDatabase.IdentifyChord(chords[i]));
                 if (!(_chordDatabase.IdentifyChord(chords[i]) == null))
                 {
                     //GET THE TYPE CHORD HERE AND DO SOMETHING WITH IT
-                    Debug.Log("SET CHORD COLOR");
+                    //Debug.Log("SET CHORD COLOR");
                     SetChordColor(notes[i]);
                 }
             }
