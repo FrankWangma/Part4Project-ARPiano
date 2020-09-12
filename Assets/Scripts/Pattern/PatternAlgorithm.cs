@@ -28,8 +28,6 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private static ChordDatabase _chordDatabase = ChordDatabase.GetInstance();
 
-        private int _color = 0;
-
         public void DrawPatterns()
         {
             _lowNotes = _noteDatabase.GetLowNotes();
@@ -211,14 +209,14 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 {
                     //GET THE TYPE CHORD HERE AND DO SOMETHING WITH IT
                     //Debug.Log("SET CHORD COLOR");
-                    SetChordColor(notes[i]);
+                    SetChordColor(notes[i], _chordDatabase.IdentifyChord(chords[i]));
                 }
             }
         }
 
-        private void SetChordColor(List<Note> notes)
-        {
-            Color myColor = ColorHandler();
+        private void SetChordColor(List<Note> notes, String major)
+        {            
+            Color myColor = ColorHandler(major.Substring(0,1));
 
             foreach (Note note in notes)
             {
@@ -259,20 +257,18 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         }
 
         //handles color of chords
-        private Color ColorHandler()
+        private Color ColorHandler(String chordnote)
         {
             Color myColor = Color.black;
-            switch (_color)
+            switch (chordnote)
             {
-                case 0: myColor = Color.blue; break;
-                case 1: myColor = Color.cyan; break;
-                case 2: myColor = Color.yellow; break;
-            }
-
-            _color++;
-            if (_color > 2)
-            {
-                _color = 0;
+                case "A": myColor = Color.magenta; break;
+                case "B": myColor = Color.cyan; break;
+                case "C": myColor = Color.red; break;
+                case "D": myColor = new Color(0.2F, 0.3F, 0.4F); break;
+                case "E": myColor = Color.yellow; break;
+                case "F": myColor = Color.green; break;
+                case "G": myColor = Color.blue; break;
             }
 
             return myColor;
