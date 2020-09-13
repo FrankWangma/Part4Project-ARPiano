@@ -13,13 +13,18 @@ namespace control
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject parentObject;
         private GameObject _overlayObject;
-
         public GameObject _canvasScore;
         public GameObject _loadScore;
-
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
+        private float _secondsPerMeasure;
+         private float nextActionTime = 0.0f;
 
-
+        private void Update() {
+            if (Time.time > nextActionTime ) {
+                nextActionTime += _secondsPerMeasure;
+                Debug.Log("Hello");
+            }
+        }
 
         // Called when the object is disabled 
         private void OnDisable()
@@ -45,6 +50,9 @@ namespace control
             // 解析MusicXml文件
             XmlFacade xmlFacade = new XmlFacade(filename);
             // 生成乐谱表
+
+            _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
+
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
             List<List<Measure>> scoreList = scoreGenerator.Generate(xmlFacade.GetMeasureList(), Screen.width - 67);
@@ -65,6 +73,15 @@ namespace control
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
             //    SymbolControl symbolControl = new SymbolControl(symbol);
             //    symbolControl.SetColor(Color.red);
+        }
+        private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM) {
+            float secondsInMinute = 60.0f;
+            float BPMeasure = float.Parse(beatsPerMeasure);
+            float BPMinute = float.Parse(BPM);
+            float secondsPerBeat = secondsInMinute / BPMinute;
+            float secondsPerMeasure = secondsPerBeat * BPMeasure;
+
+            return secondsPerMeasure;
         }
     }
 }

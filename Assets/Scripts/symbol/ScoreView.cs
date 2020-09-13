@@ -16,6 +16,7 @@ namespace symbol
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject _canvasScore;
         private GameObject _loadScore;
+        private List<GameObject> _paragraphs = new List<GameObject>();
 
 
         public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
@@ -64,6 +65,16 @@ namespace symbol
                 // 绘制每一行的视图'
                 //Debug.Log("ScoreList" + _scoreList.Count);
                 ParagraphView paragraphView = new ParagraphView(_scoreList[i], paragraphObject);
+                _paragraphs.Add(paragraphObject);
+            }
+
+            DisableParagraphs();
+        }
+
+        private void DisableParagraphs() {
+            Debug.Log(_paragraphs.Count);
+            for(int i = 1; i < _paragraphs.Count; i++) {
+                _paragraphs[i].SetActive(false);
             }
         }
 
