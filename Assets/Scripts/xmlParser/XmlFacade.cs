@@ -8,6 +8,7 @@ namespace xmlParser
         private string _filename;
         private string _workTitle;
         private string _creator;
+        private string _bpm;
         private Beat _beat;
         private Head _highHead;
         private Head _lowHead;
@@ -15,7 +16,6 @@ namespace xmlParser
         private List<Symbol> _lowSymbolList;
         private List<List<List<Symbol>>> _measureSymbolList;
         private List<Measure> _measureList;
-
         public XmlFacade(string filename) {
             _filename = filename;
             Init();
@@ -33,11 +33,14 @@ namespace xmlParser
             _lowSymbolList = xmlParser.GetLowSymbolList();
             _measureSymbolList = xmlParser.GetMeasureSymbolList();
             _measureList = xmlParser.GetMeasureList();
+            _bpm = xmlParser.GetBPM();
         }
 
         public string GetWorkTitle() { return _workTitle; }
 
         public string GetCreator() { return _creator; }
+
+        public string GetBPM() { return _bpm; }
 
         public Beat GetBeat() { return _beat; }
 

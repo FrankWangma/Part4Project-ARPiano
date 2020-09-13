@@ -38,6 +38,7 @@ namespace xmlParser
         private string _stem = ""; 
         private string _beam = ""; 
         private string _beamNum = ""; 
+        private string _bpm = "";
         private Symbol _symbol;
         private Beat _beat;
         private Head _highHead;
@@ -99,6 +100,7 @@ namespace xmlParser
                             case "accidental": _accidental = xmlReader.ReadString(); break; //Debug.Log("Accidental " + _accidental); break;
                             case "staff": _staff = xmlReader.ReadString(); break;
                             case "stem": _stem = xmlReader.ReadString(); break;
+                            case "per-minute":_bpm = xmlReader.ReadString(); break;
                             case "beam":
                                 _beamNum = xmlReader.GetAttribute("number");
                                 if (_beamNum.Equals("1"))
@@ -112,6 +114,7 @@ namespace xmlParser
                                 break;
                             case "chord": // 和弦，由于和弦也是self closing <chord /> 的，所以也放在这里
                                 _isChord = true; break;
+                            
                         }
                     }
                     //EndElement is returned when xml reader gets to the end of an element, therefore, when it is just
@@ -266,6 +269,8 @@ namespace xmlParser
         public string GetWorkTitle() { return _workTitle; }
 
         public string GetCreator() { return _creator; }
+
+        public string GetBPM() { return _bpm; }
 
         public Beat GetBeat() { return _beat; }
 
