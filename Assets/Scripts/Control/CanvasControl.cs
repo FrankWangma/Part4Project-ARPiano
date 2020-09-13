@@ -18,10 +18,21 @@ namespace control
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private float _secondsPerMeasure;
         private float _nextActionTime;
+        public static bool isStarted = false;
+
+        private bool addedTime = false;
 
         private void Update() {
-            if (Time.time > _nextActionTime ) {
-                _nextActionTime += _secondsPerMeasure;
+            if(isStarted) {
+                if(!addedTime) {
+                    addedTime = true;
+                    _nextActionTime += Time.time;
+                }
+                
+                if (Time.time > _nextActionTime ) {
+                    _nextActionTime += _secondsPerMeasure;
+                    Debug.Log("Hello");
+                }
             }
         }
 

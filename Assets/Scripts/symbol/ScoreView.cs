@@ -3,7 +3,7 @@ using util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using control;
 namespace symbol
 {
     public class ScoreView
@@ -121,6 +121,26 @@ namespace symbol
                 //SceneManager.UnloadSceneAsync("DrawScore");
                 _canvasScore.SetActive(false);
                 _loadScore.SetActive(true);
+            });
+
+            GameObject startButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
+                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            startButtonObject.transform.SetParent(_parentObject.transform);
+            RectTransform startRect = startButtonObject.GetComponent<RectTransform>();
+            startRect.position = new Vector3(100, _screenSize[1] - 50, 0);
+            startRect.sizeDelta = new Vector2(50, 30);
+            Text startText = startButtonObject.GetComponentInChildren<Text>();
+            startText.text = "Start";
+            Button startButton = startButtonObject.GetComponent<Button>();
+            startButton.onClick.AddListener(delegate
+            {
+                if(control.CanvasControl.isStarted) {
+                    startText.text = "Start";
+                    control.CanvasControl.isStarted = false;
+                } else {
+                    control.CanvasControl.isStarted = true;
+                    startText.text = "Pause";
+                }
             });
 
             // 退出按钮
