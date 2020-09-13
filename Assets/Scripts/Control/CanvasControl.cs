@@ -17,12 +17,11 @@ namespace control
         public GameObject _loadScore;
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private float _secondsPerMeasure;
-         private float nextActionTime = 0.0f;
+        private float _nextActionTime;
 
         private void Update() {
-            if (Time.time > nextActionTime ) {
-                nextActionTime += _secondsPerMeasure;
-                Debug.Log("Hello");
+            if (Time.time > _nextActionTime ) {
+                _nextActionTime += _secondsPerMeasure;
             }
         }
 
@@ -52,6 +51,7 @@ namespace control
             // 生成乐谱表
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
+            _nextActionTime = _secondsPerMeasure;
 
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());

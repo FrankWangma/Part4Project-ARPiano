@@ -72,7 +72,6 @@ namespace symbol
         }
 
         private void DisableParagraphs() {
-            Debug.Log(_paragraphs.Count);
             for(int i = 1; i < _paragraphs.Count; i++) {
                 _paragraphs[i].SetActive(false);
             }
