@@ -57,8 +57,12 @@ namespace symbol
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
+                // rect.position = new Vector3(paragraphPosition.x,
+                //     paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i,
+                //     paragraphPosition.z);
+
                 rect.position = new Vector3(paragraphPosition.x,
-                    paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i,
+                    paragraphPosition.y,
                     paragraphPosition.z);
 
                 // 将paragraph画布对象赋为下一层的父对象
@@ -125,6 +129,7 @@ namespace symbol
 
             GameObject startButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            startButtonObject.name = "startButton";
             startButtonObject.transform.SetParent(_parentObject.transform);
             RectTransform startRect = startButtonObject.GetComponent<RectTransform>();
             startRect.position = new Vector3(100, _screenSize[1] - 50, 0);
@@ -142,6 +147,7 @@ namespace symbol
                     startText.text = "Pause";
                 }
             });
+
 
             // 退出按钮
             GameObject exitButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),

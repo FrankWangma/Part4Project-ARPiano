@@ -5,6 +5,7 @@ using symbol;
 using util;
 using xmlParser;
 using Pattern;
+using UnityEngine.UI;
 
 namespace control
 {
@@ -19,8 +20,9 @@ namespace control
         private float _secondsPerMeasure;
         private float _nextActionTime;
         public static bool isStarted = false;
-
         private bool addedTime = false;
+        private int paragraphNumber = 1;
+        private int measureNumber = 0;
 
         private void Update() {
             if(isStarted) {
@@ -28,11 +30,29 @@ namespace control
                     addedTime = true;
                     _nextActionTime += Time.time;
                 }
-                
+
+                if(measureNumber >= 3 && Time.time > _nextActionTime) {
+                    _nextActionTime += _secondsPerMeasure;
+                    measureNumber = 0;
+                    parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
+                    paragraphNumber++;
+                    Transform nextObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
+                    if(nextObject) {
+                       nextObject.gameObject.SetActive(true);
+                    } else {
+                        Button startButton = parentObject.transform.Find("startButton").gameObject.GetComponent<Button>();
+                        startButton.onClick.Invoke();
+                        paragraphNumber = 1;
+                        parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
+                    }
+                }
+
                 if (Time.time > _nextActionTime ) {
                     _nextActionTime += _secondsPerMeasure;
-                    Debug.Log("Hello");
+                    measureNumber++;
+                    Debug.Log(measureNumber);
                 }
+
             }
         }
 

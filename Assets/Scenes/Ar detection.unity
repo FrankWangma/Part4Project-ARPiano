@@ -301,6 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasScore: {fileID: 339814080}
   _loadScore: {fileID: 16250556}
+  _testCanvas: {fileID: 339814080}
 --- !u!1 &58373695
 GameObject:
   m_ObjectHideFlags: 0
