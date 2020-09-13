@@ -28,7 +28,7 @@ namespace control
             // This allows for a new score to be generated without any overlap
             foreach (Transform child in parentObject.transform)
             {
-                GameObject.Destroy(child.gameObject);
+                child.gameObject.SetActive(false);
             }
         }
 
