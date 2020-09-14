@@ -13,7 +13,7 @@ namespace control
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject parentObject;
         private GameObject _overlayObject;
-
+        public GameObject _overlayCanvas;
         public GameObject _canvasScore;
         public GameObject _loadScore;
 
@@ -27,7 +27,7 @@ namespace control
             // This allows for a new score to be generated without any overlap
             foreach (Transform child in parentObject.transform)
             {
-                child.gameObject.SetActive(false);
+                GameObject.Destroy(child.gameObject);
             }
         }
 
@@ -59,7 +59,7 @@ namespace control
             // 绘制乐谱视图
             _noteDatabase.AddScoreList(scoreList);
 
-            ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore);
+            ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
             // 更改乐符颜色
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
             //    SymbolControl symbolControl = new SymbolControl(symbol);
