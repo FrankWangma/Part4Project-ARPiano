@@ -17,9 +17,10 @@ namespace symbol
         private GameObject _canvasScore;
         private GameObject _loadScore;
         private List<GameObject> _paragraphs = new List<GameObject>();
+        private GameObject _overlayCanvas;
 
 
-        public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore)
+        public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore, GameObject overlayCanvas)
         {
             _parentObject = parentObject;
             _scoreList = scoreList;
@@ -27,6 +28,7 @@ namespace symbol
             _scoreInfo = scoreInfo;
             _canvasScore = canvasScore;
             _loadScore = loadScore;
+            _overlayCanvas = overlayCanvas;
             Init();
         }
 
@@ -125,6 +127,7 @@ namespace symbol
                 //SceneManager.UnloadSceneAsync("DrawScore");
                 _canvasScore.SetActive(false);
                 _loadScore.SetActive(true);
+                _overlayCanvas.SetActive(false);
             });
 
             GameObject startButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),

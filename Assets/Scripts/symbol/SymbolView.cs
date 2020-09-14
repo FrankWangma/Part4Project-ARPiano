@@ -42,22 +42,24 @@ namespace symbol
         public void SetColor(Color color)
         {
             // 遍历整个乐符对象，修改CanvasRenderer的颜色属性
-            foreach (Transform childTransform in ParentObject.transform)
-            {
-                // 当乐符对象是划线的时候，使用的是image，修改颜色先找到image组件，然后设置颜色
-                CanvasRenderer canvasRenderer = childTransform.gameObject.GetComponent<CanvasRenderer>();
-                Image image = canvasRenderer.GetComponent<Image>();
-                if (image != null)
+            if(ParentObject != null) {
+                foreach (Transform childTransform in ParentObject.transform)
                 {
-                    image.color = color;
-                    continue; // 已经确定是划线，后面的不需要执行，直接判断下一个乐符对象
-                }
-                // 当乐符对象是音符的时候，使用的是text，修改颜色先找到text组件，然后设置颜色
-                Text text = canvasRenderer.GetComponent<Text>();
-                if (text != null)
-                {
-                    text.color = color;
-                    continue;
+                    // 当乐符对象是划线的时候，使用的是image，修改颜色先找到image组件，然后设置颜色
+                    CanvasRenderer canvasRenderer = childTransform.gameObject.GetComponent<CanvasRenderer>();
+                    Image image = canvasRenderer.GetComponent<Image>();
+                    if (image != null)
+                    {
+                        image.color = color;
+                        continue; // 已经确定是划线，后面的不需要执行，直接判断下一个乐符对象
+                    }
+                    // 当乐符对象是音符的时候，使用的是text，修改颜色先找到text组件，然后设置颜色
+                    Text text = canvasRenderer.GetComponent<Text>();
+                    if (text != null)
+                    {
+                        text.color = color;
+                        continue;
+                    }
                 }
             }
         }
