@@ -14,24 +14,30 @@ namespace control
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject parentObject;
         private GameObject _overlayObject;
+        private GameObject _sweeperLine;
         public GameObject _overlayCanvas;
         public GameObject _canvasScore;
         public GameObject _loadScore;
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
+        private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private float _secondsPerMeasure;
         private float _nextActionTime;
         public static bool isStarted = false;
         private bool addedTime = false;
         private int paragraphNumber = 1;
         private int measureNumber = 0;
+        private float speed;
 
         private void Update() {
             if(isStarted) {
                 if(!addedTime) {
                     addedTime = true;
                     _nextActionTime += Time.time;
+                    _sweeperLine = GameObject.Find("Sweeper");
                 }
-
+            
+                RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
+                trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
                 if(measureNumber >= 3 && Time.time > _nextActionTime) {
                     _nextActionTime += _secondsPerMeasure;
                     measureNumber = 0;
@@ -41,11 +47,12 @@ namespace control
                     if(nextObject) {
                        nextObject.gameObject.SetActive(true);
                     } else {
-                        Button startButton = parentObject.transform.Find("startButton").gameObject.GetComponent<Button>();
+                        Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
                         startButton.onClick.Invoke();
                         paragraphNumber = 1;
                         parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
                     }
+                    _sweeperLine = GameObject.Find("Sweeper");
                 }
 
                 if (Time.time > _nextActionTime ) {
@@ -53,7 +60,7 @@ namespace control
                     measureNumber++;
                     Debug.Log(measureNumber);
                 }
-
+                
             }
         }
 
@@ -104,6 +111,7 @@ namespace control
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
             //    SymbolControl symbolControl = new SymbolControl(symbol);
             //    symbolControl.SetColor(Color.red);
+            speed = _paramsGetter.GetMeasureLength() / _secondsPerMeasure;
         }
         private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM) {
             float secondsInMinute = 60.0f;

@@ -6,6 +6,7 @@ namespace util
     {
         private static ParamsGetter instance = new ParamsGetter();
         private int _unit = 8;
+        private int measureLength;
 
         public static ParamsGetter GetInstance() {
             return instance;
@@ -101,6 +102,13 @@ namespace util
         // 节拍离最左边位置
         public int GetBeatPortraitShift() { return 5 * _unit; }
 
+        public void SetMeasureLength(int length) {
+            measureLength = length;
+        }
+
+        public int GetMeasureLength() {
+            return measureLength;
+        }
 
         // 乐谱字体，从资源resources文件夹中读取
         public Font GetSymbolFont()
