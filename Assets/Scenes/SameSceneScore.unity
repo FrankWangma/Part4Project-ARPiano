@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e518718b2ff44996ad8309ee024c8d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _overlayCanvas: {fileID: 1885269852}
   _canvasScore: {fileID: 457960890}
   _loadScore: {fileID: 984486667}
 --- !u!114 &457960892

@@ -73,40 +73,6 @@ namespace overlay
         // 放置两个button按钮作为返回上一个场景，以及退出
         private void PlaceButton()
         {
-            // 返回按钮
-            GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
-                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
-            backButtonObject.transform.SetParent(_parentObject.transform);
-
-            RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
-            backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
-            backRect.sizeDelta = new Vector2(50, 30);
-            Text backText = backButtonObject.GetComponentInChildren<Text>();
-            backText.text = "Back";
-            Button backButton = backButtonObject.GetComponent<Button>();
-            backButton.onClick.AddListener(delegate
-            {
-                //SceneManager.LoadScene("LoadScore", LoadSceneMode.Additive);
-                //SceneManager.UnloadSceneAsync("DrawScore");
-                _canvasScore.SetActive(false);
-                _loadScore.SetActive(true);
-            });
-
-            // 退出按钮
-            GameObject exitButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
-                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
-            exitButtonObject.transform.SetParent(_parentObject.transform);
-            RectTransform exitRect = exitButtonObject.GetComponent<RectTransform>();
-            exitRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
-            exitRect.sizeDelta = new Vector2(50, 30);
-            Text exitText = exitButtonObject.GetComponentInChildren<Text>();
-            exitText.text = "Exit";
-            Button exitButton = exitButtonObject.GetComponent<Button>();
-            exitButton.onClick.AddListener(delegate
-            {
-                Application.Quit();
-            });
-
             //Button to create single note
             GameObject noteButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
