@@ -29,6 +29,8 @@ namespace control
         private float speed;
         private float timeRemaining = 4;
         private Text timeText;
+        float paragraphStartX = 67f / 2;
+        float paragraphStartY = Screen.height - 250;
 
         private void Update() {
             if(isStarted) {
@@ -41,7 +43,7 @@ namespace control
                         timeText.gameObject.SetActive(false);
                     }
                     if(_sweeperLine == null) {
-                        _sweeperLine = GameObject.Find("Sweeper");
+                        _sweeperLine = GameObject.Find("Paragraph1 Sweeper");
                     }
                     
                     _nextActionTime += Time.deltaTime;
@@ -50,18 +52,7 @@ namespace control
                     if(measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure) {
                         _nextActionTime -= _secondsPerMeasure;
                         measureNumber = 0;
-                        parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
-                        paragraphNumber++;
-                        Transform nextObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
-                        if(nextObject) {
-                        nextObject.gameObject.SetActive(true);
-                        } else {
-                            Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
-                            startButton.onClick.Invoke();
-                            paragraphNumber = 1;
-                            parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
-                        }
-                        _sweeperLine = GameObject.Find("Sweeper");
+                        HandleParagraphChange();
                     }
                     if (_nextActionTime >= _secondsPerMeasure ) {
                         _nextActionTime -= _secondsPerMeasure;
@@ -73,6 +64,31 @@ namespace control
             }
         }
 
+        private void HandleParagraphChange() {
+            parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
+            paragraphNumber++;
+            Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
+            MoveParagraphUp(movingObject.gameObject);
+
+            Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
+            if(nextObject) {
+                nextObject.gameObject.SetActive(true);
+            } else {
+                Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
+                startButton.onClick.Invoke();
+                paragraphNumber = 1;
+                parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
+            }
+            _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
+        }
+
+        private void MoveParagraphUp(GameObject paragraphObject) {
+            Vector3 paragraphPosition = new Vector3(paragraphStartX, paragraphStartY, 0);
+            RectTransform rect = paragraphObject.GetComponent<Canvas>().GetComponent<RectTransform>();
+            rect.position = new Vector3(paragraphPosition.x,
+                    paragraphPosition.y,
+                    paragraphPosition.z);
+        }
         private void DisplayTime(float timeToDisplay)
         {
             float seconds = Mathf.FloorToInt(timeToDisplay % 60);

@@ -59,12 +59,12 @@ namespace symbol
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
-                // rect.position = new Vector3(paragraphPosition.x,
-                //     paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i,
-                //     paragraphPosition.z);
-
+                int offset = 0;
+                if(i > 0) {
+                    offset = -2 * _paramsGetter.GetTotalHeight() * 1;
+                }
                 rect.position = new Vector3(paragraphPosition.x,
-                    paragraphPosition.y,
+                    paragraphPosition.y + offset,
                     paragraphPosition.z);
 
                 // 将paragraph画布对象赋为下一层的父对象
@@ -78,7 +78,8 @@ namespace symbol
         }
 
         private void DisableParagraphs() {
-            for(int i = 1; i < _paragraphs.Count; i++) {
+            // Disable every paragraph, except for first 2
+            for(int i = 2; i < _paragraphs.Count; i++) {
                 _paragraphs[i].SetActive(false);
             }
         }

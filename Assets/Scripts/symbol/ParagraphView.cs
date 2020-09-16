@@ -69,7 +69,7 @@ namespace symbol
             GameObject lineObject = GameObject.Instantiate(_commonParams.GetPrefabLine(),
                 _parentObject.transform.position,
                 _commonParams.GetPrefabLine().transform.rotation);
-            lineObject.name = "Sweeper";
+            lineObject.name = _parentObject.name + " Sweeper";
             lineObject.transform.SetParent(_parentObject.transform);
             RectTransform lineRect = lineObject.GetComponent<RectTransform>();
             float width = Math.Max(startX, stopX) - Math.Min(startX, stopX) + 1;
