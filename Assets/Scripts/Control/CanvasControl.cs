@@ -21,13 +21,13 @@ namespace control
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private float _secondsPerMeasure;
-        private float _nextActionTime;
+        private float _nextActionTime = 0;
         public static bool isStarted = false;
         private bool addedTime = false;
         private int paragraphNumber = 1;
         private int measureNumber = 0;
         private float speed;
-        private float timeRemaining = 5;
+        private float timeRemaining = 4;
         private Text timeText;
 
         private void Start() {
@@ -41,6 +41,7 @@ namespace control
             rect.position = new Vector3(Screen.width / 2, (Screen.height / 2) + 200, 0);
             timeText = textObject.GetComponent<Text>();
             timeText.text = "3";
+            timeText.gameObject.SetActive(false);
         }
         private void Update() {
             if(isStarted) {
@@ -49,16 +50,18 @@ namespace control
                     timeRemaining -= Time.deltaTime;
                     DisplayTime(timeRemaining);
                 } else {
-                    if(!addedTime) {
-                        addedTime = true;
+                    if(timeText.gameObject.activeSelf) {
                         timeText.gameObject.SetActive(false);
-                        _nextActionTime += Time.time;
+                    }
+                    if(_sweeperLine == null) {
                         _sweeperLine = GameObject.Find("Sweeper");
                     }
+                    
+                    _nextActionTime += Time.deltaTime;
                     RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
-                    if(measureNumber >= 3 && Time.time > _nextActionTime) {
-                        _nextActionTime += _secondsPerMeasure;
+                    if(measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure) {
+                        _nextActionTime -= _secondsPerMeasure;
                         measureNumber = 0;
                         parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
                         paragraphNumber++;
@@ -73,21 +76,19 @@ namespace control
                         }
                         _sweeperLine = GameObject.Find("Sweeper");
                     }
-
-                    if (Time.time > _nextActionTime ) {
-                        _nextActionTime += _secondsPerMeasure;
+                    if (_nextActionTime >= _secondsPerMeasure ) {
+                        _nextActionTime -= _secondsPerMeasure;
                         measureNumber++;
                     }
                 }
             } else {
-                timeRemaining = 3;
+                timeRemaining = 4;
             }
         }
 
         private void DisplayTime(float timeToDisplay)
         {
             float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-            Debug.Log(seconds);
             timeText.text = seconds.ToString();
         }
 
@@ -116,7 +117,6 @@ namespace control
             // 生成乐谱表
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
-            _nextActionTime = _secondsPerMeasure;
 
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
