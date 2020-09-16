@@ -29,6 +29,7 @@ namespace symbol
         private void OnDraw()
         {
             Vector3 measurePosition = Vector3.zero;
+            int paragraphLength = 0;
             // 遍历一行中的所有小节，绘制每个小节
             //Debug.Log("Paragraph " + _paragraphList.Count);
             for (int i = 0; i < _paragraphList.Count; i++)
@@ -54,12 +55,13 @@ namespace symbol
 
                 // 调整下一个小节的起始横坐标
                 measurePosition.x += _paragraphList[i].GetMeasureLength();
+                paragraphLength += _paragraphList[i].GetMeasureLength();
             }
 
             float startY = _paramsGetter.GetTotalHeight() - _paramsGetter.GetStaffCenterPosition() - 2 * _paramsGetter.GetUnit();
             float stopY = _paramsGetter.GetTotalHeight() + _paramsGetter.GetStaffCenterPosition() + 2 * _paramsGetter.GetUnit();
             DrawLine(0, startY, 1, stopY);
-            _paramsGetter.SetMeasureLength(_paragraphList[0].GetMeasureLength());
+            _paramsGetter.SetParagraphLength(paragraphLength);
         }
          private void DrawLine(float startX, float startY, float stopX, float stopY)
         {

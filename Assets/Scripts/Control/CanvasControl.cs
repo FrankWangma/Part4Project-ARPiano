@@ -111,7 +111,7 @@ namespace control
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
             //    SymbolControl symbolControl = new SymbolControl(symbol);
             //    symbolControl.SetColor(Color.red);
-            speed = _paramsGetter.GetMeasureLength() / _secondsPerMeasure;
+            speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
         }
         private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM) {
             float secondsInMinute = 60.0f;
