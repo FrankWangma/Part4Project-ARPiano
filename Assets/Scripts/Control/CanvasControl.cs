@@ -30,19 +30,6 @@ namespace control
         private float timeRemaining = 4;
         private Text timeText;
 
-        private void Start() {
-            GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText(),
-                this.transform.position,
-                _commonParams.GetPrefabText().transform.rotation);
-            textObject.name = "timerText";
-            textObject.transform.SetParent(this.transform);
-            RectTransform rect = textObject.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(500, 100);
-            rect.position = new Vector3(Screen.width / 2, (Screen.height / 2) + 200, 0);
-            timeText = textObject.GetComponent<Text>();
-            timeText.text = "3";
-            timeText.gameObject.SetActive(false);
-        }
         private void Update() {
             if(isStarted) {
                 if(timeRemaining > 1) {
@@ -108,6 +95,21 @@ namespace control
             string scoreName = _commonParams.GetScoreName();
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
+            DrawTimerText();
+        }
+
+        private void DrawTimerText() {
+            GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText(),
+                this.transform.position,
+                _commonParams.GetPrefabText().transform.rotation);
+            textObject.name = "timerText";
+            textObject.transform.SetParent(this.transform);
+            RectTransform rect = textObject.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(500, 100);
+            rect.position = new Vector3(Screen.width / 2, (Screen.height / 2) + 200, 0);
+            timeText = textObject.GetComponent<Text>();
+            timeText.text = "3";
+            timeText.gameObject.SetActive(false);
         }
 
         private void DrawScore(string filename)
