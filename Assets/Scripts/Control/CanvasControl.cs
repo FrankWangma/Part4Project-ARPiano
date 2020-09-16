@@ -27,41 +27,68 @@ namespace control
         private int paragraphNumber = 1;
         private int measureNumber = 0;
         private float speed;
+        private float timeRemaining = 5;
+        private Text timeText;
 
+        private void Start() {
+            GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText(),
+                this.transform.position,
+                _commonParams.GetPrefabText().transform.rotation);
+            textObject.name = "timerText";
+            textObject.transform.SetParent(this.transform);
+            RectTransform rect = textObject.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(500, 100);
+            rect.position = new Vector3(Screen.width / 2, (Screen.height / 2) + 200, 0);
+            timeText = textObject.GetComponent<Text>();
+            timeText.text = "3";
+        }
         private void Update() {
             if(isStarted) {
-                if(!addedTime) {
-                    addedTime = true;
-                    _nextActionTime += Time.time;
-                    _sweeperLine = GameObject.Find("Sweeper");
-                }
-            
-                RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
-                trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
-                if(measureNumber >= 3 && Time.time > _nextActionTime) {
-                    _nextActionTime += _secondsPerMeasure;
-                    measureNumber = 0;
-                    parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
-                    paragraphNumber++;
-                    Transform nextObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
-                    if(nextObject) {
-                       nextObject.gameObject.SetActive(true);
-                    } else {
-                        Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
-                        startButton.onClick.Invoke();
-                        paragraphNumber = 1;
-                        parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
+                if(timeRemaining > 1) {
+                    timeText.gameObject.SetActive(true);
+                    timeRemaining -= Time.deltaTime;
+                    DisplayTime(timeRemaining);
+                } else {
+                    if(!addedTime) {
+                        addedTime = true;
+                        timeText.gameObject.SetActive(false);
+                        _nextActionTime += Time.time;
+                        _sweeperLine = GameObject.Find("Sweeper");
                     }
-                    _sweeperLine = GameObject.Find("Sweeper");
-                }
+                    RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
+                    trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
+                    if(measureNumber >= 3 && Time.time > _nextActionTime) {
+                        _nextActionTime += _secondsPerMeasure;
+                        measureNumber = 0;
+                        parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
+                        paragraphNumber++;
+                        Transform nextObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
+                        if(nextObject) {
+                        nextObject.gameObject.SetActive(true);
+                        } else {
+                            Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
+                            startButton.onClick.Invoke();
+                            paragraphNumber = 1;
+                            parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
+                        }
+                        _sweeperLine = GameObject.Find("Sweeper");
+                    }
 
-                if (Time.time > _nextActionTime ) {
-                    _nextActionTime += _secondsPerMeasure;
-                    measureNumber++;
-                    Debug.Log(measureNumber);
+                    if (Time.time > _nextActionTime ) {
+                        _nextActionTime += _secondsPerMeasure;
+                        measureNumber++;
+                    }
                 }
-                
+            } else {
+                timeRemaining = 3;
             }
+        }
+
+        private void DisplayTime(float timeToDisplay)
+        {
+            float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+            Debug.Log(seconds);
+            timeText.text = seconds.ToString();
         }
 
         // Called when the object is disabled 
