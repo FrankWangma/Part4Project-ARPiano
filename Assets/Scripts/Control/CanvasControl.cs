@@ -89,6 +89,7 @@ namespace control
                     paragraphPosition.y,
                     paragraphPosition.z);
         }
+        
         private void DisplayTime(float timeToDisplay)
         {
             float seconds = Mathf.FloorToInt(timeToDisplay % 60);
