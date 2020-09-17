@@ -18,7 +18,8 @@ namespace symbol
         private GameObject _loadScore;
         private List<GameObject> _paragraphs = new List<GameObject>();
         private GameObject _overlayCanvas;
-        private List<string> _noteText;
+        private List<string> _whiteKeyText;
+        private List<string> _blackKeyText;
 
 
         public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore, GameObject overlayCanvas)
@@ -30,9 +31,13 @@ namespace symbol
             _canvasScore = canvasScore;
             _loadScore = loadScore;
             _overlayCanvas = overlayCanvas;
-            string[] input = {"C", "D", "E", "F", "G", "A", "B"};
-            _noteText = new List<string>();
-            _noteText.AddRange(input);
+            string[] whiteKeyInput = {"C", "D", "E", "F", "G", "A", "B"};
+            _whiteKeyText = new List<string>();
+            _whiteKeyText.AddRange(whiteKeyInput);
+
+            string[] blackKeyInput = {"C#", "D#", "F#", "G#", "Bb",};
+            _blackKeyText = new List<string>();
+            _blackKeyText.AddRange(blackKeyInput);
             Init();
         }
 
@@ -125,12 +130,26 @@ namespace symbol
                 GameObject whiteKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
                     _parentObject.transform.position,
                     _commonParams.GetPrefabPianoKey().transform.rotation);
-                whiteKey.gameObject.name = "White Key";
+
+                Text whiteKeyText = whiteKey.transform.GetChild(0).gameObject.GetComponent<Text>();
+                RectTransform textRect = whiteKeyText.gameObject.GetComponent<RectTransform>();
+                textRect.position = new Vector3(textRect.position.x, textRect.position.y - height * 0.75f, 0);
+                textRect.sizeDelta = new Vector2(width,height);
+                whiteKeyText.color = Color.black;
+                whiteKeyText.fontSize = 30;
+
+                if(i >= 7) {
+                    whiteKey.gameObject.name =  _whiteKeyText[i % _whiteKeyText.Count] + "1";
+                    whiteKeyText.text = _whiteKeyText[i % _whiteKeyText.Count] + "1";
+                } else {
+                    whiteKey.gameObject.name =  _whiteKeyText[i % _whiteKeyText.Count];
+                    whiteKeyText.text = _whiteKeyText[i % _whiteKeyText.Count];
+                }
                 whiteKey.transform.SetParent(piano.transform);
                 RectTransform rect = whiteKey.GetComponent<RectTransform>();
                 rect.sizeDelta = new Vector2(width,height);
                 rect.position = new Vector3(pianoKeyPositioning.x + width * i, pianoKeyPositioning.y, 0);
-                whiteKey.transform.GetChild(0).gameObject.GetComponent<Text>().text = _noteText[i % _noteText.Count];
+                
             }
 
             int offset = width / 2;
@@ -138,16 +157,32 @@ namespace symbol
                  GameObject blackKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
                     _parentObject.transform.position,
                     _commonParams.GetPrefabPianoKey().transform.rotation);
-                blackKey.gameObject.name = "Black Key";
                 blackKey.transform.SetParent(piano.transform);
                 Image image = blackKey.GetComponent<Image>();
                 image.color = Color.black;
                 RectTransform rect = blackKey.GetComponent<RectTransform>();
+
+                Text blackKeyText = blackKey.transform.GetChild(0).gameObject.GetComponent<Text>();
+                blackKeyText.color = Color.white;
+                blackKeyText.fontSize = 30;
+                RectTransform textRect = blackKeyText.gameObject.GetComponent<RectTransform>();
+                textRect.position = new Vector3(textRect.position.x, textRect.position.y - height / 2, 0);
+                textRect.sizeDelta = new Vector2(width,height);
+
+                if(i >= 5) {
+                     blackKeyText.text = _blackKeyText[i % _blackKeyText.Count] + "1";
+                     blackKey.gameObject.name = _blackKeyText[i % _blackKeyText.Count] + "1";
+                } else {
+                     blackKeyText.text = _blackKeyText[i % _blackKeyText.Count];
+                     blackKey.gameObject.name = _blackKeyText[i % _blackKeyText.Count];
+                }
+
                 rect.sizeDelta = new Vector2(width - 20, height - 170);
                 if (i == 2 || i == 5 || i == 7) {
                     offset += width;
                 }
-                rect.position = new Vector3((pianoKeyPositioning.x + width * i) + offset, pianoKeyPositioning.y + (pianoKeyPositioning.y / 3), 0);
+                rect.position = new Vector3((pianoKeyPositioning.x + width * i) + offset, pianoKeyPositioning.y + (pianoKeyPositioning.y / 3), 0);           
+                
             }
         }
 
