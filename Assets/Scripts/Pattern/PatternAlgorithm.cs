@@ -24,6 +24,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         **/
         private List<List<Note>> _highNotes = new List<List<Note>>();
         private List<List<Note>> _lowNotes = new List<List<Note>>();
+        string _fifth = "0";
 
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private static ChordDatabase _chordDatabase = ChordDatabase.GetInstance();
@@ -32,6 +33,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         {
             _lowNotes = _noteDatabase.GetLowNotes();
             _highNotes = _noteDatabase.GetHighNotes();
+            _fifth = _noteDatabase.GetFifth();
             LoopThrough(_lowNotes);
             LoopThrough(_highNotes);
         }
@@ -209,6 +211,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 {
                     //GET THE TYPE CHORD HERE AND DO SOMETHING WITH IT
                     //Debug.Log("SET CHORD COLOR");
+                    Debug.Log("Chord + " + _chordDatabase.IdentifyChord(chords[i]));
                     SetChordColor(notes[i], _chordDatabase.IdentifyChord(chords[i]));
                 }
             }
@@ -226,9 +229,9 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
         private String GetNote(Note note)
         {
-            String accidental = note.GetAccidental();
+            String accidental = note.GetAccidental(_fifth);
             String step = note.GetStep();
-            String output = accidental + step;
+            String output = step + accidental;
             if (accidental.Equals("flat"))
             {
                 output = Transpose(step);
@@ -262,13 +265,13 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             Color myColor = Color.black;
             switch (chordnote)
             {
-                case "A": myColor = Color.magenta; break;
-                case "B": myColor = Color.cyan; break;
-                case "C": myColor = Color.red; break;
-                case "D": myColor = new Color(0.2F, 0.3F, 0.4F); break;
-                case "E": myColor = Color.yellow; break;
-                case "F": myColor = Color.green; break;
-                case "G": myColor = Color.blue; break;
+                case "A": myColor = Color.yellow; break;
+                case "B": myColor = Color.magenta; break; //Pink
+                case "C": myColor = Color.green; break; //C is Green
+                case "D": myColor = Color.blue; break; //D is blue
+                case "E": myColor = new Color(0.52F, 0.16F, 0.89F); break; //Purple
+                case "F": myColor = Color.red; break;
+                case "G": myColor = new Color(1.0F, 0.4F, 0.0F); break; //Orange
             }
 
             return myColor;

@@ -68,17 +68,16 @@ namespace control
             parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
             paragraphNumber++;
             Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
-            MoveParagraphUp(movingObject.gameObject);
-
+            if(movingObject != null) {
+                MoveParagraphUp(movingObject.gameObject);
+            } else {
+                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                backButton.onClick.Invoke();
+            }
             Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
             if(nextObject) {
                 nextObject.gameObject.SetActive(true);
-            } else {
-                Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
-                startButton.onClick.Invoke();
-                paragraphNumber = 1;
-                parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
-            }
+            } 
             _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
         }
 
@@ -134,6 +133,7 @@ namespace control
             // 解析MusicXml文件
             XmlFacade xmlFacade = new XmlFacade(filename);
             // 生成乐谱表
+            //Debug.Log("Beat + " + xmlFacade.GetBPM());
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
 
@@ -149,9 +149,11 @@ namespace control
             scoreInfo.Add(xmlFacade.GetWorkTitle()); // 0
             scoreInfo.Add(xmlFacade.GetCreator()); // 1
 
-            // 绘制乐谱视图
-            _noteDatabase.AddScoreList(scoreList);
-
+            Debug.Log("Fifths + " + xmlFacade.GetFifths());
+            //Debug.Log("Beat + " + xmlFacade.GetBPM());
+            // Adds the created score to the note database so we can work with the notes
+            _noteDatabase.AddScoreList(scoreList, xmlFacade.GetFifths());
+            
             ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
             // 更改乐符颜色
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
@@ -160,6 +162,8 @@ namespace control
             speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
         }
         private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM) {
+            //Debug.Log("HI" + beatsPerMeasure);
+            //Debug.Log("HI HI " + BPM);
             float secondsInMinute = 60.0f;
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);

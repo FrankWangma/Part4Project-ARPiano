@@ -18,7 +18,7 @@ namespace xmlParser
         private string _creator = ""; 
         //256 default?
         private string _divisions = ""; 
-        private string _fifths = ""; 
+        private string _fifths = "0"; 
         private string _beats = ""; 
         private string _beatType = ""; 
         private string _clef = "";
@@ -38,7 +38,7 @@ namespace xmlParser
         private string _stem = ""; 
         private string _beam = ""; 
         private string _beamNum = ""; 
-        private string _bpm = "";
+        private string _bpm = "120";
         private Symbol _symbol;
         private Beat _beat;
         private Head _highHead;
@@ -285,6 +285,7 @@ namespace xmlParser
         public List<List<List<Symbol>>> GetMeasureSymbolList() { return _measureSymbolList; }
 
         public List<Measure> GetMeasureList() { return _measureList; }
+        public String GetFifths() { return _fifths; } //Gets key signature
 
         private int GetStandard() {
             int standard = 0;

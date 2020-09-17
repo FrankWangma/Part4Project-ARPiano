@@ -90,7 +90,9 @@ namespace symbol
         private void DisableParagraphs() {
             // Disable every paragraph, except for first 2
             for(int i = 2; i < _paragraphs.Count; i++) {
-                _paragraphs[i].SetActive(false);
+                if(_paragraphs[i] != false) {
+                    _paragraphs[i].SetActive(false);
+                }
             }
         }
 
@@ -193,6 +195,7 @@ namespace symbol
             //Not working?
             GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            backButtonObject.gameObject.name = "backButton";
             backButtonObject.transform.SetParent(_parentObject.transform);
             RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
             backRect.position = new Vector3(50, _screenSize[1] - 50, 0);

@@ -9,6 +9,7 @@ namespace xmlParser
         private string _workTitle;
         private string _creator;
         private string _bpm;
+        private string _fifths;
         private Beat _beat;
         private Head _highHead;
         private Head _lowHead;
@@ -34,6 +35,7 @@ namespace xmlParser
             _measureSymbolList = xmlParser.GetMeasureSymbolList();
             _measureList = xmlParser.GetMeasureList();
             _bpm = xmlParser.GetBPM();
+            _fifths = xmlParser.GetFifths();
         }
 
         public string GetWorkTitle() { return _workTitle; }
@@ -41,6 +43,7 @@ namespace xmlParser
         public string GetCreator() { return _creator; }
 
         public string GetBPM() { return _bpm; }
+        public string GetFifths() {return _fifths; }
 
         public Beat GetBeat() { return _beat; }
 
