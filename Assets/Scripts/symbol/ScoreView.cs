@@ -18,6 +18,7 @@ namespace symbol
         private GameObject _loadScore;
         private List<GameObject> _paragraphs = new List<GameObject>();
         private GameObject _overlayCanvas;
+        private List<string> _noteText;
 
 
         public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore, GameObject overlayCanvas)
@@ -29,6 +30,9 @@ namespace symbol
             _canvasScore = canvasScore;
             _loadScore = loadScore;
             _overlayCanvas = overlayCanvas;
+            string[] input = {"C", "D", "E", "F", "G", "A", "B"};
+            _noteText = new List<string>();
+            _noteText.AddRange(input);
             Init();
         }
 
@@ -75,6 +79,7 @@ namespace symbol
             }
 
             DisableParagraphs();
+            DrawPianoKeys();
         }
 
         private void DisableParagraphs() {
@@ -106,6 +111,44 @@ namespace symbol
             Text objectText = textObject.GetComponent<Text>();
             objectText.fontSize = fontSize;
             objectText.text = text;
+        }
+
+        private void DrawPianoKeys() {
+            int width = 100;
+            int height = 400;
+            Vector2 position = new Vector2(_screenSize[0] / 2, _screenSize[1] - 250);
+            GameObject piano = new GameObject();
+            piano.transform.SetParent(_parentObject.transform);
+            piano.gameObject.name = "Piano";
+            Vector3 pianoKeyPositioning = new Vector3((position.x - 6.5f * width), position.y - 2 * _paramsGetter.GetTotalHeight() * 3, 0);
+            for(int i = 0; i < 14; i++) {
+                GameObject whiteKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
+                    _parentObject.transform.position,
+                    _commonParams.GetPrefabPianoKey().transform.rotation);
+                whiteKey.gameObject.name = "White Key";
+                whiteKey.transform.SetParent(piano.transform);
+                RectTransform rect = whiteKey.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(width,height);
+                rect.position = new Vector3(pianoKeyPositioning.x + width * i, pianoKeyPositioning.y, 0);
+                whiteKey.transform.GetChild(0).gameObject.GetComponent<Text>().text = _noteText[i % _noteText.Count];
+            }
+
+            int offset = width / 2;
+            for(int i = 0; i < 10; i++) {
+                 GameObject blackKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
+                    _parentObject.transform.position,
+                    _commonParams.GetPrefabPianoKey().transform.rotation);
+                blackKey.gameObject.name = "Black Key";
+                blackKey.transform.SetParent(piano.transform);
+                Image image = blackKey.GetComponent<Image>();
+                image.color = Color.black;
+                RectTransform rect = blackKey.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(width - 20, height - 170);
+                if (i == 2 || i == 5 || i == 7) {
+                    offset += width;
+                }
+                rect.position = new Vector3((pianoKeyPositioning.x + width * i) + offset, pianoKeyPositioning.y + (pianoKeyPositioning.y / 3), 0);
+            }
         }
 
         // 放置两个button按钮作为返回上一个场景，以及退出
