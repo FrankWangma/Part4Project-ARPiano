@@ -270,7 +270,11 @@ namespace xmlParser
 
         public string GetCreator() { return _creator; }
 
-        public string GetBPM() { return _bpm; }
+        public string GetBPM() { 
+            if(_bpm.Equals("")){
+                return "120";
+            }
+             return _bpm; }
 
         public Beat GetBeat() { return _beat; }
 
@@ -285,6 +289,7 @@ namespace xmlParser
         public List<List<List<Symbol>>> GetMeasureSymbolList() { return _measureSymbolList; }
 
         public List<Measure> GetMeasureList() { return _measureList; }
+        public String GetFifths() { return _fifths; } //Gets key signature
 
         private int GetStandard() {
             int standard = 0;

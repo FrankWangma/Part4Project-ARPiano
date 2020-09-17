@@ -97,27 +97,27 @@ namespace control
 
             //add new button here
             ///Increment the button so it is positioned correclty
-            xmlFileCount += 1;
-            GameObject blankButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
-                canvasObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
-            blankButtonObject.name = "Button" + xmlFileCount;
-            blankButtonObject.transform.SetParent(canvasObject.transform);
-            RectTransform blankRect = blankButtonObject.GetComponent<RectTransform>();
-            // 设置位置为以画布左下角为坐标原点
-            blankRect.position = new Vector3(buttonPosition.x,
-                buttonPosition.y - 50 * xmlFileCount,
-                buttonPosition.z);
+            // xmlFileCount += 1;
+            // GameObject blankButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
+            //     canvasObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            // blankButtonObject.name = "Button" + xmlFileCount;
+            // blankButtonObject.transform.SetParent(canvasObject.transform);
+            // RectTransform blankRect = blankButtonObject.GetComponent<RectTransform>();
+            // // 设置位置为以画布左下角为坐标原点
+            // blankRect.position = new Vector3(buttonPosition.x,
+            //     buttonPosition.y - 50 * xmlFileCount,
+            //     buttonPosition.z);
 
-            Text blankBtnText = blankButtonObject.GetComponentInChildren<Text>();
-            blankBtnText.text = "Blank Button";
+            // Text blankBtnText = blankButtonObject.GetComponentInChildren<Text>();
+            // blankBtnText.text = "Blank Button";
 
-            Button blankButton = blankButtonObject.GetComponent<Button>();
-            blankButton.onClick.AddListener(delegate
-            {
-                _testCanvas.SetActive(true);
-                _loadScore.SetActive(false);
-                _canvasScore.SetActive(true);
-            });
+            // Button blankButton = blankButtonObject.GetComponent<Button>();
+            // blankButton.onClick.AddListener(delegate
+            // {
+            //     _testCanvas.SetActive(true);
+            //     _loadScore.SetActive(false);
+            //     _canvasScore.SetActive(true);
+            // });
         }
     }
 }

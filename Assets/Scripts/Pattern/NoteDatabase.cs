@@ -33,8 +33,6 @@ namespace Pattern
 
             //Test code to check method works
             ///ChangeNoteColor(1, 0, Color.green, false);
-
-
             //When we are looking at a chord, check if is chord using .HasChord(), then use .GetChordList() to get list of notes that make up the chord
             //Debug.Log("note " + _lowNotes[1][0].GetStep() + " " + _lowNotes[1][0].IsChord() + " " + _lowNotes[1][0].GetChordList().Count + " " + _lowNotes[4][0].GetChordList()[1].GetStep());
             //foreach(Note note in _lowNotes[5][0].GetChordList()){
@@ -45,7 +43,8 @@ namespace Pattern
             //GetChordList()[0].GetStep()
              //Debug.Log("note " + _highNotes[2][3].GetStep() );
             //Accidental is empty if no accidental
-             //Debug.Log("Accidental " + _highNotes[2][3].GetAccidental() );
+            //Debug.Log("note " + _highNotes[3][0].GetStep());
+            //Debug.Log("Accidental " + _highNotes[3][0].GetAccidental() );
         }
 
         //Adds notes to their corresponding bar, in order and based on measure
