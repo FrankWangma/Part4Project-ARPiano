@@ -68,17 +68,16 @@ namespace control
             parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
             paragraphNumber++;
             Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
-            MoveParagraphUp(movingObject.gameObject);
-
+            if(movingObject != null) {
+                MoveParagraphUp(movingObject.gameObject);
+            } else {
+                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                backButton.onClick.Invoke();
+            }
             Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
             if(nextObject) {
                 nextObject.gameObject.SetActive(true);
-            } else {
-                Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
-                startButton.onClick.Invoke();
-                paragraphNumber = 1;
-                parentObject.transform.Find("Paragraph1").gameObject.SetActive(true);
-            }
+            } 
             _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
         }
 
