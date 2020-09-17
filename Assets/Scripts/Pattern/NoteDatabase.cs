@@ -9,7 +9,7 @@ namespace Pattern
 {
     public class NoteDatabase
     {
-        private List<List<Measure>> _scoreList;
+        private List<List<Measure>> _scoreList = new List<List<Measure>>();
         private List<List<Note>> _highNotes = new List<List<Note>>();
         private List<List<Note>> _lowNotes = new List<List<Note>>();
         private List<Measure> _measures = new List<Measure>();
@@ -37,12 +37,12 @@ namespace Pattern
             //When we are looking at a chord, check if is chord using .HasChord(), then use .GetChordList() to get list of notes that make up the chord
             //Debug.Log("note " + _lowNotes[1][0].GetStep() + " " + _lowNotes[1][0].IsChord() + " " + _lowNotes[1][0].GetChordList().Count + " " + _lowNotes[4][0].GetChordList()[1].GetStep());
             //foreach(Note note in _lowNotes[5][0].GetChordList()){
-                //Debug.Log("note chord " + note.GetStep());
+            //Debug.Log("note chord " + note.GetStep());
             //}
             //Debug.Log("note " + _lowNotes[3][0].GetStep() + " " + _lowNotes[3][0].IsChord() + " " + _lowNotes[3][0].GetChordList().Count);
             //Debug.Log("note " + _lowNotes[10][0].GetStep() + _lowNotes[10][0].GetChordList()[0].GetStep() + " " + _lowNotes[10][0].GetChordList()[1].GetStep()  + " " + _lowNotes[10][0].IsChord() + " " + _lowNotes[10][0].GetChordList().Count);
             //GetChordList()[0].GetStep()
-             //Debug.Log("note " + _highNotes[2][3].GetStep() );
+            //Debug.Log("note " + _highNotes[2][3].GetStep() );
             //Accidental is empty if no accidental
             // Debug.Log("note " + _lowNotes[3][0].GetStep());
             // Debug.Log("Accidental " + _lowNotes[3][0].GetAccidental(_fifth) );
@@ -85,20 +85,32 @@ namespace Pattern
             }
         }
 
-        public List<List<Note>> GetHighNotes(){ return _highNotes; }
+        public List<List<Note>> GetHighNotes() { return _highNotes; }
 
-        public List<List<Note>> GetLowNotes(){ return _lowNotes; }
-        public String GetFifth() {return _fifth; }
+        public List<List<Note>> GetLowNotes() { return _lowNotes; }
+        public String GetFifth() { return _fifth; }
 
-        public void ChangeNoteColor(int measurePosition, int notePosition, Color color, Boolean highNote){
-            if(highNote){
+        public void ChangeNoteColor(int measurePosition, int notePosition, Color color, Boolean highNote)
+        {
+            if (highNote)
+            {
                 Note toChange = _highNotes[measurePosition][notePosition];
                 toChange.SetColor(color);
-            } 
-            else{
+            }
+            else
+            {
                 Note toChange = _lowNotes[measurePosition][notePosition];
                 toChange.SetColor(color);
             }
+        }
+
+        public void Clear()
+        {
+            _scoreList = new List<List<Measure>>();
+            _highNotes = new List<List<Note>>();
+            _lowNotes = new List<List<Note>>();
+            _measures = new List<Measure>();
+            _fifth = "0"; //Key signature
         }
     }
 }
