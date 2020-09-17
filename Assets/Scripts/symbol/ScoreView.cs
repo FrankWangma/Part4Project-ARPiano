@@ -3,7 +3,7 @@ using util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using control;
 namespace symbol
 {
     public class ScoreView
@@ -16,6 +16,7 @@ namespace symbol
         private CommonParams _commonParams = CommonParams.GetInstance();
         private GameObject _canvasScore;
         private GameObject _loadScore;
+        private List<GameObject> _paragraphs = new List<GameObject>();
         private GameObject _overlayCanvas;
 
 
@@ -58,14 +59,28 @@ namespace symbol
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
                 // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
+                int offset = 0;
+                if(i > 0) {
+                    offset = -2 * _paramsGetter.GetTotalHeight() * 1;
+                }
                 rect.position = new Vector3(paragraphPosition.x,
-                    paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i,
+                    paragraphPosition.y + offset,
                     paragraphPosition.z);
 
                 // 将paragraph画布对象赋为下一层的父对象
                 // 绘制每一行的视图'
                 //Debug.Log("ScoreList" + _scoreList.Count);
                 ParagraphView paragraphView = new ParagraphView(_scoreList[i], paragraphObject);
+                _paragraphs.Add(paragraphObject);
+            }
+
+            DisableParagraphs();
+        }
+
+        private void DisableParagraphs() {
+            // Disable every paragraph, except for first 2
+            for(int i = 2; i < _paragraphs.Count; i++) {
+                _paragraphs[i].SetActive(false);
             }
         }
 
@@ -115,6 +130,28 @@ namespace symbol
                 _loadScore.SetActive(true);
                 _overlayCanvas.SetActive(false);
             });
+
+            GameObject startButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
+                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            startButtonObject.name = "startButton";
+            startButtonObject.transform.SetParent(_parentObject.transform);
+            RectTransform startRect = startButtonObject.GetComponent<RectTransform>();
+            startRect.position = new Vector3(100, _screenSize[1] - 50, 0);
+            startRect.sizeDelta = new Vector2(50, 30);
+            Text startText = startButtonObject.GetComponentInChildren<Text>();
+            startText.text = "Start";
+            Button startButton = startButtonObject.GetComponent<Button>();
+            startButton.onClick.AddListener(delegate
+            {
+                if(control.CanvasControl.isStarted) {
+                    startText.text = "Start";
+                    control.CanvasControl.isStarted = false;
+                } else {
+                    control.CanvasControl.isStarted = true;
+                    startText.text = "Pause";
+                }
+            });
+
 
             // 退出按钮
             GameObject exitButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
