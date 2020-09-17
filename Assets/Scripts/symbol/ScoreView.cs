@@ -80,7 +80,9 @@ namespace symbol
         private void DisableParagraphs() {
             // Disable every paragraph, except for first 2
             for(int i = 2; i < _paragraphs.Count; i++) {
-                _paragraphs[i].SetActive(false);
+                if(_paragraphs[i] != false) {
+                    _paragraphs[i].SetActive(false);
+                }
             }
         }
 
