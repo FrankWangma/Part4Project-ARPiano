@@ -74,6 +74,7 @@ namespace Pattern
             return null;
         }
 
+        //Find the difference between chord and major chord
         public List<String> IdentifyDiff(String major)
         {
             List<String> diff = new List<string>();
