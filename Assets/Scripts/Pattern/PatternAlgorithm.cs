@@ -258,9 +258,16 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 myColor = Color.black;
             }
 
+            List<String> diffNotes = _chordDatabase.IdentifyDiff(major);
+
             foreach (Note note in notes)
             {
                 note.SetColor(myColor);
+                foreach (String diff in diffNotes){
+                    if(GetNote(note).Equals(diff)){
+                        note.SetColor(Color.cyan);
+                    }
+                }
             }
         }
 

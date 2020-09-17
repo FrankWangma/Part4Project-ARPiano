@@ -10,12 +10,14 @@ namespace Pattern
     public class ChordDatabase
     {
         private Dictionary<String, HashSet<String>> _chordDatabase = new Dictionary<String, HashSet<String>>();
+        private Dictionary<String, List<String>> _diffDatabase = new Dictionary<String, List<String>>();
 
         private static ChordDatabase instance = new ChordDatabase();
 
-        public static ChordDatabase GetInstance() { return instance;}
+        public static ChordDatabase GetInstance() { return instance; }
 
-        private ChordDatabase(){
+        private ChordDatabase()
+        {
             addMajorChords();
             addMinorChords();
             addDiminishedChords();
@@ -23,40 +25,76 @@ namespace Pattern
             addMajorSeventhChords();
         }
 
-        private void addChord(String firstNote, String secondNote, String thirdNote, String chordName){
-            HashSet<String> chord = new HashSet<string>();
+        private void addChord(String firstNote, String secondNote, String thirdNote, String chordName)
+        {
+            HashSet<String> chord = new HashSet<String>();
             chord.Add(firstNote);
             chord.Add(secondNote);
             chord.Add(thirdNote);
-
             _chordDatabase.Add(chordName, chord);
+
+            List<String> notes = new List<String>();
+            notes.Add(firstNote);
+            notes.Add(secondNote);
+            notes.Add(thirdNote);
+            _diffDatabase.Add(chordName, notes);
         }
 
-        
-        private void addChord(String firstNote, String secondNote, String thirdNote, String fourthNote, String chordName){
-            HashSet<String> chord = new HashSet<string>();
+
+        private void addChord(String firstNote, String secondNote, String thirdNote, String fourthNote, String chordName)
+        {
+            HashSet<String> chord = new HashSet<String>();
             chord.Add(firstNote);
             chord.Add(secondNote);
             chord.Add(thirdNote);
             chord.Add(fourthNote);
-
             _chordDatabase.Add(chordName, chord);
-        }      
 
-        public String IdentifyChord(HashSet<String> notes){
+            List<String> notes = new List<String>();
+            notes.Add(firstNote);
+            notes.Add(secondNote);
+            notes.Add(thirdNote);
+            notes.Add(fourthNote);
+            _diffDatabase.Add(chordName, notes);
+        }
+
+        public String IdentifyChord(HashSet<String> notes)
+        {
             //String output;
             //Check if key exists, if it does give output string the key value
             //If key does not exist, method returns null
-            foreach (String major in _chordDatabase.Keys){
+            foreach (String major in _chordDatabase.Keys)
+            {
                 HashSet<String> chordToCheck = _chordDatabase[major];
-                if(chordToCheck.SetEquals(notes)){
+                if (chordToCheck.SetEquals(notes))
+                {
                     return major;
                 }
             }
             return null;
         }
 
-        public void addMajorChords() {
+        public List<String> IdentifyDiff(String major)
+        {
+            List<String> diff = new List<string>();
+            List<String> notes = _diffDatabase[major];
+
+            String type = major.Remove(0, 2);
+            Debug.Log("tpye " + type);
+
+            switch (type)
+            {
+                case "Minor": diff.Add(notes[1]); break;
+                case "Diminished": diff.Add(notes[1]); diff.Add(notes[2]); break;
+                case "7": diff.Add(notes[3]); break;
+                case "Major 7": diff.Add(notes[3]); break;
+            }
+
+            return diff;
+        }
+
+        public void addMajorChords()
+        {
             addChord("C", "E", "G", "C Major");
             addChord("D", "Fsharp", "A", "D Major");
             addChord("E", "Gsharp", "B", "E Major");
@@ -71,7 +109,8 @@ namespace Pattern
             addChord("Asharp", "D", "F", "A Sharp Major");
         }
 
-        public void addMinorChords() {
+        public void addMinorChords()
+        {
             addChord("C", "Dsharp", "G", "C Minor");
             addChord("D", "F", "A", "D Minor");
             addChord("E", "G", "B", "E Minor");
@@ -80,13 +119,14 @@ namespace Pattern
             addChord("A", "C", "E", "A Minor");
             addChord("B", "D", "Fsharp", "B Minor");
             addChord("Csharp", "E", "Asharp", "C Sharp Minor");
-            addChord("Dsharp","Fsharp","Asharp", "D Sharp Minor");
+            addChord("Dsharp", "Fsharp", "Asharp", "D Sharp Minor");
             addChord("Fsharp", "A", "Csharp", "F Sharp Minor");
             addChord("Gsharp", "B", "Dsharp", "G Sharp Minor");
             addChord("Asharp", "Csharp", "F", "A Sharp Minor");
         }
 
-        public void addDiminishedChords() {
+        public void addDiminishedChords()
+        {
             addChord("C", "Dsharp", "Fsharp", "C Diminished");
             addChord("D", "F", "Gsharp", "D Diminished");
             addChord("E", "G", "Asharp", "E Diminished");
@@ -101,7 +141,8 @@ namespace Pattern
             addChord("Asharp", "Csharp", "E", "A Sharp Diminished");
         }
 
-        public void addSeventhChords() {
+        public void addSeventhChords()
+        {
             addChord("C", "E", "G", "Asharp", "C 7");
             addChord("D", "Fsharp", "A", "C", "D 7");
             addChord("E", "Gsharp", "B", "D", "E 7");
@@ -116,7 +157,8 @@ namespace Pattern
             addChord("Asharp", "D", "F", "Gsharp", "A Sharp 7");
         }
 
-        public void addMajorSeventhChords() {
+        public void addMajorSeventhChords()
+        {
             addChord("C", "E", "G", "B", "C Major 7");
             addChord("D", "Fsharp", "A", "Csharp", "D Major 7");
             addChord("E", "Gsharp", "B", "Dsharp", "E Major 7");
