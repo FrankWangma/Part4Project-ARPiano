@@ -181,7 +181,7 @@ namespace symbol
                 if (i == 2 || i == 5 || i == 7) {
                     offset += width;
                 }
-                rect.position = new Vector3((pianoKeyPositioning.x + width * i) + offset, pianoKeyPositioning.y + (pianoKeyPositioning.y / 3), 0);           
+                rect.position = new Vector3((pianoKeyPositioning.x + width * i) + offset, pianoKeyPositioning.y + (rect.sizeDelta.y / 3), 0);           
                 
             }
         }
