@@ -134,7 +134,7 @@ namespace control
             // 解析MusicXml文件
             XmlFacade xmlFacade = new XmlFacade(filename);
             // 生成乐谱表
-            Debug.Log("Beat + " + xmlFacade.GetBPM());
+            //Debug.Log("Beat + " + xmlFacade.GetBPM());
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
 
@@ -153,8 +153,8 @@ namespace control
             Debug.Log("Fifths + " + xmlFacade.GetFifths());
             //Debug.Log("Beat + " + xmlFacade.GetBPM());
             // Adds the created score to the note database so we can work with the notes
-            _noteDatabase.AddScoreList(scoreList);
-
+            _noteDatabase.AddScoreList(scoreList, xmlFacade.GetFifths());
+            
             ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
             // 更改乐符颜色
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
@@ -163,8 +163,8 @@ namespace control
             speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
         }
         private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM) {
-            Debug.Log("HI" + beatsPerMeasure);
-            Debug.Log("HI HI " + BPM);
+            //Debug.Log("HI" + beatsPerMeasure);
+            //Debug.Log("HI HI " + BPM);
             float secondsInMinute = 60.0f;
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);

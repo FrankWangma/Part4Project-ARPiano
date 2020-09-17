@@ -58,7 +58,7 @@ namespace Pattern
 
         public void addMajorChords() {
             addChord("C", "E", "G", "C Major");
-            addChord("C", "Fsharp", "A", "D Major");
+            addChord("D", "Fsharp", "A", "D Major");
             addChord("E", "Gsharp", "B", "E Major");
             addChord("F", "G", "C", "F Major");
             addChord("G", "B", "D", "G Major");

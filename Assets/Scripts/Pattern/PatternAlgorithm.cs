@@ -24,6 +24,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         **/
         private List<List<Note>> _highNotes = new List<List<Note>>();
         private List<List<Note>> _lowNotes = new List<List<Note>>();
+        string _fifth = "0";
 
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private static ChordDatabase _chordDatabase = ChordDatabase.GetInstance();
@@ -32,6 +33,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         {
             _lowNotes = _noteDatabase.GetLowNotes();
             _highNotes = _noteDatabase.GetHighNotes();
+            _fifth = _noteDatabase.GetFifth();
             LoopThrough(_lowNotes);
             LoopThrough(_highNotes);
         }
@@ -209,7 +211,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 {
                     //GET THE TYPE CHORD HERE AND DO SOMETHING WITH IT
                     //Debug.Log("SET CHORD COLOR");
-                    //Debug.Log("Chord + " + _chordDatabase.IdentifyChord(chords[i]));
+                    Debug.Log("Chord + " + _chordDatabase.IdentifyChord(chords[i]));
                     SetChordColor(notes[i], _chordDatabase.IdentifyChord(chords[i]));
                 }
             }
@@ -227,9 +229,9 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
         private String GetNote(Note note)
         {
-            String accidental = note.GetAccidental();
+            String accidental = note.GetAccidental(_fifth);
             String step = note.GetStep();
-            String output = accidental + step;
+            String output = step + accidental;
             if (accidental.Equals("flat"))
             {
                 output = Transpose(step);
