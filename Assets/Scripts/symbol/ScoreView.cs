@@ -117,6 +117,7 @@ namespace symbol
             //Not working?
             GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            backButtonObject.gameObject.name = "backButton";
             backButtonObject.transform.SetParent(_parentObject.transform);
             RectTransform backRect = backButtonObject.GetComponent<RectTransform>();
             backRect.position = new Vector3(50, _screenSize[1] - 50, 0);
