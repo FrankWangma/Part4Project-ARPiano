@@ -183,6 +183,7 @@ namespace symbol
                     whiteKey.gameObject.name =  _whiteKeyText[i % _whiteKeyText.Count];
                     whiteKeyText.text = _whiteKeyText[i % _whiteKeyText.Count];
                 }
+
                 whiteKey.transform.SetParent(piano.transform);
                 RectTransform rect = whiteKey.GetComponent<RectTransform>();
                 rect.sizeDelta = new Vector2(width,height);
@@ -208,14 +209,19 @@ namespace symbol
                 textRect.position = new Vector3(textRect.position.x, textRect.position.y - height / 2, 0);
                 textRect.sizeDelta = new Vector2(width,height);
 
+                string name = _blackKeyText[i % _blackKeyText.Count];
                 if(i >= 5) {
-                     blackKeyText.text = _blackKeyText[i % _blackKeyText.Count] + "1";
-                     blackKey.gameObject.name = _blackKeyText[i % _blackKeyText.Count] + "1";
+                     blackKeyText.text = name + "1";
+                     blackKey.gameObject.name = name + "1";
                 } else {
-                     blackKeyText.text = _blackKeyText[i % _blackKeyText.Count];
-                     blackKey.gameObject.name = _blackKeyText[i % _blackKeyText.Count];
+                     blackKeyText.text = name;
+                     blackKey.gameObject.name = name;
                 }
-
+                if(name.Equals("Bb")) {
+                    blackKey.gameObject.name = blackKey.gameObject.name.Replace("Bb", "Asharp");
+                } else if (name.Contains("#")) {
+                    blackKey.gameObject.name = blackKey.gameObject.name.Replace("#", "sharp");
+                }               
                 rect.sizeDelta = new Vector2(width - 20, height - 170);
                 if (i == 2 || i == 5 || i == 7) {
                     offset += width;

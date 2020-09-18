@@ -132,6 +132,7 @@ namespace control
         {
             string scoreName = _commonParams.GetScoreName();
             _notes = new List<List<Note>>();
+            _oldKeys = new Dictionary<GameObject, Color>();
             index = 0;
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
