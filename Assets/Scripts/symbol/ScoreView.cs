@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using control;
+using Pattern;
 namespace symbol
 {
     public class ScoreView
@@ -14,6 +15,7 @@ namespace symbol
         private List<string> _scoreInfo;
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private CommonParams _commonParams = CommonParams.GetInstance();
+        private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private GameObject _canvasScore;
         private GameObject _loadScore;
         private List<GameObject> _paragraphs = new List<GameObject>();
@@ -245,6 +247,7 @@ namespace symbol
                 _canvasScore.SetActive(false);
                 _loadScore.SetActive(true);
                 _overlayCanvas.SetActive(false);
+                _noteDatabase.Clear();
             });
 
             GameObject startButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
