@@ -81,7 +81,7 @@ namespace Pattern
             List<String> notes = _diffDatabase[major];
 
             String type = major.Remove(0, 2);
-            Debug.Log("tpye " + type);
+            //Debug.Log("tpye " + type);
 
             switch (type)
             {
