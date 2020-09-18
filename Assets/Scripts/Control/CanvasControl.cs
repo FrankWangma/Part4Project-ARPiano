@@ -83,7 +83,7 @@ namespace control
                         _numberOfPatterns--;
                     }
 
-                                        //Increments measure number count
+                    //Increments measure number count
                     if (_nextActionTime >= _secondsPerMeasure)
                     {
                         _nextActionTime -= _secondsPerMeasure;
@@ -138,7 +138,13 @@ namespace control
 
             //NOTE: IF INDEX IS EMPTY, SET KEYS TO WHITE AGAIN (AS NOTHING IS IN THERE)
             Debug.Log("Measure counts " + _measureTotal + " " + _noteIndex);
-            _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
+            if (_notes[_measureTotal].Count != 0)
+            {
+                _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
+            }
+            else{
+                _oldKeys = new Dictionary<GameObject, Color>();
+            }
 
         }
 
