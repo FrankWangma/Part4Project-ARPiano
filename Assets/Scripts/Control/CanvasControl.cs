@@ -23,94 +23,134 @@ namespace control
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private float _secondsPerMeasure;
         private float _nextActionTime = 0;
+        private int _numberOfPatterns = 1;
         public static bool isStarted = false;
         private bool addedTime = false;
         private int paragraphNumber = 1;
-        private int measureNumber = 0;
+        private int _measureNumber = 0;
+        private int _measureTotal = 0;
         private int index = 0;
+        private int _noteIndex = 0;
         private float speed;
         private float timeRemaining = 4;
         private Text timeText;
         private float paragraphStartX = 67f / 2;
         private float paragraphStartY = Screen.height - 250;
-        public static List<List<Note>> _notes;
-        private Dictionary<GameObject,Color> _oldKeys;
+        public static List<List<List<Note>>> _notes;
+        private Dictionary<GameObject, Color> _oldKeys;
 
-        private void Update() {
-            if(isStarted) {
-                if(timeRemaining > 1) {
+        private void Update()
+        {
+            if (isStarted)
+            {
+                if (timeRemaining > 1)
+                {
                     timeText.gameObject.SetActive(true);
                     timeRemaining -= Time.deltaTime;
                     DisplayTime(timeRemaining);
-                } else {
-                    if(timeText.gameObject.activeSelf) {
+                }
+                else
+                {
+                    if (timeText.gameObject.activeSelf)
+                    {
                         timeText.gameObject.SetActive(false);
                     }
-                    if(_sweeperLine == null) {
+                    if (_sweeperLine == null)
+                    {
                         _sweeperLine = GameObject.Find("Paragraph1 Sweeper");
                     }
-                    
+
                     _nextActionTime += Time.deltaTime;
                     RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
-                    if(measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure) {
+
+                    if (_measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure)
+                    {
                         _nextActionTime -= _secondsPerMeasure;
-                        measureNumber = 0;
+                        _measureNumber = 0;
                         HandleParagraphChange();
                         index++;
                         HandlePianoColor();
+                        _measureTotal++;
                     }
-                    if (_nextActionTime >= _secondsPerMeasure ) {
-                        _nextActionTime -= _secondsPerMeasure;
-                        measureNumber++;
+
+                    //Increments pattern number count
+                    if (_nextActionTime >= (_secondsPerMeasure / _numberOfPatterns))
+                    {
                         index++;
                         HandlePianoColor();
+                        _noteIndex++;
+                        _numberOfPatterns--;
+                    }
+
+                                        //Increments measure number count
+                    if (_nextActionTime >= _secondsPerMeasure)
+                    {
+                        _nextActionTime -= _secondsPerMeasure;
+                        _measureNumber++;
+                        _measureTotal++;
+                        _noteIndex = 0;
+                        _numberOfPatterns = _notes[_measureTotal].Count;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 timeRemaining = 4;
             }
         }
 
-        private void HandleParagraphChange() {
+        private void HandleParagraphChange()
+        {
             parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
             paragraphNumber++;
             Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
-            if(movingObject != null) {
+            if (movingObject != null)
+            {
                 MoveParagraphUp(movingObject.gameObject);
-            } else {
+            }
+            else
+            {
                 Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
                 backButton.onClick.Invoke();
             }
             Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
-            if(nextObject) {
+            if (nextObject)
+            {
                 nextObject.gameObject.SetActive(true);
-            } 
+            }
             _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
         }
 
-        private void HandlePianoColor() {
+        private void HandlePianoColor()
+        {
             Color color;
-            if(_oldKeys != null) {
-                foreach(GameObject key in _oldKeys.Keys) {
-                    if(_oldKeys.TryGetValue(key, out color)) {
+            if (_oldKeys != null)
+            {
+                foreach (GameObject key in _oldKeys.Keys)
+                {
+                    if (_oldKeys.TryGetValue(key, out color))
+                    {
                         key.GetComponent<Image>().color = color;
                     }
                 }
             }
-            
-            _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[index]);
-            
+
+            //NOTE: IF INDEX IS EMPTY, SET KEYS TO WHITE AGAIN (AS NOTHING IS IN THERE)
+            Debug.Log("Measure counts " + _measureTotal + " " + _noteIndex);
+            _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
+
         }
 
-        private void MoveParagraphUp(GameObject paragraphObject) {
+        private void MoveParagraphUp(GameObject paragraphObject)
+        {
             Vector3 paragraphPosition = new Vector3(paragraphStartX, paragraphStartY, 0);
             RectTransform rect = paragraphObject.GetComponent<Canvas>().GetComponent<RectTransform>();
             rect.position = new Vector3(paragraphPosition.x,
                     paragraphPosition.y,
                     paragraphPosition.z);
         }
-        
+
         private void DisplayTime(float timeToDisplay)
         {
             float seconds = Mathf.FloorToInt(timeToDisplay % 60);
@@ -131,16 +171,22 @@ namespace control
         private void OnEnable()
         {
             string scoreName = _commonParams.GetScoreName();
-            _notes = new List<List<Note>>();
+            _notes = new List<List<List<Note>>>();
             _oldKeys = new Dictionary<GameObject, Color>();
+            _measureNumber = 0;
             index = 0;
+            _noteIndex = 0;
+            _measureTotal = 0;
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
+            _numberOfPatterns = _notes[_measureTotal].Count;
             HandlePianoColor();
+            _measureTotal = 1;
         }
 
-        private void DrawTimerText() {
+        private void DrawTimerText()
+        {
             GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText(),
                 this.transform.position,
                 _commonParams.GetPrefabText().transform.rotation);
@@ -179,7 +225,7 @@ namespace control
             //Debug.Log("Beat + " + xmlFacade.GetBPM());
             // Adds the created score to the note database so we can work with the notes
             _noteDatabase.AddScoreList(scoreList, xmlFacade.GetFifths());
-            
+
             _scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
             // 更改乐符颜色
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
@@ -187,7 +233,8 @@ namespace control
             //    symbolControl.SetColor(Color.red);
             speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
         }
-        private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM) {
+        private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM)
+        {
             //Debug.Log("HI" + beatsPerMeasure);
             //Debug.Log("HI HI " + BPM);
             float secondsInMinute = 60.0f;

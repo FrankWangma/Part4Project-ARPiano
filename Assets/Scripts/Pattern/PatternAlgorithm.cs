@@ -217,6 +217,8 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
         private void CheckPattern(List<HashSet<String>> chords, List<List<Note>> notes)
         {
+            List<List<Note>> pianoNotes = new List<List<Note>>();
+
             foreach (List<Note> note in notes)
             {
                 String output = "";
@@ -236,7 +238,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 {
                     //GET THE TYPE CHORD HERE AND DO SOMETHING WITH IT
                     //Debug.Log("SET CHORD COLOR");
-                    Debug.Log("Chord + " + _chordDatabase.IdentifyChord(chords[i]));
+                    //Debug.Log("Chord + " + _chordDatabase.IdentifyChord(chords[i]));
                     //Debug.Log("notes " + notes[i].Count);
                     // String output = "";
                     // foreach (Note n in notes[i])
@@ -246,8 +248,12 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                     // Debug.Log("notes" + output);
                     //Debug.Log("Index + " + i + "Notes " + notes.Count + "Chords " + chords.Count);
                     SetChordColor(notes[i], _chordDatabase.IdentifyChord(chords[i]));
+                    pianoNotes.Add(notes[i]);
                 }
             }
+
+            //Adds in notes for piano overlay
+            control.CanvasControl._notes.Add(pianoNotes);
         }
 
         private void SetChordColor(List<Note> notes, String major)
@@ -261,7 +267,6 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             List<String> diffNotes = _chordDatabase.IdentifyDiff(major);
 
             List<Color> colors = new List<Color>();
-            control.CanvasControl._notes.Add(notes);
             foreach (Note note in notes)
             {
                 note.SetColor(myColor);

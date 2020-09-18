@@ -36,7 +36,7 @@ namespace symbol
             _whiteKeyText = new List<string>();
             _whiteKeyText.AddRange(whiteKeyInput);
 
-            string[] blackKeyInput = {"C#", "D#", "F#", "G#", "Bb",};
+            string[] blackKeyInput = {"Db\nC#", "Eb\nD#", "Gb\nF#", "Ab\nG#", "Bb\nA#",};
             _blackKeyText = new List<string>();
             _blackKeyText.AddRange(blackKeyInput);
             _pianoKeys.Clear();
@@ -90,18 +90,24 @@ namespace symbol
         }
 
         public Dictionary<GameObject,Color> changePianoKeyColor(List<Color> colors, List<Note> notes) {
-            int highestOctave = -1;
+            int lowestOctave = 100;
             foreach(Note note in notes) {
-                if(int.Parse(note.GetOctave())  > highestOctave) {
-                    highestOctave = int.Parse(note.GetOctave());
+                if(int.Parse(note.GetOctave())  < lowestOctave) {
+                    lowestOctave = int.Parse(note.GetOctave());
                 }
             }
             Dictionary<GameObject,Color> keysAndColors = new Dictionary<GameObject,Color>();
             Debug.Log("colors: " + colors.Count + " Notes: " + notes.Count);
+            // foreach(Color color in colors){
+            //     Debug.Log("My Color " + color);
+            // }
+            foreach(Note note in notes){
+                Debug.Log("Note " + note.GetStep());
+            }
             for(int i = 0; i < colors.Count; i++) {
                 Note note = notes[i];
                 GameObject key;
-                if(int.Parse(note.GetOctave()) < highestOctave) {
+                if(int.Parse(note.GetOctave()) == lowestOctave) {
                     key = _pianoKeys.Find(x => x.gameObject.name.Equals(note.GetStep()));
                 } else {
                     key = _pianoKeys.Find(x => {
@@ -178,11 +184,10 @@ namespace symbol
 
                 if(i >= 7) {
                     whiteKey.gameObject.name =  _whiteKeyText[i % _whiteKeyText.Count] + "1";
-                    whiteKeyText.text = _whiteKeyText[i % _whiteKeyText.Count] + "1";
                 } else {
                     whiteKey.gameObject.name =  _whiteKeyText[i % _whiteKeyText.Count];
-                    whiteKeyText.text = _whiteKeyText[i % _whiteKeyText.Count];
                 }
+                whiteKeyText.text = _whiteKeyText[i % _whiteKeyText.Count];
 
                 whiteKey.transform.SetParent(piano.transform);
                 RectTransform rect = whiteKey.GetComponent<RectTransform>();
@@ -211,17 +216,16 @@ namespace symbol
 
                 string name = _blackKeyText[i % _blackKeyText.Count];
                 if(i >= 5) {
-                     blackKeyText.text = name + "1";
-                     blackKey.gameObject.name = name + "1";
+                     blackKey.gameObject.name = name.Substring(3,2) + "1";
                 } else {
-                     blackKeyText.text = name;
-                     blackKey.gameObject.name = name;
+                     blackKey.gameObject.name = name.Substring(3,2);
                 }
-                if(name.Equals("Bb")) {
-                    blackKey.gameObject.name = blackKey.gameObject.name.Replace("Bb", "Asharp");
-                } else if (name.Contains("#")) {
+                blackKeyText.text = name;
+
+                if (name.Contains("#")) {
                     blackKey.gameObject.name = blackKey.gameObject.name.Replace("#", "sharp");
-                }               
+                }   
+
                 rect.sizeDelta = new Vector2(width - 20, height - 170);
                 if (i == 2 || i == 5 || i == 7) {
                     offset += width;
