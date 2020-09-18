@@ -4,6 +4,7 @@ using util;
 using UnityEngine;
 using UnityEngine.UI;
 using symbol;
+using control;
 
 namespace Pattern
 {
@@ -220,11 +221,15 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         private void SetChordColor(List<Note> notes, String major)
         {            
             Color myColor = ColorHandler(major.Substring(0,1));
-
+            List<Color> colors = new List<Color>();
+            control.CanvasControl._notes.Add(notes);
             foreach (Note note in notes)
             {
                 note.SetColor(myColor);
+                colors.Add(myColor);
             }
+
+            _noteDatabase.AddColorsToList(colors);
         }
 
         private String GetNote(Note note)

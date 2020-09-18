@@ -18,6 +18,7 @@ namespace control
         public GameObject _overlayCanvas;
         public GameObject _canvasScore;
         public GameObject _loadScore;
+        private ScoreView _scoreView;
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private float _secondsPerMeasure;
@@ -26,11 +27,14 @@ namespace control
         private bool addedTime = false;
         private int paragraphNumber = 1;
         private int measureNumber = 0;
+        private int index = 0;
         private float speed;
         private float timeRemaining = 4;
         private Text timeText;
-        float paragraphStartX = 67f / 2;
-        float paragraphStartY = Screen.height - 250;
+        private float paragraphStartX = 67f / 2;
+        private float paragraphStartY = Screen.height - 250;
+        public static List<List<Note>> _notes;
+        private Dictionary<GameObject,Color> _oldKeys;
 
         private void Update() {
             if(isStarted) {
@@ -53,10 +57,14 @@ namespace control
                         _nextActionTime -= _secondsPerMeasure;
                         measureNumber = 0;
                         HandleParagraphChange();
+                        index++;
+                        HandlePianoColor();
                     }
                     if (_nextActionTime >= _secondsPerMeasure ) {
                         _nextActionTime -= _secondsPerMeasure;
                         measureNumber++;
+                        index++;
+                        HandlePianoColor();
                     }
                 }
             } else {
@@ -79,6 +87,20 @@ namespace control
                 nextObject.gameObject.SetActive(true);
             } 
             _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
+        }
+
+        private void HandlePianoColor() {
+            Color color;
+            if(_oldKeys != null) {
+                foreach(GameObject key in _oldKeys.Keys) {
+                    if(_oldKeys.TryGetValue(key, out color)) {
+                        key.GetComponent<Image>().color = color;
+                    }
+                }
+            }
+            
+            _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[index]);
+            
         }
 
         private void MoveParagraphUp(GameObject paragraphObject) {
@@ -109,9 +131,12 @@ namespace control
         private void OnEnable()
         {
             string scoreName = _commonParams.GetScoreName();
+            _notes = new List<List<Note>>();
+            index = 0;
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
+            HandlePianoColor();
         }
 
         private void DrawTimerText() {
@@ -154,7 +179,7 @@ namespace control
             // Adds the created score to the note database so we can work with the notes
             _noteDatabase.AddScoreList(scoreList, xmlFacade.GetFifths());
             
-            ScoreView scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
+            _scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
             // 更改乐符颜色
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
             //    SymbolControl symbolControl = new SymbolControl(symbol);

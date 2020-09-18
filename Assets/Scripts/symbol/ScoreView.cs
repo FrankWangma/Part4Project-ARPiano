@@ -20,8 +20,7 @@ namespace symbol
         private GameObject _overlayCanvas;
         private List<string> _whiteKeyText;
         private List<string> _blackKeyText;
-
-
+        private static List<GameObject> _pianoKeys = new List<GameObject>();
         public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore, GameObject overlayCanvas)
         {
             _parentObject = parentObject;
@@ -38,6 +37,7 @@ namespace symbol
             string[] blackKeyInput = {"C#", "D#", "F#", "G#", "Bb",};
             _blackKeyText = new List<string>();
             _blackKeyText.AddRange(blackKeyInput);
+            _pianoKeys.Clear();
             Init();
         }
 
@@ -85,6 +85,40 @@ namespace symbol
 
             DisableParagraphs();
             DrawPianoKeys();
+        }
+
+        public Dictionary<GameObject,Color> changePianoKeyColor(List<Color> colors, List<Note> notes) {
+            int highestOctave = -1;
+            foreach(Note note in notes) {
+                if(int.Parse(note.GetOctave())  > highestOctave) {
+                    highestOctave = int.Parse(note.GetOctave());
+                }
+            }
+            Dictionary<GameObject,Color> keysAndColors = new Dictionary<GameObject,Color>();
+            Debug.Log("colors: " + colors.Count + " Notes: " + notes.Count);
+            for(int i = 0; i < colors.Count; i++) {
+                Note note = notes[i];
+                GameObject key;
+                if(int.Parse(note.GetOctave()) < highestOctave) {
+                    key = _pianoKeys.Find(x => x.gameObject.name.Equals(note.GetStep()));
+                } else {
+                    key = _pianoKeys.Find(x => {
+                            string name = note.GetStep();
+                            if(x.gameObject.name.Equals(name + "1")) {
+                                return x;
+                            }
+                            return false;
+                        }
+                    );
+                }
+                Image image = key.GetComponent<Image>();
+                if(!keysAndColors.ContainsKey(key)) {
+                    keysAndColors.Add(key, image.color);
+                }
+                image.color = colors[i];
+            }
+
+            return keysAndColors;
         }
 
         private void DisableParagraphs() {
@@ -152,6 +186,7 @@ namespace symbol
                 rect.sizeDelta = new Vector2(width,height);
                 rect.position = new Vector3(pianoKeyPositioning.x + width * i, pianoKeyPositioning.y, 0);
                 
+                _pianoKeys.Add(whiteKey);
             }
 
             int offset = width / 2;
@@ -184,7 +219,7 @@ namespace symbol
                     offset += width;
                 }
                 rect.position = new Vector3((pianoKeyPositioning.x + width * i) + offset, pianoKeyPositioning.y + (rect.sizeDelta.y / 3), 0);           
-                
+                _pianoKeys.Add(blackKey);
             }
         }
 

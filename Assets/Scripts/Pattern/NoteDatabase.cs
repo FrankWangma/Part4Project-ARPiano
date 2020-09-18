@@ -14,6 +14,7 @@ namespace Pattern
         private List<List<Note>> _lowNotes = new List<List<Note>>();
         private List<Measure> _measures = new List<Measure>();
         private String _fifth = "0"; //Key signature
+        private List<List<Color>> _colors = new List<List<Color>>();
 
         private static NoteDatabase instance = new NoteDatabase();
 
@@ -89,6 +90,17 @@ namespace Pattern
 
         public List<List<Note>> GetLowNotes(){ return _lowNotes; }
         public String GetFifth() {return _fifth; }
+
+        public void AddColorsToList(List<Color> colors) {
+            _colors.Add(colors);
+        }
+
+        public List<Color> GetColorList(int index) {
+            if(index >= 0 && index < _colors.Count) {
+                return _colors[index];
+            }
+            return null;
+        }
 
         public void ChangeNoteColor(int measurePosition, int notePosition, Color color, Boolean highNote){
             if(highNote){
