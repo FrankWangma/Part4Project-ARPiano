@@ -267,7 +267,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 note.SetColor(myColor);
                 bool colorAdded = false;
                 //Change color of non-major notes
-                foreach (String diff in diffNotes){
+                foreach (String diff in diffNotes) {
                     if(GetNote(note).Equals(diff)){
                         note.SetColor(Color.cyan);
                         colors.Add(Color.cyan);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -271,9 +271,11 @@ namespace symbol
                 if(control.CanvasControl.isStarted) {
                     startText.text = "Start";
                     control.CanvasControl.isStarted = false;
+                    backButtonObject.GetComponent<Button>().enabled = true;
                 } else {
                     control.CanvasControl.isStarted = true;
                     startText.text = "Pause";
+                    backButtonObject.GetComponent<Button>().enabled = false;
                 }
             });
 
