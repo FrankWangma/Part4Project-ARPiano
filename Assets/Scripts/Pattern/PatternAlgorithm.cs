@@ -58,7 +58,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
 
             foreach (Note note in measure)
             {
-                if (note.GetChordList().Count > 0)
+                if (note.HasChord())
                 {
                     separateNotes.Add(note);
                     foreach (Note chordNote in note.GetChordList())
@@ -279,6 +279,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                         colorAdded = true;
                     }
                 }
+                //note.SetColor(myColor);
                 if(!colorAdded) {
                     colors.Add(myColor);
                 }

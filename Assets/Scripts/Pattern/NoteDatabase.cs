@@ -34,14 +34,19 @@ namespace Pattern
             pattern.DrawPatterns();
 
             //Test code to check method works
-            ///ChangeNoteColor(1, 0, Color.green, false);
+            //ChangeNoteColor(1, 0, Color.green, false);
+            // _lowNotes[4][0].SetColor(Color.blue);
+            // foreach(Note note in _lowNotes[4][0].GetChordList()){
+            //     note.SetColor(Color.magenta);
+            // }
             //When we are looking at a chord, check if is chord using .HasChord(), then use .GetChordList() to get list of notes that make up the chord
             //Debug.Log("note " + _lowNotes[1][0].GetStep() + " " + _lowNotes[1][0].IsChord() + " " + _lowNotes[1][0].GetChordList().Count + " " + _lowNotes[4][0].GetChordList()[1].GetStep());
             //foreach(Note note in _lowNotes[5][0].GetChordList()){
             //Debug.Log("note chord " + note.GetStep());
             //}
             //Debug.Log("note " + _lowNotes[3][0].GetStep() + " " + _lowNotes[3][0].IsChord() + " " + _lowNotes[3][0].GetChordList().Count);
-            //Debug.Log("note " + _lowNotes[10][0].GetStep() + _lowNotes[10][0].GetChordList()[0].GetStep() + " " + _lowNotes[10][0].GetChordList()[1].GetStep()  + " " + _lowNotes[10][0].IsChord() + " " + _lowNotes[10][0].GetChordList().Count);
+            Debug.Log("Chord " + _lowNotes[4][0].HasChord());
+            Debug.Log("note " + _lowNotes[4][0].GetStep() + _lowNotes[4][0].GetChordList()[0].GetStep() + " " + _lowNotes[4][0].GetChordList()[2].GetStep()  + " " +  _lowNotes[10][0].GetChordList().Count);
             //GetChordList()[0].GetStep()
             //Debug.Log("note " + _highNotes[2][3].GetStep() );
             //Accidental is empty if no accidental

@@ -23,9 +23,10 @@ namespace symbol
 
         protected GameObject ParentObject; // 对象的父对象
 
-        public SymbolView() {}
+        public SymbolView() { }
 
-        public SymbolView(Symbol symbol, int width, int start, GameObject parentObject) {
+        public SymbolView(Symbol symbol, int width, int start, GameObject parentObject)
+        {
             this.symbol = symbol;
             Width = width;
             Start = start;
@@ -42,7 +43,8 @@ namespace symbol
         public void SetColor(Color color)
         {
             // 遍历整个乐符对象，修改CanvasRenderer的颜色属性
-            if(ParentObject != null) {
+            if (ParentObject != null)
+            {
                 foreach (Transform childTransform in ParentObject.transform)
                 {
                     // 当乐符对象是划线的时候，使用的是image，修改颜色先找到image组件，然后设置颜色
@@ -50,6 +52,9 @@ namespace symbol
                     Image image = canvasRenderer.GetComponent<Image>();
                     if (image != null)
                     {
+                        if(image.color == Color.black){
+                            image.color = color;
+                        }
                         image.color = color;
                         continue; // 已经确定是划线，后面的不需要执行，直接判断下一个乐符对象
                     }
@@ -57,7 +62,11 @@ namespace symbol
                     Text text = canvasRenderer.GetComponent<Text>();
                     if (text != null)
                     {
-                        text.color = color;
+                        //only change colors of objects not already set
+                        if(text.color == Color.black){
+                            text.color = color;
+                        }
+                        //text.color = color;
                         continue;
                     }
                 }

@@ -53,6 +53,7 @@ namespace symbol
             if (Type == 1) // Whole Note
             {
                 DrawSymbol("\uE12B", Start, yPosition);
+                SetColor(_note.GetColor());
                 if (_note.HasChord()) DrawChord();
             }
             else
@@ -60,10 +61,12 @@ namespace symbol
                 if (Type == 2) // Half Note
                 {
                     DrawSymbol("\uE12C", Start, yPosition);
+                    SetColor(_note.GetColor());
                 }
                 else // 其余的所有
                 {
                     DrawSymbol("\uE12D", Start, yPosition);
+                    SetColor(_note.GetColor());
                 }
 
                 if (_note.IsUpOrDown())
@@ -310,6 +313,7 @@ namespace symbol
                 else
                     temp = extraPosition - ParamsGetter.GetNoteStemHeight();
                 DrawLine(_stemX, extraPosition, _stemX, temp);
+                SetColor(extraNote.GetColor());
             }
         }
     }

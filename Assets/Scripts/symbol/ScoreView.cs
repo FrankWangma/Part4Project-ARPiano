@@ -101,9 +101,6 @@ namespace symbol
             // foreach(Color color in colors){
             //     Debug.Log("My Color " + color);
             // }
-            foreach(Note note in notes){
-                Debug.Log("Note " + note.GetStep());
-            }
             for(int i = 0; i < colors.Count; i++) {
                 Note note = notes[i];
                 GameObject key;
