@@ -39,6 +39,8 @@ namespace control
         public static List<List<List<Note>>> _notes;
         private Dictionary<GameObject, Color> _oldKeys;
 
+        private bool firstTime = false;
+
         private void Update()
         {
             if (isStarted)
@@ -81,6 +83,13 @@ namespace control
                         HandlePianoColor();
                         _noteIndex++;
                         _numberOfPatterns--;
+
+                        //VERY BAD CODING
+                        //Resets timing, because the first draw screws thing up and everything is behind half a beat :))
+                        if(firstTime){
+                            _numberOfPatterns--;
+                            firstTime = false;
+                        }
                     }
 
                     //Increments measure number count
@@ -188,7 +197,13 @@ namespace control
             DrawTimerText();
             _numberOfPatterns = _notes[_measureTotal].Count;
             HandlePianoColor();
-            _measureTotal = 1;
+            if(_numberOfPatterns <= 1){
+                _measureTotal++;
+            } else{
+                _noteIndex++;
+                //_numberOfPatterns--;
+                firstTime = true;
+            }
         }
 
         private void DrawTimerText()
