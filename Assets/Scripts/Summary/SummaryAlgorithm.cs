@@ -21,7 +21,8 @@ namespace summary
         private int _highNotesMissed = 0;
         private int _lowNotesCorrect = 0;
         private int _lowNotesMissed = 0;
-        private int _notesIncorrect = 0;
+        private int _highNotesIncorrect = 0;
+        private int _lowNotesIncorrect = 0;
 
 
         public void generateSummary()
@@ -39,7 +40,9 @@ namespace summary
             summary.Add("HighNotesCorrect", _highNotesCorrect);
             summary.Add("HighNotesMissed", _highNotesMissed);
             summary.Add("LowNotesCorrect", _lowNotesCorrect);
-            summary.Add("NotesIncorrect", _notesIncorrect);
+            summary.Add("LowNotesMissed", _lowNotesMissed);
+            summary.Add("HighNotesIncorrect", _highNotesIncorrect);
+            summary.Add("LowNotesIncorrect", _lowNotesIncorrect);
             _summaryMaster.UpdateSummary(summary);
         }
 
@@ -53,6 +56,28 @@ namespace summary
 
             foreach (Note note in _playedNotes)
             {
+                Note highNote;
+                Note lowNote;
+
+                if(!highFinished)
+                {
+                    highNote = _highNotes[highPointer];
+                }
+                else
+                {
+                    highNote = null;
+                }
+
+                if(!lowFinished)
+                {
+                    lowNote = _lowNotes[lowPointer];
+                } 
+                else
+                {
+                    lowNote = null;
+                }
+
+                bool closestToHigh = findClosest(note, highNote, lowNote);
 
                 if (!highFinished)
                 {
@@ -78,7 +103,16 @@ namespace summary
                 }
                 else
                 {
-                    _notesIncorrect++;
+                    if(closestToHigh)
+                    {
+                        _highNotesIncorrect++;
+                        highPointer++;
+                    }
+                    else
+                    {
+                        _lowNotesIncorrect++;
+                        lowPointer++;
+                    }
                 }
 
 
@@ -91,6 +125,10 @@ namespace summary
                 if (lowPointer >= _lowNotes.Count)
                 {
                     lowFinished = true;
+                }
+
+                if(highFinished && lowFinished){
+
                 }
 
             }
@@ -115,8 +153,17 @@ namespace summary
         }
 
         //Method which takes three notes. The first note is a played note, and it finds the note which the played note is closest to.
+        //Returns true if the note is closer to highnote
         private bool findClosest(Note note, Note highNote, Note lowNote)
         {
+            if(highNote == null){
+                return false;
+            }
+
+            if(lowNote == null){
+                return true;
+            }
+
             return false;
         }
     }
