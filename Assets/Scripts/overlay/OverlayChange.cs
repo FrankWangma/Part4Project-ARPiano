@@ -119,18 +119,19 @@ namespace overlay
             //Debug.Log("Octave" + octave);
             //Debug.Log("Step " + step);
 
-            ((Note) _symbol).SetOctave(octave.ToString());
-            ((Note)_symbol).SetStep(step);
-            if(octave >= 4)
-            {
-                ((Note)_symbol).SetUpOrDown(true);
-                _overlayMaster.ModifySetView(position, _symbol, true);
-            }
-            else
-            {
-                _overlayMaster.ModifySetView(position, _symbol, false);
-            }
-            position++;
+            //Legacy code for the piano overlay
+            // ((Note) _symbol).SetOctave(octave.ToString());
+            // ((Note)_symbol).SetStep(step);
+            // if(octave >= 4)
+            // {
+            //     ((Note)_symbol).SetUpOrDown(true);
+            //     _overlayMaster.ModifySetView(position, _symbol, true);
+            // }
+            // else
+            // {
+            //     _overlayMaster.ModifySetView(position, _symbol, false);
+            // }
+            // position++;
         }
     }
 }

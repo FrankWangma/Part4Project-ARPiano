@@ -94,7 +94,7 @@ namespace control
                         _canvasScore.SetActive(true);
                         _loadScore.SetActive(false);
                         //Add overlay canvas
-                        _testCanvas.SetActive(true);
+                        //_testCanvas.SetActive(true);
                     });
                 }
             }
