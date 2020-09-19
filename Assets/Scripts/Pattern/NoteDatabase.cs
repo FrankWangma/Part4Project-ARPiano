@@ -45,8 +45,8 @@ namespace Pattern
             //Debug.Log("note chord " + note.GetStep());
             //}
             //Debug.Log("note " + _lowNotes[3][0].GetStep() + " " + _lowNotes[3][0].IsChord() + " " + _lowNotes[3][0].GetChordList().Count);
-            Debug.Log("Chord " + _lowNotes[4][0].HasChord());
-            Debug.Log("note " + _lowNotes[4][0].GetStep() + _lowNotes[4][0].GetChordList()[0].GetStep() + " " + _lowNotes[4][0].GetChordList()[2].GetStep()  + " " +  _lowNotes[10][0].GetChordList().Count);
+            //Debug.Log("Chord " + _lowNotes[4][0].HasChord());
+            //Debug.Log("note " + _lowNotes[4][0].GetOctave() + _lowNotes[4][0].GetChordList()[0].GetStep() + " " + _lowNotes[4][0].GetChordList()[2].GetStep()  + " " +  _lowNotes[10][0].GetChordList().Count);
             //GetChordList()[0].GetStep()
             //Debug.Log("note " + _highNotes[2][3].GetStep() );
             //Accidental is empty if no accidental

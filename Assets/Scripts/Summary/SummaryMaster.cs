@@ -23,8 +23,16 @@ namespace summary
             _notesPlayed.Add(note);
         }
 
+        public List<Note> GetNotesPlayed(){
+            return _notesPlayed;
+        }
+
         public Dictionary<String, int> GetSummary(){
             return _summary;
+        }
+
+        public void UpdateSummary(Dictionary<String, int> summary){
+            _summary = summary;
         }
     }
 }
