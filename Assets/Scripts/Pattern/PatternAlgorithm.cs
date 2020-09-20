@@ -198,15 +198,19 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             }
 
             //Rearrange notes if ending note of a chord is the same as the starting note of next chord
-            if(chords.Count > 1){
-                for(int i = 1; i < chords.Count; i++){
+            if (chords.Count > 1)
+            {
+                for (int i = 1; i < chords.Count; i++)
+                {
                     String chordName = _chordDatabase.IdentifyChord(chords[i]);
-                    if(chordName != null){
+                    if (chordName != null)
+                    {
                         String major = chordName.Substring(0, 1);
-                        Note last = notes[i-1][notes[i-1].Count-1];
-                        if(last.GetStep().Equals(major)){
+                        Note last = notes[i - 1][notes[i - 1].Count - 1];
+                        if (last.GetStep().Equals(major))
+                        {
                             notes[i].Add(last);
-                            notes[i-1].RemoveAt(notes[i-1].Count -1);
+                            notes[i - 1].RemoveAt(notes[i - 1].Count - 1);
                         }
                     }
                 }
@@ -259,12 +263,13 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
         private void SetChordColor(List<Note> notes, String major)
         {
             Color myColor = ColorHandler(major.Substring(0, 1));
-
-            //default color for accidental chords
-            if(major.Substring(2,5).Equals("Sharp")){
-                myColor = Color.black;
-            }
             List<String> diffNotes = _chordDatabase.IdentifyDiff(major);
+            //default color for accidental chords
+            if (major.Substring(2, 5).Equals("Sharp"))
+            {
+                myColor = Color.black;
+                diffNotes = new List<String>();
+            }
 
             List<Color> colors = new List<Color>();
             foreach (Note note in notes)
@@ -272,16 +277,19 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 note.SetColor(myColor);
                 bool colorAdded = false;
                 //Change color of non-major notes
-                foreach (String diff in diffNotes) {
-                    if(GetNote(note).Equals(diff)){
+                foreach (String diff in diffNotes)
+                {
+                    if (GetNote(note).Equals(diff))
+                    {
                         note.SetColor(Color.cyan);
                         colors.Add(Color.cyan);
                         colorAdded = true;
                     }
                 }
                 //note.SetColor(myColor);
-                if(!colorAdded) {
-                    colors.Add(myColor);
+                if (!colorAdded)
+                {
+                        colors.Add(myColor);
                 }
             }
 

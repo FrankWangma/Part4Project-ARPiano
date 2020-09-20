@@ -105,6 +105,12 @@ namespace symbol
             //     Debug.Log("Note " + note.GetStep());
             // }
             for(int i = 0; i < colors.Count; i++) {
+                
+                //If the color if black, continue to next iteration
+                if(colors[i] == Color.black)
+                {
+                    continue;
+                }
                 Note note = notes[i];
                 GameObject key;
                 if(int.Parse(note.GetOctave()) == lowestOctave) {
