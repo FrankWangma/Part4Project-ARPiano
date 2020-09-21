@@ -151,9 +151,7 @@ namespace control
                 }
             }
 
-            //NOTE: IF INDEX IS EMPTY, SET KEYS TO WHITE AGAIN (AS NOTHING IS IN THERE)
-            Debug.Log("Measure counts " + _measureTotal + " " + _noteIndex);
-            Debug.Log("patterns " + _numberOfPatterns);
+            Debug.Log(_noteDatabase.GetColorList(index));
             if (_notes[_measureTotal].Count != 0)
             {
                 _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
@@ -194,6 +192,7 @@ namespace control
         private void OnEnable()
         {
             string scoreName = _commonParams.GetScoreName();
+            _noteDatabase.resetColorsList();
             _notes = new List<List<List<Note>>>();
             _oldKeys = new Dictionary<GameObject, Color>();
             _measureNumber = 0;
