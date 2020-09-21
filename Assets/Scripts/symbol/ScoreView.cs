@@ -114,7 +114,7 @@ namespace symbol
                 Note note = notes[i];
                 GameObject key;
                 if(int.Parse(note.GetOctave()) == lowestOctave) {
-                    key = _pianoKeys.Find(x => x.gameObject.name.Equals(note.GetStep()));
+                    key = _pianoKeys.Find(x => x.gameObject.name.Equals(note.GetStep() + note.GetAccidental(_noteDatabase.GetFifth())));
                 } else {
                     key = _pianoKeys.Find(x => {
                             string name = note.GetStep();

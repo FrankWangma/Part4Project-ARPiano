@@ -31,6 +31,7 @@ namespace control
         private int _measureTotal = 0;
         private int index = 0;
         private int _noteIndex = 0;
+        private string _fifth = "";
         private float speed;
         private float timeRemaining = 4;
         private Text timeText;
@@ -114,7 +115,7 @@ namespace control
                         }
                         _nextActionTime -= _secondsPerMeasure;
                         _numberOfPatterns = _notes[_measureTotal].Count;
-                        Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
+                        //Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
                         _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
                         _patternIteration = 1;
                         _reset = false;
@@ -217,6 +218,7 @@ namespace control
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
+            _fifth = _noteDatabase.GetFifth();
             _numberOfPatterns = _notes[_measureTotal].Count;
             _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
             HandlePianoColor();
