@@ -36,11 +36,11 @@ namespace summary
             RunSummary();
 
             Dictionary<String, int> summary = new Dictionary<String, int>();
-            summary.Add("HighNotesCorrect", _highNotesCorrect);
-            summary.Add("HighNotesMissed", _highNotesMissed);
-            summary.Add("LowNotesCorrect", _lowNotesCorrect);
-            summary.Add("LowNotesMissed",  _lowNotesMissed);
-            summary.Add("NotesIncorrect", _notesIncorrect);
+            summary.Add("High Notes Correct: ", _highNotesCorrect);
+            summary.Add("High Notes Missed: ", _highNotesMissed);
+            summary.Add("Low Notes Correct: ", _lowNotesCorrect);
+            summary.Add("Low Notes Missed: ",  _lowNotesMissed);
+            summary.Add("Notes Incorrect: ", _notesIncorrect);
             _summaryMaster.UpdateSummary(summary);
         }
 
