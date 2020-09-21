@@ -76,21 +76,30 @@ namespace control
                         // index++;
                         // HandlePianoColor();
                         _noteIndex = 0;
-                        _measureTotal++;
+                        //_measureTotal++;
                         _reset = true;
+                        if (_numberOfPatterns > 1)
+                        {
+                            _measureTotal++;
+                        }
                     }
                     else if (_nextActionTime >= _secondsPerMeasure)
                     {
                         _measureNumber++;
-                        _measureTotal++;
+                        //_measureTotal++;
                         _noteIndex = 0;
                         _reset = true;
+                        if (_numberOfPatterns > 1)
+                        {
+                            _measureTotal++;
+                        }
                     }
 
                     //Handles displaying different patterns
-                    if (_nextActionTime >= _patternSplitSeconds*_patternIteration)
+                    if (_nextActionTime >= _patternSplitSeconds * _patternIteration)
                     {
                         index++;
+                        Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
                         HandlePianoColor();
                         _noteIndex++;
                         //_numberOfPatterns--;
@@ -100,10 +109,13 @@ namespace control
                     //Handles reset
                     if (_reset)
                     {
+                        if(_numberOfPatterns ==1){
+                            _measureTotal++;
+                        }
                         _nextActionTime -= _secondsPerMeasure;
                         _numberOfPatterns = _notes[_measureTotal].Count;
                         Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
-                        _patternSplitSeconds = _secondsPerMeasure/_numberOfPatterns;
+                        _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
                         _patternIteration = 1;
                         _reset = false;
                     }
@@ -153,7 +165,7 @@ namespace control
                 }
             }
 
-            Debug.Log(_noteDatabase.GetColorList(index));
+            //Debug.Log(_noteDatabase.GetColorList(index));
             if (_notes[_measureTotal].Count != 0)
             {
                 _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
@@ -206,7 +218,7 @@ namespace control
             DrawScore(scoreName);
             DrawTimerText();
             _numberOfPatterns = _notes[_measureTotal].Count;
-            _patternSplitSeconds = _secondsPerMeasure/_numberOfPatterns;
+            _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
             HandlePianoColor();
             if (_numberOfPatterns <= 1)
             {
