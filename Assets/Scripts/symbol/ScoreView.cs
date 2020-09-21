@@ -290,20 +290,22 @@ namespace symbol
                 imageRect.anchorMax = new Vector2(0.5f, 1);
                 imageRect.sizeDelta = new Vector2(25, 25);
                 imageObject.transform.GetChild(0).gameObject.SetActive(false);
-
-                _panel.SetActive(false);
-                //Take Care of Button
-                GameObject backButtonObject = _panel.transform.Find("PanelBackButton").gameObject;
-                Button backButton = backButtonObject.GetComponent<Button>();
-                backButton.onClick.AddListener(delegate
-                {
-                    _panel.gameObject.SetActive(false);
-                });
-
-                GameObject titleObject = _panel.transform.Find("Title").gameObject;
-                Text titleText = titleObject.GetComponent<Text>();
-                titleText.text = "Each Color Corresponds to a Chord";
             }
+            
+            //Take Care of Button
+            GameObject backButtonObject = _panel.transform.Find("PanelBackButton").gameObject;
+            Button backButton = backButtonObject.GetComponent<Button>();
+            backButton.onClick.AddListener(delegate
+            {
+                _panel.gameObject.SetActive(false);
+            });
+
+            GameObject titleObject = _panel.transform.Find("Title").gameObject;
+            Text titleText = titleObject.GetComponent<Text>();
+            titleText.text = "Each Color Corresponds to a Chord";
+
+            _panel.SetActive(false);
+                
         }
 
         // 放置两个button按钮作为返回上一个场景，以及退出

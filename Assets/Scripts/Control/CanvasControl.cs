@@ -264,8 +264,10 @@ namespace control
             rect.offsetMax = new Vector2(-Screen.width / 5,-Screen.height / 5);
 
             GameObject titleObject = panel.transform.Find("Title").gameObject;
-                Text titleText = titleObject.GetComponent<Text>();
-                titleText.text = "Summary";
+            RectTransform titleRect = titleObject.GetComponent<RectTransform>();
+            Text titleText = titleObject.GetComponent<Text>();
+            titleText.text = "Summary";
+            titleText.fontSize = 40;
 
             GameObject panelBackButtonObject = panel.transform.Find("PanelBackButton").gameObject;
             Text backText = panelBackButtonObject.GetComponentInChildren<Text>();
@@ -280,9 +282,22 @@ namespace control
             SummaryAlgorithm algorithm = new SummaryAlgorithm();
             algorithm.generateSummary();
             Dictionary<string, int> stats = _summaryMaster.GetSummary();
+            int i = 0;
+
+            float textOffset = -(titleRect.anchoredPosition.y) + titleRect.sizeDelta.y;
             foreach(string key in stats.Keys) {
                 stats.TryGetValue(key, out int value);
-                Debug.Log(key + value);
+                // Draw the text
+                 GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText());
+                textObject.transform.SetParent(panel.transform);
+                Text text = textObject.GetComponent<Text>();
+                text.text = key + value;
+                text.fontSize = 20;
+                RectTransform textRect = textObject.GetComponent<RectTransform>();
+                textRect.anchoredPosition = new Vector3(0,- textOffset - (-rect.sizeDelta.y /5) * i,0);
+                textRect.anchorMin = new Vector2(0.5f, 1);
+                textRect.anchorMax = new Vector2(0.5f, 1);
+                i++;
             }
         }
 
