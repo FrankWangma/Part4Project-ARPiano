@@ -14,7 +14,6 @@ namespace util
         private GameObject _prefabLine;
         private GameObject _prefabFileButton;
         private GameObject _prefabPianoKey;
-        private GameObject _prefabPanel;
 
         public static CommonParams GetInstance() { return instance; }
 
@@ -52,8 +51,5 @@ namespace util
         public GameObject GetPrefabPianoKey() { return _prefabPianoKey; }
 
         public void SetPrefabPianoKey(GameObject prefabPianoKey) { _prefabPianoKey = prefabPianoKey; }
-        
-        public GameObject GetPrefabPanel() { return _prefabPanel; }
-        public void SetPrefabPanel(GameObject prefabPanel) { _prefabPanel = prefabPanel; }
     }
 }
