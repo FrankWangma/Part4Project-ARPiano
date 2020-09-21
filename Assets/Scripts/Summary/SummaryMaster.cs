@@ -29,7 +29,7 @@ namespace summary
         }
 
         public Dictionary<String, int> GetSummary(){
-            _algorithm.generateSummary();
+            //_algorithm.generateSummary();
             return _summary;
         }
 

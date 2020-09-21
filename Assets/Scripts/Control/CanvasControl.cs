@@ -277,11 +277,13 @@ namespace control
                 backButton.onClick.Invoke();
             });
 
-            // Dictionary<string, int> stats = _summaryMaster.GetSummary();
-            // foreach(string key in stats.Keys) {
-            //     stats.TryGetValue(key, out int value);
-            //     Debug.Log(key + value);
-            // }
+            SummaryAlgorithm algorithm = new SummaryAlgorithm();
+            algorithm.generateSummary();
+            Dictionary<string, int> stats = _summaryMaster.GetSummary();
+            foreach(string key in stats.Keys) {
+                stats.TryGetValue(key, out int value);
+                Debug.Log(key + value);
+            }
         }
 
         private void DrawScore(string filename)
