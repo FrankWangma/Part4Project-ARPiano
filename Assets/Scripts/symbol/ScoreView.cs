@@ -72,7 +72,7 @@ namespace symbol
                 // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
                 int offset = 0;
-                if(i > 0) {
+                if(i % 2 != 0) {
                     offset = -2 * _paramsGetter.GetTotalHeight() * 1;
                 }
                 rect.position = new Vector3(paragraphPosition.x,

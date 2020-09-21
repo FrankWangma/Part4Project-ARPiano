@@ -134,12 +134,14 @@ namespace control
         {
             parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
             _paragraphNumber++;
-            Transform movingObject = parentObject.transform.Find("Paragraph" + _paragraphNumber);
-            if (movingObject != null)
+            
+            Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
+            if (nextObject)
             {
-                MoveParagraphUp(movingObject.gameObject);
-            }
-            else
+                nextObject.gameObject.SetActive(true);
+            }   
+            
+            if (parentObject.transform.Find("Paragraph" + (_paragraphNumber)) == null)
             {
                 Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
                 startButton.onClick.Invoke();
@@ -150,11 +152,6 @@ namespace control
                 helpButton.enabled = false;
 
                 DrawEndScreen();
-            }
-            Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
-            if (nextObject)
-            {
-                nextObject.gameObject.SetActive(true);
             }
             _sweeperLine = GameObject.Find("Paragraph" + _paragraphNumber + " Sweeper");
         }
@@ -183,15 +180,6 @@ namespace control
                 _oldKeys = new Dictionary<GameObject, Color>();
             }
 
-        }
-
-        private void MoveParagraphUp(GameObject paragraphObject)
-        {
-            Vector3 paragraphPosition = new Vector3(paragraphStartX, paragraphStartY, 0);
-            RectTransform rect = paragraphObject.GetComponent<Canvas>().GetComponent<RectTransform>();
-            rect.position = new Vector3(paragraphPosition.x,
-                    paragraphPosition.y,
-                    paragraphPosition.z);
         }
 
         private void DisplayTime(float timeToDisplay)
