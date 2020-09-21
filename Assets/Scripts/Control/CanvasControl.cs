@@ -26,7 +26,7 @@ namespace control
         private int _numberOfPatterns = 1;
         public static bool isStarted = false;
         private bool addedTime = false;
-        private int paragraphNumber = 1;
+        private int _paragraphNumber = 1;
         private int _measureNumber = 0;
         private int _measureTotal = 0;
         private int index = 0;
@@ -38,8 +38,9 @@ namespace control
         private float paragraphStartY = Screen.height - 250;
         public static List<List<List<Note>>> _notes;
         private Dictionary<GameObject, Color> _oldKeys;
-
-        private bool firstTime = false;
+        private bool _reset = false;
+        private float _patternSplitSeconds = 0;
+        private int _patternIteration = 1;
 
         private void Update()
         {
@@ -66,40 +67,57 @@ namespace control
                     RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
 
+                    //Checks if measure needs to change
                     if (_measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure)
                     {
-                        _nextActionTime -= _secondsPerMeasure;
+                        // _nextActionTime -= _secondsPerMeasure;
                         _measureNumber = 0;
                         HandleParagraphChange();
-                        index++;
-                        HandlePianoColor();
-                        _measureTotal++;
+                        // index++;
+                        // HandlePianoColor();
+                        _noteIndex = 0;
+                        //_measureTotal++;
+                        _reset = true;
+                        if (_numberOfPatterns > 1)
+                        {
+                            _measureTotal++;
+                        }
                     }
-
-                    //Increments pattern number count
-                    if (_nextActionTime >= (_secondsPerMeasure / _numberOfPatterns))
+                    else if (_nextActionTime >= _secondsPerMeasure)
                     {
-                        index++;
-                        HandlePianoColor();
-                        _noteIndex++;
-                        _numberOfPatterns--;
-
-                        //VERY BAD CODING
-                        //Resets timing, because the first draw screws thing up and everything is behind half a beat :))
-                        if(firstTime){
-                            _numberOfPatterns--;
-                            firstTime = false;
+                        _measureNumber++;
+                        //_measureTotal++;
+                        _noteIndex = 0;
+                        _reset = true;
+                        if (_numberOfPatterns > 1)
+                        {
+                            _measureTotal++;
                         }
                     }
 
-                    //Increments measure number count
-                    if (_nextActionTime >= _secondsPerMeasure)
+                    //Handles displaying different patterns
+                    if (_nextActionTime >= _patternSplitSeconds * _patternIteration)
                     {
+                        index++;
+                        Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
+                        HandlePianoColor();
+                        _noteIndex++;
+                        //_numberOfPatterns--;
+                        _patternIteration++;
+                    }
+
+                    //Handles reset
+                    if (_reset)
+                    {
+                        if(_numberOfPatterns ==1){
+                            _measureTotal++;
+                        }
                         _nextActionTime -= _secondsPerMeasure;
-                        _measureNumber++;
-                        _measureTotal++;
-                        _noteIndex = 0;
                         _numberOfPatterns = _notes[_measureTotal].Count;
+                        Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
+                        _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
+                        _patternIteration = 1;
+                        _reset = false;
                     }
                 }
             }
@@ -111,24 +129,26 @@ namespace control
 
         private void HandleParagraphChange()
         {
-            parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
-            paragraphNumber++;
-            Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
+            parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
+            _paragraphNumber++;
+            Transform movingObject = parentObject.transform.Find("Paragraph" + _paragraphNumber);
             if (movingObject != null)
             {
                 MoveParagraphUp(movingObject.gameObject);
             }
             else
             {
+                Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
                 Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                startButton.onClick.Invoke();
                 backButton.onClick.Invoke();
             }
-            Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
+            Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
             if (nextObject)
             {
                 nextObject.gameObject.SetActive(true);
             }
-            _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
+            _sweeperLine = GameObject.Find("Paragraph" + _paragraphNumber + " Sweeper");
         }
 
         private void HandlePianoColor()
@@ -145,13 +165,13 @@ namespace control
                 }
             }
 
-            //NOTE: IF INDEX IS EMPTY, SET KEYS TO WHITE AGAIN (AS NOTHING IS IN THERE)
-            Debug.Log("Measure counts " + _measureTotal + " " + _noteIndex);
+            //Debug.Log(_noteDatabase.GetColorList(index));
             if (_notes[_measureTotal].Count != 0)
             {
                 _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
             }
-            else{
+            else
+            {
                 _oldKeys = new Dictionary<GameObject, Color>();
             }
 
@@ -186,23 +206,27 @@ namespace control
         private void OnEnable()
         {
             string scoreName = _commonParams.GetScoreName();
+            _noteDatabase.resetColorsList();
             _notes = new List<List<List<Note>>>();
             _oldKeys = new Dictionary<GameObject, Color>();
             _measureNumber = 0;
             index = 0;
             _noteIndex = 0;
             _measureTotal = 0;
+            _paragraphNumber = 1;
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
             _numberOfPatterns = _notes[_measureTotal].Count;
+            _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
             HandlePianoColor();
-            if(_numberOfPatterns <= 1){
+            if (_numberOfPatterns <= 1)
+            {
                 _measureTotal++;
-            } else{
+            }
+            else
+            {
                 _noteIndex++;
-                //_numberOfPatterns--;
-                firstTime = true;
             }
         }
 
@@ -229,6 +253,7 @@ namespace control
             //Debug.Log("Beat + " + xmlFacade.GetBPM());
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
+            Debug.Log("seconds " + _secondsPerMeasure);
 
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
