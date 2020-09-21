@@ -248,8 +248,8 @@ namespace symbol
                     _commonParams.GetPrefabPanel().transform.rotation);
             _panel.transform.SetParent(_parentObject.transform);
             RectTransform rect = _panel.GetComponent<RectTransform>();
-            rect.offsetMin = new Vector2(_screenSize[0] / 3, _screenSize[1] / 3);
-            rect.offsetMax = new Vector2(-_screenSize[0] / 3, -_screenSize[1] / 3);
+            rect.offsetMin = new Vector2(_screenSize[0] / 3, _screenSize[1] / 4);
+            rect.offsetMax = new Vector2(-_screenSize[0] / 3, -_screenSize[1] / 4);
 
             for(int i = 0; i < _whiteKeyText.Count; i++) {
                 Color myColor = Color.black;
@@ -293,12 +293,16 @@ namespace symbol
 
                 _panel.SetActive(false);
                 //Take Care of Button
-                GameObject backButtonObject = _panel.transform.Find("Button").gameObject;
+                GameObject backButtonObject = _panel.transform.Find("PanelBackButton").gameObject;
                 Button backButton = backButtonObject.GetComponent<Button>();
                 backButton.onClick.AddListener(delegate
                 {
                     _panel.gameObject.SetActive(false);
                 });
+
+                GameObject titleObject = _panel.transform.Find("Title").gameObject;
+                Text titleText = titleObject.GetComponent<Text>();
+                titleText.text = "Each Color Corresponds to a Chord";
             }
         }
 
@@ -330,6 +334,7 @@ namespace symbol
             GameObject helpButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             helpButtonObject.transform.SetParent(_parentObject.transform);
+            helpButtonObject.gameObject.name = "helpButton";
             RectTransform helpRect = helpButtonObject.GetComponent<RectTransform>();
             helpRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
             helpRect.sizeDelta = new Vector2(50, 30);

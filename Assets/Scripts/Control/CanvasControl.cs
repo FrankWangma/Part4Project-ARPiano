@@ -5,6 +5,7 @@ using symbol;
 using util;
 using xmlParser;
 using Pattern;
+using summary;
 using UnityEngine.UI;
 
 namespace control
@@ -21,6 +22,7 @@ namespace control
         private ScoreView _scoreView;
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
+        private SummaryMaster _summaryMaster = SummaryMaster.GetInstance();
         private float _secondsPerMeasure;
         private float _nextActionTime = 0;
         private int _numberOfPatterns = 1;
@@ -140,9 +142,14 @@ namespace control
             else
             {
                 Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
-                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
                 startButton.onClick.Invoke();
-                backButton.onClick.Invoke();
+                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                Button helpButton = GameObject.Find("helpButton").gameObject.GetComponent<Button>();
+                startButton.enabled = false;
+                backButton.enabled = false;
+                helpButton.enabled = false;
+
+                DrawEndScreen();
             }
             Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
             if (nextObject)
@@ -245,6 +252,36 @@ namespace control
             timeText = textObject.GetComponent<Text>();
             timeText.text = "3";
             timeText.gameObject.SetActive(false);
+        }
+
+        private void DrawEndScreen() {
+            GameObject panel = GameObject.Instantiate(_commonParams.GetPrefabPanel(),
+                    parentObject.transform.position,
+                    _commonParams.GetPrefabPanel().transform.rotation);
+            panel.transform.SetParent(parentObject.transform);
+            RectTransform rect = panel.GetComponent<RectTransform>();
+            rect.offsetMin = new Vector2(Screen.width / 5, Screen.height / 5);
+            rect.offsetMax = new Vector2(-Screen.width / 5,-Screen.height / 5);
+
+            GameObject titleObject = panel.transform.Find("Title").gameObject;
+                Text titleText = titleObject.GetComponent<Text>();
+                titleText.text = "Summary";
+
+            GameObject panelBackButtonObject = panel.transform.Find("PanelBackButton").gameObject;
+            Text backText = panelBackButtonObject.GetComponentInChildren<Text>();
+            backText.text = "Back to Main Menu";
+            Button panelBackButton = panelBackButtonObject.GetComponent<Button>();
+            panelBackButton.onClick.AddListener(delegate
+            {
+                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                backButton.onClick.Invoke();
+            });
+
+            // Dictionary<string, int> stats = _summaryMaster.GetSummary();
+            // foreach(string key in stats.Keys) {
+            //     stats.TryGetValue(key, out int value);
+            //     Debug.Log(key + value);
+            // }
         }
 
         private void DrawScore(string filename)

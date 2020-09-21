@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 114870660624098432}
   - component: {fileID: 7019358750095293891}
   m_Layer: 5
-  m_Name: Button
+  m_Name: PanelBackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 3260449954312199618}
   - component: {fileID: 5998932974848156667}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,7 +276,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Each Color Corresponds to a Chord
+  m_Text: 'New Text
+
+'
 --- !u!1 &8776826192468086246
 GameObject:
   m_ObjectHideFlags: 0
