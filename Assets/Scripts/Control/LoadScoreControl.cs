@@ -14,6 +14,7 @@ namespace control
         private GameObject _prefabLine;
         private GameObject _prefabFileButton;
         private GameObject _prefabPianoKey;
+        private GameObject _prefabPanel;
         public GameObject _canvasScore;
         public GameObject _loadScore;
         //Test canvas to show dynamically changing template. Merge with _canvasScore later for overlay
@@ -27,12 +28,14 @@ namespace control
             _prefabLine = (GameObject)Resources.Load("Prefabs/Prefab_Line");
             _prefabFileButton = (GameObject)Resources.Load("Prefabs/Prefab_FileButton");
             _prefabPianoKey = (GameObject)Resources.Load("Prefabs/Prefab_PianoKey");
+            _prefabPanel = (GameObject)Resources.Load("Prefabs/Prefab_Panel");
             // 设置到单例模式中对应的参数
             _commonParams.SetPrefabSymbol(_prefabSymbol);
             _commonParams.SetPrefabText(_prefabText);
             _commonParams.SetPrefabLine(_prefabLine);
             _commonParams.SetPrefabFileButton(_prefabFileButton);
             _commonParams.SetPrefabPianoKey(_prefabPianoKey);
+            _commonParams.SetPrefabPanel(_prefabPanel);
         }
 
         // Use this for initialization
@@ -44,6 +47,7 @@ namespace control
             _commonParams.SetPrefabLine(_prefabLine);
             _commonParams.SetPrefabFileButton(_prefabFileButton);
             _commonParams.SetPrefabPianoKey(_prefabPianoKey);
+            _commonParams.SetPrefabPanel(_prefabPanel);
             LoadScore();
         }
 
