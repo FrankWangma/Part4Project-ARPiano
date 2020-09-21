@@ -39,6 +39,7 @@ namespace summary
             summary.Add("HighNotesCorrect", _highNotesCorrect);
             summary.Add("HighNotesMissed", _highNotesMissed);
             summary.Add("LowNotesCorrect", _lowNotesCorrect);
+            summary.Add("LowNotesMissed",  _lowNotesMissed);
             summary.Add("NotesIncorrect", _notesIncorrect);
             _summaryMaster.UpdateSummary(summary);
         }
