@@ -26,7 +26,7 @@ namespace control
         private int _numberOfPatterns = 1;
         public static bool isStarted = false;
         private bool addedTime = false;
-        private int paragraphNumber = 1;
+        private int _paragraphNumber = 1;
         private int _measureNumber = 0;
         private int _measureTotal = 0;
         private int index = 0;
@@ -97,7 +97,7 @@ namespace control
                         _patternIteration++;
                     }
 
-                    //Hanldes reset
+                    //Handles reset
                     if (_reset)
                     {
                         _nextActionTime -= _secondsPerMeasure;
@@ -117,24 +117,26 @@ namespace control
 
         private void HandleParagraphChange()
         {
-            parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
-            paragraphNumber++;
-            Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
+            parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
+            _paragraphNumber++;
+            Transform movingObject = parentObject.transform.Find("Paragraph" + _paragraphNumber);
             if (movingObject != null)
             {
                 MoveParagraphUp(movingObject.gameObject);
             }
             else
             {
+                Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
                 Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                startButton.onClick.Invoke();
                 backButton.onClick.Invoke();
             }
-            Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
+            Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
             if (nextObject)
             {
                 nextObject.gameObject.SetActive(true);
             }
-            _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
+            _sweeperLine = GameObject.Find("Paragraph" + _paragraphNumber + " Sweeper");
         }
 
         private void HandlePianoColor()
@@ -199,6 +201,7 @@ namespace control
             index = 0;
             _noteIndex = 0;
             _measureTotal = 0;
+            _paragraphNumber = 1;
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
