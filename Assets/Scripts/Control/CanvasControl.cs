@@ -299,6 +299,15 @@ namespace control
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
             Debug.Log("seconds " + _secondsPerMeasure);
 
+            // Draw Background
+            GameObject backgroundPanel = GameObject.Instantiate(_commonParams.GetBackgroundPanel());
+            backgroundPanel.name = "BackgroundPanel";
+            backgroundPanel.transform.SetParent(parentObject.transform);
+            RectTransform backgroundRect = backgroundPanel.GetComponent<RectTransform>();
+            backgroundRect.offsetMin = new Vector2(0, 0);
+            backgroundRect.offsetMax = new Vector2(0, 0);
+
+            
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
             List<List<Measure>> scoreList = scoreGenerator.Generate(xmlFacade.GetMeasureList(), Screen.width - 67);

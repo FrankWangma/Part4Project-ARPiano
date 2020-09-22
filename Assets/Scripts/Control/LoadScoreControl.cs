@@ -15,6 +15,7 @@ namespace control
         private GameObject _prefabFileButton;
         private GameObject _prefabPianoKey;
         private GameObject _prefabPanel;
+        private GameObject _background;
         public GameObject _canvasScore;
         public GameObject _loadScore;
         //Test canvas to show dynamically changing template. Merge with _canvasScore later for overlay
@@ -29,6 +30,7 @@ namespace control
             _prefabFileButton = (GameObject)Resources.Load("Prefabs/Prefab_FileButton");
             _prefabPianoKey = (GameObject)Resources.Load("Prefabs/Prefab_PianoKey");
             _prefabPanel = (GameObject)Resources.Load("Prefabs/Prefab_Panel");
+            _background = (GameObject)Resources.Load("Prefabs/BackgroundPanel");
             // 设置到单例模式中对应的参数
             _commonParams.SetPrefabSymbol(_prefabSymbol);
             _commonParams.SetPrefabText(_prefabText);
@@ -36,6 +38,7 @@ namespace control
             _commonParams.SetPrefabFileButton(_prefabFileButton);
             _commonParams.SetPrefabPianoKey(_prefabPianoKey);
             _commonParams.SetPrefabPanel(_prefabPanel);
+            _commonParams.SetBackgroundPanel(_background);
         }
 
         // Use this for initialization
@@ -48,6 +51,7 @@ namespace control
             _commonParams.SetPrefabFileButton(_prefabFileButton);
             _commonParams.SetPrefabPianoKey(_prefabPianoKey);
             _commonParams.SetPrefabPanel(_prefabPanel);
+            _commonParams.SetBackgroundPanel(_background);
             LoadScore();
         }
 
@@ -64,6 +68,13 @@ namespace control
 
             // 遍历musicxml目录里的所有xml文件
             DirectoryInfo xmlFolder = new DirectoryInfo(_commonParams.GetXmlFolderPath());
+
+            GameObject backgroundPanel = GameObject.Instantiate(_commonParams.GetBackgroundPanel());
+            backgroundPanel.name = "BackgroundPanel";
+            backgroundPanel.transform.SetParent(canvasObject.transform);
+            RectTransform backgroundRect = backgroundPanel.GetComponent<RectTransform>();
+            backgroundRect.offsetMin = new Vector2(0, 0);
+            backgroundRect.offsetMax = new Vector2(0, 0);
 
             int xmlFileCount = 0;
             Vector3 buttonPosition = new Vector3(Screen.width / 2, Screen.height - 100, 0);
