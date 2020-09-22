@@ -235,10 +235,11 @@ namespace control
             textObject.name = "timerText";
             textObject.transform.SetParent(this.transform);
             RectTransform rect = textObject.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(500, 100);
-            rect.position = new Vector3(Screen.width / 2, (Screen.height / 2) + 200, 0);
+            rect.sizeDelta = new Vector2(500, 500);
+            rect.position = new Vector3(Screen.width / 2, Screen.height / 2, 0);
             timeText = textObject.GetComponent<Text>();
             timeText.text = "3";
+            timeText.fontSize = 60;
             timeText.gameObject.SetActive(false);
         }
 
