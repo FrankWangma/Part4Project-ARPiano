@@ -170,13 +170,13 @@ namespace symbol
         }
 
         private void DrawPianoKeys() {
-            int width = 100;
-            int height = 400;
+            float width = _screenSize[0] / 20;
+            float height = _screenSize[1] / 4;
             Vector2 position = new Vector2(_screenSize[0] / 2, _screenSize[1] - 250);
             GameObject piano = new GameObject();
             piano.transform.SetParent(_parentObject.transform);
             piano.gameObject.name = "Piano";
-            Vector3 pianoKeyPositioning = new Vector3((position.x - 6.5f * width), position.y - 2 * _paramsGetter.GetTotalHeight() * 3, 0);
+            Vector3 pianoKeyPositioning = new Vector3((position.x - 6.5f * width), _screenSize[1] / 4, 0);
             for(int i = 0; i < 14; i++) {
                 GameObject whiteKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
                     _parentObject.transform.position,
@@ -204,7 +204,7 @@ namespace symbol
                 _pianoKeys.Add(whiteKey);
             }
 
-            int offset = width / 2;
+            float offset = width / 2;
             for(int i = 0; i < 10; i++) {
                  GameObject blackKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
                     _parentObject.transform.position,
@@ -216,7 +216,7 @@ namespace symbol
 
                 Text blackKeyText = blackKey.transform.GetChild(0).gameObject.GetComponent<Text>();
                 blackKeyText.color = Color.white;
-                blackKeyText.fontSize = 30;
+                blackKeyText.fontSize = 15;
                 RectTransform textRect = blackKeyText.gameObject.GetComponent<RectTransform>();
                 textRect.position = new Vector3(textRect.position.x, textRect.position.y - height / 2, 0);
                 textRect.sizeDelta = new Vector2(width,height);
@@ -233,7 +233,7 @@ namespace symbol
                     blackKey.gameObject.name = blackKey.gameObject.name.Replace("#", "sharp");
                 }   
 
-                rect.sizeDelta = new Vector2(width - 20, height - 170);
+                rect.sizeDelta = new Vector2(width / 1.5f, height / 1.75f);
                 if (i == 2 || i == 5 || i == 7) {
                     offset += width;
                 }
