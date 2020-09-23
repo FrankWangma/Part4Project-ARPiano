@@ -15,21 +15,20 @@ namespace summary
 
         public static SummaryMaster GetInstance() { return instance; }
 
-        private List<Note> _notesPlayed = new List<Note>();
+        private List<int> _notesPlayed = new List<int>();
 
         private Dictionary<String, int> _summary = new Dictionary<String, int>();
         SummaryAlgorithm _algorithm = new SummaryAlgorithm();
 
-        public void AddNotePlayed(Note note){
+        public void AddNotePlayed(int note){
             _notesPlayed.Add(note);
         }
 
-        public List<Note> GetNotesPlayed(){
+        public List<int> GetNotesPlayed(){
             return _notesPlayed;
         }
 
         public Dictionary<String, int> GetSummary(){
-            //_algorithm.generateSummary();
             return _summary;
         }
 

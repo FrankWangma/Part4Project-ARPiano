@@ -13,9 +13,10 @@ namespace summary
     {
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private SummaryMaster _summaryMaster = SummaryMaster.GetInstance();
-        private List<Note> _highNotes = new List<Note>();
-        private List<Note> _lowNotes = new List<Note>();
-        private List<Note> _playedNotes = new List<Note>();
+        private List<int> _highNotes = new List<int>();
+        private List<int> _lowNotes = new List<int>();
+        private List<int> _playedNotes = new List<int>();
+        private string _fifth = "0";
 
         private int _highNotesCorrect = 0;
         private int _highNotesMissed = 0;
@@ -27,22 +28,31 @@ namespace summary
 
         public void generateSummary()
         {
-            List<List<Note>> highNotes = _noteDatabase.GetHighNotes();
-            List<List<Note>> lowNotes = _noteDatabase.GetLowNotes();
-            _highNotes = SmoothList(highNotes);
-            _lowNotes = SmoothList(lowNotes);
+            List<Note> highNotes = SmoothList(_noteDatabase.GetHighNotes());
+            List<Note> lowNotes = SmoothList(_noteDatabase.GetLowNotes());
+            _fifth = _noteDatabase.GetFifth();
+            _highNotes = ConvertToNumber(highNotes);
+            _lowNotes = ConvertToNumber(lowNotes);
 
+            for (int i = 0; i < _highNotes.Count; i++)
+            {
+                Debug.Log("high " + _highNotes[i] + " " + i);
+            }
+
+            for (int i = 0; i < _lowNotes.Count; i++)
+            {
+                Debug.Log("low " + _lowNotes[i] + " " + i);
+            }
             _playedNotes = _summaryMaster.GetNotesPlayed();
-            _playedNotes = new List<Note>();
 
             RunSummary();
 
             Dictionary<String, int> summary = new Dictionary<String, int>();
             summary.Add("HighNotesCorrect", _highNotesCorrect);
+            summary.Add("HighNotesIncorrect", _highNotesIncorrect);
             summary.Add("HighNotesMissed", _highNotesMissed);
             summary.Add("LowNotesCorrect", _lowNotesCorrect);
             summary.Add("LowNotesMissed", _lowNotesMissed);
-            summary.Add("HighNotesIncorrect", _highNotesIncorrect);
             summary.Add("LowNotesIncorrect", _lowNotesIncorrect);
             _summaryMaster.UpdateSummary(summary);
         }
@@ -55,64 +65,61 @@ namespace summary
             bool highFinished = false;
             bool lowFinished = false;
 
-            foreach (Note note in _playedNotes)
+            foreach (int note in _playedNotes)
             {
-                Note highNote;
-                Note lowNote;
+                int highNote;
+                int lowNote;
 
-                if(!highFinished)
+                if (!highFinished)
                 {
                     highNote = _highNotes[highPointer];
                 }
                 else
                 {
-                    highNote = null;
+                    highNote = -999;
                 }
 
-                if(!lowFinished)
+                if (!lowFinished)
                 {
                     lowNote = _lowNotes[lowPointer];
-                } 
-                else
-                {
-                    lowNote = null;
-                }
-
-                bool closestToHigh = findClosest(note, highNote, lowNote);
-
-                if (!highFinished)
-                {
-                    if (note.GetStep().Equals(_highNotes[highPointer].GetStep()))
-                    {
-                        if (note.GetOctave().Equals(_highNotes[highPointer].GetOctave()))
-                        {
-                            highPointer++;
-                            _highNotesCorrect++;
-                        }
-                    }
-                }
-                else if (!lowFinished)
-                {
-                    if (note.GetStep().Equals(_lowNotes[lowPointer].GetStep()))
-                    {
-                        if (note.GetOctave().Equals(_lowNotes[lowPointer].GetOctave()))
-                        {
-                            lowPointer++;
-                            _lowNotesCorrect++;
-                        }
-                    }
                 }
                 else
                 {
-                    if(closestToHigh)
+                    lowNote = -999;
+                }
+
+                string closestToHigh = findClosest(note, highNote, lowNote);
+
+
+                if (note == highNote)
+                {
+                    highPointer++;
+                    _highNotesCorrect++;
+                }
+                else if (note == lowNote)
+                {
+                    lowPointer++;
+                    _lowNotesCorrect++;
+                }
+                else
+                {
+                    if (closestToHigh.Equals("highIncorrect"))
                     {
                         _highNotesIncorrect++;
                         highPointer++;
                     }
-                    else
+                    else if (closestToHigh.Equals("highFail"))
+                    {
+                        _highNotesIncorrect++;
+                    }
+                    else if (closestToHigh.Equals("lowIncorrect"))
                     {
                         _lowNotesIncorrect++;
                         lowPointer++;
+                    }
+                    else
+                    {
+                        _lowNotesIncorrect++;
                     }
                 }
 
@@ -128,8 +135,9 @@ namespace summary
                     lowFinished = true;
                 }
 
-                if(highFinished && lowFinished){
-
+                if (highFinished && lowFinished)
+                {
+                    break;
                 }
 
             }
@@ -153,19 +161,85 @@ namespace summary
             return smoothedList;
         }
 
-        //Method which takes three notes. The first note is a played note, and it finds the note which the played note is closest to.
-        //Returns true if the note is closer to highnote
-        private bool findClosest(Note note, Note highNote, Note lowNote)
+        private List<int> ConvertToNumber(List<Note> notes)
         {
-            if(highNote == null){
-                return false;
+
+            List<int> output = new List<int>();
+            foreach (Note note in notes)
+            {
+                int step = StepToInt(note);
+                int octave = Int32.Parse(note.GetOctave()) * 12;
+                int noteNumber = octave + step;
+                output.Add(noteNumber);
             }
 
-            if(lowNote == null){
-                return true;
+            return output;
+        }
+
+        //Method which takes three notes. The first note is a played note, and it finds the note which the played note is closest to.
+        //Provides a 3 note birth as to whether the note played was intended
+        private string findClosest(int note, int highNote, int lowNote)
+        {
+
+            int highDiff = Math.Abs(note - highNote);
+            int lowDiff = Math.Abs(note - lowNote);
+
+            if (highDiff <= lowDiff)
+            {
+                if (highDiff <= 3)
+                {
+                    return "highIncorrect";
+                }
+                else
+                {
+                    return "highFail";
+                }
+            }
+            else
+            {
+                if (lowDiff <= 3)
+                {
+                    return "lowIncorrect";
+                }
+                else
+                {
+                    return "lowFail";
+                }
+            }
+        }
+
+        private int StepToInt(Note note)
+        {
+            string step = note.GetStep();
+            string accidental = note.GetAccidental(_fifth);
+
+            int number = 0;
+            switch (step)
+            {
+                case "C": number = 0; break;
+                case "D": number = 2; break;
+                case "E": number = 4; break;
+                case "F": number = 5; break;
+                case "G": number = 7; break;
+                case "A": number = 9; break;
+                case "B": number = 11; break;
             }
 
-            return false;
+            if (accidental.Equals("sharp"))
+            {
+                number++;
+            }
+
+            if (accidental.Equals("flat"))
+            {
+                number--;
+                if (number < 0)
+                {
+                    number = 12;
+                }
+            }
+
+            return number;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace summary
             _symbol.SetChord(false);
             _symbol.SetDuration("256", "256");
             _symbol.SetType("quarter");
-            _summaryMaster.AddNotePlayed((Note) _symbol);
+            //_summaryMaster.AddNotePlayed((Note) _symbol);
         }
 
         int noteStatus;
@@ -118,7 +118,7 @@ namespace summary
             ((Note)_symbol).SetStep(step);
 
             //Pass in notes played
-            _summaryMaster.AddNotePlayed((Note) _symbol);
+            _summaryMaster.AddNotePlayed(noteNumber - 12);
         }
     }
 }
