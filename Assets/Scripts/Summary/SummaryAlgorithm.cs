@@ -33,6 +33,7 @@ namespace summary
             _lowNotes = SmoothList(lowNotes);
 
             _playedNotes = _summaryMaster.GetNotesPlayed();
+            _playedNotes = new List<Note>();
 
             RunSummary();
 

@@ -5,6 +5,7 @@ using symbol;
 using util;
 using xmlParser;
 using Pattern;
+using summary;
 using UnityEngine.UI;
 
 namespace control
@@ -21,16 +22,18 @@ namespace control
         private ScoreView _scoreView;
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
+        private SummaryMaster _summaryMaster = SummaryMaster.GetInstance();
         private float _secondsPerMeasure;
         private float _nextActionTime = 0;
         private int _numberOfPatterns = 1;
         public static bool isStarted = false;
         private bool addedTime = false;
-        private int paragraphNumber = 1;
+        private int _paragraphNumber = 1;
         private int _measureNumber = 0;
         private int _measureTotal = 0;
         private int index = 0;
         private int _noteIndex = 0;
+        private string _fifth = "";
         private float speed;
         private float timeRemaining = 4;
         private Text timeText;
@@ -38,6 +41,9 @@ namespace control
         private float paragraphStartY = Screen.height - 250;
         public static List<List<List<Note>>> _notes;
         private Dictionary<GameObject, Color> _oldKeys;
+        private bool _reset = false;
+        private float _patternSplitSeconds = 0;
+        private int _patternIteration = 1;
 
         private void Update()
         {
@@ -64,33 +70,57 @@ namespace control
                     RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
 
+                    //Checks if measure needs to change
                     if (_measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure)
                     {
-                        _nextActionTime -= _secondsPerMeasure;
+                        // _nextActionTime -= _secondsPerMeasure;
                         _measureNumber = 0;
                         HandleParagraphChange();
-                        index++;
-                        HandlePianoColor();
-                        _measureTotal++;
+                        // index++;
+                        // HandlePianoColor();
+                        _noteIndex = 0;
+                        //_measureTotal++;
+                        _reset = true;
+                        if (_numberOfPatterns > 1)
+                        {
+                            _measureTotal++;
+                        }
+                    }
+                    else if (_nextActionTime >= _secondsPerMeasure)
+                    {
+                        _measureNumber++;
+                        //_measureTotal++;
+                        _noteIndex = 0;
+                        _reset = true;
+                        if (_numberOfPatterns > 1)
+                        {
+                            _measureTotal++;
+                        }
                     }
 
-                    //Increments pattern number count
-                    if (_nextActionTime >= (_secondsPerMeasure / _numberOfPatterns))
+                    //Handles displaying different patterns
+                    if (_nextActionTime >= _patternSplitSeconds * _patternIteration)
                     {
                         index++;
+                        Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
                         HandlePianoColor();
                         _noteIndex++;
-                        _numberOfPatterns--;
+                        //_numberOfPatterns--;
+                        _patternIteration++;
                     }
 
-                    //Increments measure number count
-                    if (_nextActionTime >= _secondsPerMeasure)
+                    //Handles reset
+                    if (_reset)
                     {
+                        if(_numberOfPatterns ==1){
+                            _measureTotal++;
+                        }
                         _nextActionTime -= _secondsPerMeasure;
-                        _measureNumber++;
-                        _measureTotal++;
-                        _noteIndex = 0;
                         _numberOfPatterns = _notes[_measureTotal].Count;
+                        //Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
+                        _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
+                        _patternIteration = 1;
+                        _reset = false;
                     }
                 }
             }
@@ -102,24 +132,28 @@ namespace control
 
         private void HandleParagraphChange()
         {
-            parentObject.transform.Find("Paragraph" + paragraphNumber).gameObject.SetActive(false);
-            paragraphNumber++;
-            Transform movingObject = parentObject.transform.Find("Paragraph" + paragraphNumber);
-            if (movingObject != null)
-            {
-                MoveParagraphUp(movingObject.gameObject);
-            }
-            else
-            {
-                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
-                backButton.onClick.Invoke();
-            }
-            Transform nextObject = parentObject.transform.Find("Paragraph" + (paragraphNumber + 1));
+            parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
+            _paragraphNumber++;
+            
+            Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
             if (nextObject)
             {
                 nextObject.gameObject.SetActive(true);
+            }   
+            
+            if (parentObject.transform.Find("Paragraph" + (_paragraphNumber)) == null)
+            {
+                Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
+                startButton.onClick.Invoke();
+                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                Button helpButton = GameObject.Find("helpButton").gameObject.GetComponent<Button>();
+                startButton.enabled = false;
+                backButton.enabled = false;
+                helpButton.enabled = false;
+
+                DrawEndScreen();
             }
-            _sweeperLine = GameObject.Find("Paragraph" + paragraphNumber + " Sweeper");
+            _sweeperLine = GameObject.Find("Paragraph" + _paragraphNumber + " Sweeper");
         }
 
         private void HandlePianoColor()
@@ -136,25 +170,16 @@ namespace control
                 }
             }
 
-            //NOTE: IF INDEX IS EMPTY, SET KEYS TO WHITE AGAIN (AS NOTHING IS IN THERE)
-            Debug.Log("Measure counts " + _measureTotal + " " + _noteIndex);
+            //Debug.Log(_noteDatabase.GetColorList(index));
             if (_notes[_measureTotal].Count != 0)
             {
                 _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
             }
-            else{
+            else
+            {
                 _oldKeys = new Dictionary<GameObject, Color>();
             }
 
-        }
-
-        private void MoveParagraphUp(GameObject paragraphObject)
-        {
-            Vector3 paragraphPosition = new Vector3(paragraphStartX, paragraphStartY, 0);
-            RectTransform rect = paragraphObject.GetComponent<Canvas>().GetComponent<RectTransform>();
-            rect.position = new Vector3(paragraphPosition.x,
-                    paragraphPosition.y,
-                    paragraphPosition.z);
         }
 
         private void DisplayTime(float timeToDisplay)
@@ -177,18 +202,29 @@ namespace control
         private void OnEnable()
         {
             string scoreName = _commonParams.GetScoreName();
+            _noteDatabase.resetColorsList();
             _notes = new List<List<List<Note>>>();
             _oldKeys = new Dictionary<GameObject, Color>();
             _measureNumber = 0;
             index = 0;
             _noteIndex = 0;
             _measureTotal = 0;
+            _paragraphNumber = 1;
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
+            _fifth = _noteDatabase.GetFifth();
             _numberOfPatterns = _notes[_measureTotal].Count;
+            _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
             HandlePianoColor();
-            _measureTotal = 1;
+            if (_numberOfPatterns <= 1)
+            {
+                _measureTotal++;
+            }
+            else
+            {
+                _noteIndex++;
+            }
         }
 
         private void DrawTimerText()
@@ -199,11 +235,59 @@ namespace control
             textObject.name = "timerText";
             textObject.transform.SetParent(this.transform);
             RectTransform rect = textObject.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(500, 100);
-            rect.position = new Vector3(Screen.width / 2, (Screen.height / 2) + 200, 0);
+            rect.sizeDelta = new Vector2(500, 500);
+            rect.position = new Vector3(Screen.width / 2, Screen.height / 2, 0);
             timeText = textObject.GetComponent<Text>();
             timeText.text = "3";
+            timeText.fontSize = 60;
             timeText.gameObject.SetActive(false);
+        }
+
+        private void DrawEndScreen() {
+            GameObject panel = GameObject.Instantiate(_commonParams.GetPrefabPanel(),
+                    parentObject.transform.position,
+                    _commonParams.GetPrefabPanel().transform.rotation);
+            panel.transform.SetParent(parentObject.transform);
+            RectTransform rect = panel.GetComponent<RectTransform>();
+            rect.offsetMin = new Vector2(Screen.width / 5, Screen.height / 5);
+            rect.offsetMax = new Vector2(-Screen.width / 5,-Screen.height / 5);
+
+            GameObject titleObject = panel.transform.Find("Title").gameObject;
+            RectTransform titleRect = titleObject.GetComponent<RectTransform>();
+            Text titleText = titleObject.GetComponent<Text>();
+            titleText.text = "Summary";
+            titleText.fontSize = 40;
+
+            GameObject panelBackButtonObject = panel.transform.Find("PanelBackButton").gameObject;
+            Text backText = panelBackButtonObject.GetComponentInChildren<Text>();
+            backText.text = "Back to Main Menu";
+            Button panelBackButton = panelBackButtonObject.GetComponent<Button>();
+            panelBackButton.onClick.AddListener(delegate
+            {
+                Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
+                backButton.onClick.Invoke();
+            });
+
+            SummaryAlgorithm algorithm = new SummaryAlgorithm();
+            algorithm.generateSummary();
+            Dictionary<string, int> stats = _summaryMaster.GetSummary();
+            int i = 0;
+
+            float textOffset = -(titleRect.anchoredPosition.y) + titleRect.sizeDelta.y;
+            foreach(string key in stats.Keys) {
+                stats.TryGetValue(key, out int value);
+                // Draw the text
+                 GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText());
+                textObject.transform.SetParent(panel.transform);
+                Text text = textObject.GetComponent<Text>();
+                text.text = key + value;
+                text.fontSize = 20;
+                RectTransform textRect = textObject.GetComponent<RectTransform>();
+                textRect.anchoredPosition = new Vector3(0,- textOffset - (-rect.sizeDelta.y /5) * i,0);
+                textRect.anchorMin = new Vector2(0.5f, 1);
+                textRect.anchorMax = new Vector2(0.5f, 1);
+                i++;
+            }
         }
 
         private void DrawScore(string filename)
@@ -214,7 +298,17 @@ namespace control
             //Debug.Log("Beat + " + xmlFacade.GetBPM());
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
+            Debug.Log("seconds " + _secondsPerMeasure);
 
+            // Draw Background
+            GameObject backgroundPanel = GameObject.Instantiate(_commonParams.GetBackgroundPanel());
+            backgroundPanel.name = "BackgroundPanel";
+            backgroundPanel.transform.SetParent(parentObject.transform);
+            RectTransform backgroundRect = backgroundPanel.GetComponent<RectTransform>();
+            backgroundRect.offsetMin = new Vector2(0, 0);
+            backgroundRect.offsetMax = new Vector2(0, 0);
+
+            
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
             List<List<Measure>> scoreList = scoreGenerator.Generate(xmlFacade.GetMeasureList(), Screen.width - 67);

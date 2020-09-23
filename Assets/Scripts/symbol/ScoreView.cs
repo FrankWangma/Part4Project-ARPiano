@@ -22,6 +22,7 @@ namespace symbol
         private GameObject _overlayCanvas;
         private List<string> _whiteKeyText;
         private List<string> _blackKeyText;
+        private GameObject _panel;
         private static List<GameObject> _pianoKeys = new List<GameObject>();
         public ScoreView(List<List<Measure>> scoreList, GameObject parentObject, List<float> screenSize, List<string> scoreInfo, GameObject canvasScore, GameObject loadScore, GameObject overlayCanvas)
         {
@@ -71,7 +72,7 @@ namespace symbol
                 // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
                 int offset = 0;
-                if(i > 0) {
+                if(i % 2 != 0) {
                     offset = -2 * _paramsGetter.GetTotalHeight() * 1;
                 }
                 rect.position = new Vector3(paragraphPosition.x,
@@ -87,6 +88,7 @@ namespace symbol
 
             DisableParagraphs();
             DrawPianoKeys();
+            DrawHelperCanvas();
         }
 
         public Dictionary<GameObject,Color> changePianoKeyColor(List<Color> colors, List<Note> notes) {
@@ -101,11 +103,20 @@ namespace symbol
             // foreach(Color color in colors){
             //     Debug.Log("My Color " + color);
             // }
+            // foreach(Note note in notes){
+            //     Debug.Log("Note " + note.GetStep());
+            // }
             for(int i = 0; i < colors.Count; i++) {
+                
+                //If the color if black, continue to next iteration
+                if(colors[i] == Color.black)
+                {
+                    continue;
+                }
                 Note note = notes[i];
                 GameObject key;
                 if(int.Parse(note.GetOctave()) == lowestOctave) {
-                    key = _pianoKeys.Find(x => x.gameObject.name.Equals(note.GetStep()));
+                    key = _pianoKeys.Find(x => x.gameObject.name.Equals(note.GetStep() + note.GetAccidental(_noteDatabase.GetFifth())));
                 } else {
                     key = _pianoKeys.Find(x => {
                             string name = note.GetStep();
@@ -142,7 +153,6 @@ namespace symbol
             Vector2 creatorPosition = new Vector2(_screenSize[0] - 50, _screenSize[1] - 75);
 
             DrawText(_scoreInfo[0], worktitlePosition, 30);
-            DrawText(_scoreInfo[1], creatorPosition, 10);
         }
 
         private void DrawText(string text, Vector2 position, int fontSize)
@@ -232,6 +242,72 @@ namespace symbol
             }
         }
 
+        private void DrawHelperCanvas() {
+            _panel = GameObject.Instantiate(_commonParams.GetPrefabPanel(),
+                    _parentObject.transform.position,
+                    _commonParams.GetPrefabPanel().transform.rotation);
+            _panel.transform.SetParent(_parentObject.transform);
+            RectTransform rect = _panel.GetComponent<RectTransform>();
+            rect.offsetMin = new Vector2(_screenSize[0] / 3, _screenSize[1] / 4);
+            rect.offsetMax = new Vector2(-_screenSize[0] / 3, -_screenSize[1] / 4);
+
+            for(int i = 0; i < _whiteKeyText.Count; i++) {
+                Color myColor = Color.black;
+                string chord = _whiteKeyText[i];
+
+                // Determine color of text
+                switch (chord)
+                {
+                    case "A": myColor = Color.yellow; break;
+                    case "B": myColor = Color.magenta; break; //Pink
+                    case "C": myColor = Color.green; break; //C is Green
+                    case "D": myColor = Color.blue; break; //D is blue
+                    case "E": myColor = new Color(0.52F, 0.16F, 0.89F); break; //Purple
+                    case "F": myColor = Color.red; break;
+                    case "G": myColor = new Color(1.0F, 0.4F, 0.0F); break; //Orange
+                }
+                
+                // Draw the text
+                 GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText());
+                textObject.transform.SetParent(_panel.transform);
+                Text text = textObject.GetComponent<Text>();
+                text.text = chord + " Chord";
+                text.fontSize = 20;
+                RectTransform textRect = textObject.GetComponent<RectTransform>();
+                textRect.anchoredPosition = new Vector3(0,-72 - 30 * i,0);
+                textRect.anchorMin = new Vector2(0.5f, 1);
+                textRect.anchorMax = new Vector2(0.5f, 1);
+                textRect.sizeDelta = new Vector2(100, 25);
+
+                // Draw the square representing the color
+                GameObject imageObject = GameObject.Instantiate(_commonParams.GetPrefabPianoKey());
+                imageObject.transform.SetParent(_panel.transform);
+                Image image = imageObject.GetComponent<Image>();
+                image.color = myColor;
+                RectTransform imageRect = imageObject.GetComponent<RectTransform>();
+                imageRect.anchoredPosition = new Vector3(-textRect.sizeDelta.x / (3.0f/2.0f),-72 - 30 * i,0);
+                imageRect.anchorMin = new Vector2(0.5f, 1);
+                imageRect.anchorMax = new Vector2(0.5f, 1);
+                imageRect.sizeDelta = new Vector2(25, 25);
+                imageObject.transform.GetChild(0).gameObject.SetActive(false);
+            }
+            
+            //Take Care of Button
+            GameObject backButtonObject = _panel.transform.Find("PanelBackButton").gameObject;
+            Button backButton = backButtonObject.GetComponent<Button>();
+            backButton.onClick.AddListener(delegate
+            {
+                _panel.gameObject.SetActive(false);
+            });
+
+            GameObject titleObject = _panel.transform.Find("Title").gameObject;
+            Text titleText = titleObject.GetComponent<Text>();
+            titleText.text = "Each Color Corresponds to a Chord";
+
+            _panel.SetActive(false);
+                
+        }
+
         // 放置两个button按钮作为返回上一个场景，以及退出
         private void PlaceButton()
         {
@@ -257,6 +333,21 @@ namespace symbol
                 _noteDatabase.Clear();
             });
 
+            GameObject helpButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
+                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
+            helpButtonObject.transform.SetParent(_parentObject.transform);
+            helpButtonObject.gameObject.name = "helpButton";
+            RectTransform helpRect = helpButtonObject.GetComponent<RectTransform>();
+            helpRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
+            helpRect.sizeDelta = new Vector2(50, 30);
+            Text helpText = helpButtonObject.GetComponentInChildren<Text>();
+            helpText.text = "Help";
+            Button helpButton = helpButtonObject.GetComponent<Button>();
+            helpButton.onClick.AddListener(delegate
+            {
+                _panel.gameObject.SetActive(true);
+            });
+
             GameObject startButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             startButtonObject.name = "startButton";
@@ -272,28 +363,14 @@ namespace symbol
                 if(control.CanvasControl.isStarted) {
                     startText.text = "Start";
                     control.CanvasControl.isStarted = false;
-                    backButtonObject.GetComponent<Button>().enabled = true;
+                    backButton.enabled = true;
+                    helpButton.enabled = true;
                 } else {
                     control.CanvasControl.isStarted = true;
                     startText.text = "Pause";
-                    backButtonObject.GetComponent<Button>().enabled = false;
+                    backButton.enabled = false;
+                    helpButton.enabled = false;
                 }
-            });
-
-
-            // 退出按钮
-            GameObject exitButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
-                _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
-            exitButtonObject.transform.SetParent(_parentObject.transform);
-            RectTransform exitRect = exitButtonObject.GetComponent<RectTransform>();
-            exitRect.position = new Vector3(_screenSize[0] - 50, _screenSize[1] - 50, 0);
-            exitRect.sizeDelta = new Vector2(50, 30);
-            Text exitText = exitButtonObject.GetComponentInChildren<Text>();
-            exitText.text = "Exit";
-            Button exitButton = exitButtonObject.GetComponent<Button>();
-            exitButton.onClick.AddListener(delegate
-            {
-                Application.Quit();
             });
         }
     }

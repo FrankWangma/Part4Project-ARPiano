@@ -18,6 +18,7 @@ namespace summary
         private List<Note> _notesPlayed = new List<Note>();
 
         private Dictionary<String, int> _summary = new Dictionary<String, int>();
+        SummaryAlgorithm _algorithm = new SummaryAlgorithm();
 
         public void AddNotePlayed(Note note){
             _notesPlayed.Add(note);
@@ -28,6 +29,7 @@ namespace summary
         }
 
         public Dictionary<String, int> GetSummary(){
+            //_algorithm.generateSummary();
             return _summary;
         }
 

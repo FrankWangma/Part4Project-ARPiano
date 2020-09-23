@@ -95,6 +95,10 @@ namespace Pattern
 
         public List<List<Note>> GetLowNotes() { return _lowNotes; }
         public String GetFifth() { return _fifth; }
+        
+        public void resetColorsList() {
+            _colors = new List<List<Color>>();
+        }
 
         public void AddColorsToList(List<Color> colors) {
             _colors.Add(colors);
