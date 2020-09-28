@@ -55,7 +55,8 @@ namespace symbol
             PlaceButton();
             // 绘制乐谱信息
             DrawScoreInfo();
-
+            
+            DrawScoreBackground();
             // 绘制乐谱内容
             float startX = 67f / 2;
             float startY = _screenSize[1] - 250;
@@ -135,6 +136,18 @@ namespace symbol
             }
 
             return keysAndColors;
+        }
+
+        private void DrawScoreBackground() {
+            GameObject imageObject = GameObject.Instantiate(_commonParams.GetPrefabPianoKey());
+            imageObject.transform.SetParent(_parentObject.transform);
+            RectTransform imageRect = imageObject.GetComponent<RectTransform>();
+            imageRect.anchorMin = new Vector2(0.01f, 0.55f);
+            imageRect.anchorMax = new Vector2(0.99f, 0.9f);
+            imageObject.transform.GetChild(0).gameObject.SetActive(false);
+            imageRect.offsetMin = new Vector2(0,0);
+            imageRect.offsetMax = new Vector2(0,0);
+            
         }
 
         private void DisableParagraphs() {
