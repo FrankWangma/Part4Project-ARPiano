@@ -331,13 +331,15 @@ namespace control
             //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
             //    SymbolControl symbolControl = new SymbolControl(symbol);
             //    symbolControl.SetColor(Color.red);
+            //speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
             speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
         }
         private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM)
         {
             //Debug.Log("HI" + beatsPerMeasure);
             //Debug.Log("HI HI " + BPM);
-            float secondsInMinute = 60.0f;
+            float secondsInMinute = 120.0f;
+            //float secondsInMinute = 60.0f;
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);
             float secondsPerBeat = secondsInMinute / BPMinute;
