@@ -145,8 +145,8 @@ namespace symbol
             imageRect.anchorMin = new Vector2(0.01f, 0.55f);
             imageRect.anchorMax = new Vector2(0.99f, 0.9f);
             imageObject.transform.GetChild(0).gameObject.SetActive(false);
-            imageRect.offsetMin = new Vector2(0,0);
-            imageRect.offsetMax = new Vector2(0,0);
+            imageRect.offsetMin = new Vector2(0,-40);
+            imageRect.offsetMax = new Vector2(0,40);
             
         }
 
@@ -184,7 +184,7 @@ namespace symbol
 
         private void DrawPianoKeys() {
             float width = _screenSize[0] / 20;
-            float height = _screenSize[1] / 4;
+            float height = _screenSize[1] / 3;
             Vector2 position = new Vector2(_screenSize[0] / 2, _screenSize[1] - 250);
             GameObject piano = new GameObject();
             piano.transform.SetParent(_parentObject.transform);
