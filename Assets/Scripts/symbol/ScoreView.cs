@@ -55,7 +55,8 @@ namespace symbol
             PlaceButton();
             // 绘制乐谱信息
             DrawScoreInfo();
-
+            
+            DrawScoreBackground();
             // 绘制乐谱内容
             float startX = 67f / 2;
             float startY = _screenSize[1] - 250;
@@ -137,6 +138,18 @@ namespace symbol
             return keysAndColors;
         }
 
+        private void DrawScoreBackground() {
+            GameObject imageObject = GameObject.Instantiate(_commonParams.GetPrefabPianoKey());
+            imageObject.transform.SetParent(_parentObject.transform);
+            RectTransform imageRect = imageObject.GetComponent<RectTransform>();
+            imageRect.anchorMin = new Vector2(0.01f, 0.55f);
+            imageRect.anchorMax = new Vector2(0.99f, 0.9f);
+            imageObject.transform.GetChild(0).gameObject.SetActive(false);
+            imageRect.offsetMin = new Vector2(0,-40);
+            imageRect.offsetMax = new Vector2(0,40);
+            
+        }
+
         private void DisableParagraphs() {
             // Disable every paragraph, except for first 2
             for(int i = 2; i < _paragraphs.Count; i++) {
@@ -170,13 +183,13 @@ namespace symbol
         }
 
         private void DrawPianoKeys() {
-            int width = 100;
-            int height = 400;
+            float width = _screenSize[0] / 20;
+            float height = _screenSize[1] / 3;
             Vector2 position = new Vector2(_screenSize[0] / 2, _screenSize[1] - 250);
             GameObject piano = new GameObject();
             piano.transform.SetParent(_parentObject.transform);
             piano.gameObject.name = "Piano";
-            Vector3 pianoKeyPositioning = new Vector3((position.x - 6.5f * width), position.y - 2 * _paramsGetter.GetTotalHeight() * 3, 0);
+            Vector3 pianoKeyPositioning = new Vector3((position.x - 6.5f * width), _screenSize[1] / 4, 0);
             for(int i = 0; i < 14; i++) {
                 GameObject whiteKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
                     _parentObject.transform.position,
@@ -204,7 +217,7 @@ namespace symbol
                 _pianoKeys.Add(whiteKey);
             }
 
-            int offset = width / 2;
+            float offset = width / 2;
             for(int i = 0; i < 10; i++) {
                  GameObject blackKey = GameObject.Instantiate(_commonParams.GetPrefabPianoKey(),
                     _parentObject.transform.position,
@@ -216,7 +229,7 @@ namespace symbol
 
                 Text blackKeyText = blackKey.transform.GetChild(0).gameObject.GetComponent<Text>();
                 blackKeyText.color = Color.white;
-                blackKeyText.fontSize = 30;
+                blackKeyText.fontSize = 15;
                 RectTransform textRect = blackKeyText.gameObject.GetComponent<RectTransform>();
                 textRect.position = new Vector3(textRect.position.x, textRect.position.y - height / 2, 0);
                 textRect.sizeDelta = new Vector2(width,height);
@@ -233,7 +246,7 @@ namespace symbol
                     blackKey.gameObject.name = blackKey.gameObject.name.Replace("#", "sharp");
                 }   
 
-                rect.sizeDelta = new Vector2(width - 20, height - 170);
+                rect.sizeDelta = new Vector2(width / 1.5f, height / 1.75f);
                 if (i == 2 || i == 5 || i == 7) {
                     offset += width;
                 }

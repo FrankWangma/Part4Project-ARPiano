@@ -99,7 +99,7 @@ namespace Pattern
             addChord("C", "E", "G", "C Major");
             addChord("D", "Fsharp", "A", "D Major");
             addChord("E", "Gsharp", "B", "E Major");
-            addChord("F", "G", "C", "F Major");
+            addChord("F", "A", "C", "F Major");
             addChord("G", "B", "D", "G Major");
             addChord("A", "Csharp", "E", "A Major");
             addChord("B", "Dsharp", "Fsharp", "B Major");

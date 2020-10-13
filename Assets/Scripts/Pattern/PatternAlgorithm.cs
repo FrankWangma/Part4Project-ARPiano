@@ -339,7 +339,8 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 case "C": myColor = Color.green; break; //C is Green
                 case "D": myColor = Color.blue; break; //D is blue
                 case "E": myColor = new Color(0.52F, 0.16F, 0.89F); break; //Purple
-                case "F": myColor = Color.red; break;
+                //case "F": myColor = Color.red; break;
+                case "F": myColor = new Color(0.0F, 0.8F, 0.0F); break; //Dark Green
                 case "G": myColor = new Color(1.0F, 0.4F, 0.0F); break; //Orange
             }
 
