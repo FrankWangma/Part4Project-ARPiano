@@ -35,7 +35,7 @@ namespace summary {
         private Symbol _symbol;
 
         // Start is called before the first frame update
-        void Start () {
+        void OnEnable () {
             _symbol = new Note ("D", "4");
             _symbol.SetChord (false);
             _symbol.SetDuration ("256", "256");

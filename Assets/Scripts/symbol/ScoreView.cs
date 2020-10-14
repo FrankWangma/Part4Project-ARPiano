@@ -379,7 +379,7 @@ namespace symbol
                 if(control.CanvasControl.isStarted) {
                     startText.text = "Start";
                     control.CanvasControl.isStarted = false;
-                    //_canvasScore.GetComponent<Change>().enabled = false;
+                    _canvasScore.GetComponent<Change>().enabled = false;
                     _summaryMaster.SetReset();
                     backButton.enabled = true;
                     helpButton.enabled = true;
