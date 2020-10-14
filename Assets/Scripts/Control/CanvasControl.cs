@@ -134,6 +134,7 @@ namespace control
         {
             parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
             _paragraphNumber++;
+            _summaryMaster.SetParagraphNumber(_paragraphNumber);
             
             Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
             if (nextObject)
@@ -210,6 +211,7 @@ namespace control
             _noteIndex = 0;
             _measureTotal = 0;
             _paragraphNumber = 1;
+            _summaryMaster.SetParagraphNumber(_paragraphNumber);
             parentObject = GameObject.Find("Canvas_Score");
             DrawScore(scoreName);
             DrawTimerText();
@@ -268,9 +270,10 @@ namespace control
                 backButton.onClick.Invoke();
             });
 
-            SummaryAlgorithm algorithm = new SummaryAlgorithm();
-            algorithm.generateSummary();
+            // SummaryAlgorithm algorithm = new SummaryAlgorithm();
+            // algorithm.generateSummary();
             Dictionary<string, int> stats = _summaryMaster.GetSummary();
+            _summaryMaster.SetReset();
             int i = 0;
 
             float textOffset = -(titleRect.anchoredPosition.y) + titleRect.sizeDelta.y;
@@ -280,7 +283,7 @@ namespace control
                  GameObject textObject = GameObject.Instantiate(_commonParams.GetPrefabText());
                 textObject.transform.SetParent(panel.transform);
                 Text text = textObject.GetComponent<Text>();
-                text.text = key + value;
+                text.text = key + " " + value;
                 text.fontSize = 20;
                 RectTransform textRect = textObject.GetComponent<RectTransform>();
                 textRect.anchoredPosition = new Vector3(0,- textOffset - (-rect.sizeDelta.y /5) * i,0);
@@ -288,6 +291,7 @@ namespace control
                 textRect.anchorMax = new Vector2(0.5f, 1);
                 i++;
             }
+            _summaryMaster.Reset();
         }
 
         private void DrawScore(string filename)

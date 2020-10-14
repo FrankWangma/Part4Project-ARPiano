@@ -52,9 +52,9 @@ namespace symbol
                     Image image = canvasRenderer.GetComponent<Image>();
                     if (image != null)
                     {
-                        if(image.color == Color.black){
-                            image.color = color;
-                        }
+                        // if(image.color == Color.black){
+                        //     image.color = color;
+                        // }
                         image.color = color;
                         continue; // 已经确定是划线，后面的不需要执行，直接判断下一个乐符对象
                     }
@@ -63,10 +63,10 @@ namespace symbol
                     if (text != null)
                     {
                         //only change colors of objects not already set
-                        if(text.color == Color.black){
-                            text.color = color;
-                        }
-                        //text.color = color;
+                        // if(text.color == Color.black){
+                        //     text.color = color;
+                        // }
+                        text.color = color;
                         continue;
                     }
                 }

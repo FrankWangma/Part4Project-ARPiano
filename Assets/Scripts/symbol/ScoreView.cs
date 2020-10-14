@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using control;
 using Pattern;
+using summary;
 namespace symbol
 {
     public class ScoreView
@@ -16,6 +17,7 @@ namespace symbol
         private ParamsGetter _paramsGetter = ParamsGetter.GetInstance();
         private CommonParams _commonParams = CommonParams.GetInstance();
         private NoteDatabase _noteDatabase = NoteDatabase.GetInstance();
+        private SummaryMaster _summaryMaster = SummaryMaster.GetInstance();
         private GameObject _canvasScore;
         private GameObject _loadScore;
         private List<GameObject> _paragraphs = new List<GameObject>();
@@ -311,6 +313,7 @@ namespace symbol
             backButton.onClick.AddListener(delegate
             {
                 _panel.gameObject.SetActive(false);
+                _noteDatabase.Clear();
             });
 
             GameObject titleObject = _panel.transform.Find("Title").gameObject;
@@ -376,10 +379,13 @@ namespace symbol
                 if(control.CanvasControl.isStarted) {
                     startText.text = "Start";
                     control.CanvasControl.isStarted = false;
+                    //_canvasScore.GetComponent<Change>().enabled = false;
+                    _summaryMaster.SetReset();
                     backButton.enabled = true;
                     helpButton.enabled = true;
                 } else {
                     control.CanvasControl.isStarted = true;
+                    _canvasScore.GetComponent<Change>().enabled = true;
                     startText.text = "Pause";
                     backButton.enabled = false;
                     helpButton.enabled = false;
