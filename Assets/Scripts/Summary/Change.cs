@@ -26,6 +26,8 @@ namespace summary {
         private int lowPointer = 0;
         private int incorrectNotes = 0;
         private int _paragraphNumber = 1;
+        private int _highNotesCorrect = 0;
+        private int _lowNotesCorrect = 0;
 
         private List<int> _noteNumberHigh = new List<int> ();
         private List<int> _noteNumberLow = new List<int> ();
@@ -40,6 +42,9 @@ namespace summary {
             _symbol.SetType ("quarter");
             _noteNumberHigh = FindNotesPerParagraph (_noteDatabase.GetHighNotes ());
             _noteNumberLow = FindNotesPerParagraph (_noteDatabase.GetLowNotes ());
+            Debug.Log("not count " + _noteNumberHigh.Count);
+            _summaryMaster.SetNumberHigh(_noteNumberHigh);
+            _summaryMaster.SetNumberLow(_noteNumberLow);
             _smoothedHighNotes = SmoothList (_noteDatabase.GetHighNotes ());
             _smoothedLowNotes = SmoothList (_noteDatabase.GetLowNotes ());
             _highNotes = ConvertToNumber (_smoothedHighNotes);
@@ -89,29 +94,29 @@ namespace summary {
                     notesPressed.Remove (noteNumber);
                 }
             }
-
-            CheckNotesMissed ();
             CheckReset ();
+            CheckNotesMissed();
 
         }
 
         private void CheckNotesMissed () {
             if (_paragraphNumber < _summaryMaster.GetParagraphNumber ()) {
-
-                int expectedHigh = _noteNumberHigh[_paragraphNumber - 1];
-                int expectedLow = _noteNumberLow[_paragraphNumber - 1];
+                _paragraphNumber = _summaryMaster.GetParagraphNumber ();
+                Debug.Log("Para " + _paragraphNumber);
+                int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
+                int expectedLow = _noteNumberLow[_paragraphNumber - 2];
 
                 if (highPointer < expectedHigh) {
                     _summaryMaster.AddHighNotesMissed (expectedHigh - highPointer);
                     highPointer = expectedHigh;
+                    _summaryMaster.SetHighPointer(highPointer);
                 }
 
                 if (lowPointer < expectedLow) {
                     _summaryMaster.AddLowNotesMissed (expectedLow - lowPointer);
                     lowPointer = expectedLow;
+                    _summaryMaster.SetLowPointer(lowPointer);
                 }
-
-                _paragraphNumber = _summaryMaster.GetParagraphNumber ();
             }
         }
 
@@ -187,11 +192,17 @@ namespace summary {
             if (noteNumber == highNoteNumber) {
                 _smoothedHighNotes[highPointer].ChangeColor (Color.green);
                 highPointer++;
+                _highNotesCorrect++;
+                _summaryMaster.SetHighNotesCorrect(_highNotesCorrect);
+                _summaryMaster.SetHighPointer(highPointer);
                 noMatch = false;
             }
             if (noteNumber == lowNoteNumber) {
                 _smoothedLowNotes[lowPointer].ChangeColor (Color.green);
                 lowPointer++;
+                _lowNotesCorrect++;
+                _summaryMaster.SetLowNotesCorrect(_lowNotesCorrect);
+                _summaryMaster.SetLowPointer(lowPointer);
                 noMatch = false;
             }
 
@@ -294,12 +305,15 @@ namespace summary {
                 if (measureCount >= 5) {
                     measureCount = 1;
                     notesPerParagraph.Add (noteCount);
+                    
                     //noteCount = 0;
                 }
                 foreach (Note note in notes) {
                     noteCount++;
                 }
             }
+
+            notesPerParagraph.Add(noteCount);
 
             return notesPerParagraph;
         }

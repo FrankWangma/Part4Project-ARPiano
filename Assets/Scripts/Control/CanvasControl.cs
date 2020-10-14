@@ -7,6 +7,7 @@ using xmlParser;
 using Pattern;
 using summary;
 using UnityEngine.UI;
+using summary;
 
 namespace control
 {
@@ -135,6 +136,7 @@ namespace control
             parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
             _paragraphNumber++;
             _summaryMaster.SetParagraphNumber(_paragraphNumber);
+
             
             Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
             if (nextObject)
@@ -342,7 +344,7 @@ namespace control
         {
             //Debug.Log("HI" + beatsPerMeasure);
             //Debug.Log("HI HI " + BPM);
-            float secondsInMinute = 120.0f;
+            float secondsInMinute = 60.0f;
             //float secondsInMinute = 60.0f;
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);
