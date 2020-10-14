@@ -7,7 +7,7 @@
   <identification>
     <encoding>
       <software>MuseScore 3.5.1</software>
-      <encoding-date>2020-10-13</encoding-date>
+      <encoding-date>2020-10-14</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
@@ -634,9 +634,9 @@
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <note default-x="37.72" default-y="-100.00">
+      <note default-x="37.72" default-y="-110.00">
         <pitch>
-          <step>B</step>
+          <step>G</step>
           <octave>3</octave>
           </pitch>
         <duration>4</duration>
