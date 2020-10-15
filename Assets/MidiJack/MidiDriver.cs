@@ -146,7 +146,24 @@ namespace MidiJack
 
         public Queue<MidiMessage> History {
             get { return _messageHistory; }
+            //set { _messageHistory.Clear(); }
         }
+
+        public Queue<MidiMessage> UpdateQueue() {
+            Queue<MidiMessage> copy = new Queue<MidiMessage>();
+            copy = GetHistory();
+            _messageHistory.Clear();
+            return copy;
+        }
+
+        public Queue<MidiMessage> GetHistory(){
+            return _messageHistory;
+        }
+
+        public void ClearHistory(){
+            _messageHistory.Clear();
+        }
+
 
         #endif
 
@@ -256,9 +273,11 @@ namespace MidiJack
             }
 
             #if UNITY_EDITOR
-            // Truncate the history.
-            while (_messageHistory.Count > 8)
-                _messageHistory.Dequeue();
+            //Truncate the history.
+            while (_messageHistory.Count > 8){
+
+            }
+                //_messageHistory.Dequeue();
             #endif
         }
 

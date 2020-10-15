@@ -32,6 +32,8 @@ namespace summary {
         private List<int> _noteNumberHigh = new List<int> ();
         private List<int> _noteNumberLow = new List<int> ();
 
+        HashSet<int> _notesRecorded = new HashSet<int> ();
+
         private Symbol _symbol;
 
         // Start is called before the first frame update
@@ -42,9 +44,9 @@ namespace summary {
             _symbol.SetType ("quarter");
             _noteNumberHigh = FindNotesPerParagraph (_noteDatabase.GetHighNotes ());
             _noteNumberLow = FindNotesPerParagraph (_noteDatabase.GetLowNotes ());
-            Debug.Log("not count " + _noteNumberHigh.Count);
-            _summaryMaster.SetNumberHigh(_noteNumberHigh);
-            _summaryMaster.SetNumberLow(_noteNumberLow);
+            Debug.Log ("not count " + _noteNumberHigh.Count);
+            _summaryMaster.SetNumberHigh (_noteNumberHigh);
+            _summaryMaster.SetNumberLow (_noteNumberLow);
             _smoothedHighNotes = SmoothList (_noteDatabase.GetHighNotes ());
             _smoothedLowNotes = SmoothList (_noteDatabase.GetLowNotes ());
             _highNotes = ConvertToNumber (_smoothedHighNotes);
@@ -71,51 +73,59 @@ namespace summary {
             //HashSet<int> notesPressed = new HashSet<int>();
 
             //Get queue of notes played
-            Queue<MidiJack.MidiMessage> myQueue = MidiDriver.Instance.History;
+            Queue<MidiJack.MidiMessage> myQueue = MidiDriver.Instance.GetHistory ();
 
             //Change queue to array so we can get last note pressed or released
             MidiMessage[] messageArray = myQueue.ToArray ();
 
             if (messageArray.Length > 0) {
-                //Get the last note played (represented as message)
-                MidiMessage message = messageArray[messageArray.Length - 1];
+                foreach (MidiMessage message in messageArray) {
+                    //Get the last note played (represented as message)
+                    //MidiMessage message = messageArray[messageArray.Length - 1];
 
-                noteNumber = message.data1;
-                noteStatus = message.status;
+                    noteNumber = message.data1;
+                    noteStatus = message.status;
+                    noteNumber = AdjustNote (noteNumber);
+                    Debug.Log (noteNumber);
 
-                //If notes status indicates press, add the note to the hashset
-                //Otherwise, if it detects the note is released, then remove the note from the hashset
-                if (noteStatus == press) {
-                    if (!notesPressed.Contains (noteNumber)) {
-                        updateSheetMusic (noteNumber);
+                    //If notes status indicates press, add the note to the hashset
+                    //Otherwise, if it detects the note is released, then remove the note from the hashset
+                    if (noteStatus == press) {
+                        if (!notesPressed.Contains (noteNumber)) {
+                            notesPressed.Add (noteNumber);
+                            updateSheetMusic (noteNumber, notesPressed);
+                            _summaryMaster.AddNotePlayed (noteNumber);
+                        }
+                    } else if (noteStatus == release) {
+                        notesPressed.Remove (noteNumber);
+                        _notesRecorded.Remove (noteNumber);
                     }
-                    notesPressed.Add (noteNumber);
-                } else if (noteStatus == release) {
-                    notesPressed.Remove (noteNumber);
                 }
             }
             CheckReset ();
-            CheckNotesMissed();
+            CheckNotesMissed ();
+
+            MidiDriver.Instance.ClearHistory ();
 
         }
 
         private void CheckNotesMissed () {
             if (_paragraphNumber < _summaryMaster.GetParagraphNumber ()) {
                 _paragraphNumber = _summaryMaster.GetParagraphNumber ();
-                Debug.Log("Para " + _paragraphNumber);
+                Debug.Log ("Para " + _paragraphNumber);
                 int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
                 int expectedLow = _noteNumberLow[_paragraphNumber - 2];
 
                 if (highPointer < expectedHigh) {
                     _summaryMaster.AddHighNotesMissed (expectedHigh - highPointer);
                     highPointer = expectedHigh;
-                    _summaryMaster.SetHighPointer(highPointer);
+                    _summaryMaster.SetHighPointer (highPointer);
                 }
 
                 if (lowPointer < expectedLow) {
                     _summaryMaster.AddLowNotesMissed (expectedLow - lowPointer);
                     lowPointer = expectedLow;
-                    _summaryMaster.SetLowPointer(lowPointer);
+                    _summaryMaster.SetLowPointer (lowPointer);
                 }
             }
         }
@@ -129,8 +139,8 @@ namespace summary {
             }
         }
 
-        //Method to pass in notes played
-        public void updateSheetMusic (int noteNumber) {
+        //Fix notenumber to keyboard
+        private int AdjustNote (int notenumber) {
             int octave = (noteNumber - 12) / 12;
             int stepNum = noteNumber - 12 - (octave * 12);
             string step = "";
@@ -164,54 +174,82 @@ namespace summary {
 
             //Pass in notes played
             noteNumber = noteNumber - 12;
-            _summaryMaster.AddNotePlayed (noteNumber);
+            return noteNumber;
+        }
 
+        //Method to pass in notes played
+        public void updateSheetMusic (int noteNumber, HashSet<int> notesPressed) {
             bool isHighChord = false;
             bool isLowChord = false;
             bool noMatch = true;
-            int highNoteNumber;
+            HashSet<int> highNoteNumber = new HashSet<int> ();
+            //List<int> highNoteNumber = new List<int>();
             if (highPointer < _highNotes.Count) {
-                highNoteNumber = _highNotes[highPointer];
-                if (_smoothedHighNotes[highPointer].IsChord ()) {
+                //highNoteNumber.Add (_highNotes[highPointer]);
+                if (_smoothedHighNotes[highPointer].GetChordList ().Count > 1) {
                     isHighChord = true;
+                    highNoteNumber.Add (_highNotes[highPointer]);
+                    foreach (Note note in _smoothedHighNotes[highPointer].GetChordList ()) {
+                        highNoteNumber.Add (ConvertToNumberSingle (note));
+                    }
+                } else {
+                    highNoteNumber.Add (_highNotes[highPointer]);
                 }
             } else {
-                highNoteNumber = -999;
+                highNoteNumber.Add (-999);
             }
 
-            int lowNoteNumber;
+            HashSet<int> lowNoteNumber = new HashSet<int> ();
+            //List<int> lowNoteNumber = new List<int> ();
             if (lowPointer < _lowNotes.Count) {
-                lowNoteNumber = _lowNotes[lowPointer];
-                if (_smoothedLowNotes[lowPointer].IsChord ()) {
+
+                if (_smoothedLowNotes[lowPointer].GetChordList ().Count > 0) {
+                    Debug.Log ("here ");
                     isLowChord = true;
+                    lowNoteNumber.Add (_lowNotes[lowPointer]);
+                    foreach (Note note in _smoothedLowNotes[lowPointer].GetChordList ()) {
+                        lowNoteNumber.Add (ConvertToNumberSingle (note));
+                    }
+                } else {
+                    lowNoteNumber.Add (_lowNotes[lowPointer]);
                 }
             } else {
-                lowNoteNumber = -999;
+                lowNoteNumber.Add (-999);
             }
 
-            if (noteNumber == highNoteNumber) {
-                _smoothedHighNotes[highPointer].ChangeColor (Color.green);
-                highPointer++;
-                _highNotesCorrect++;
-                _summaryMaster.SetHighNotesCorrect(_highNotesCorrect);
-                _summaryMaster.SetHighPointer(highPointer);
-                noMatch = false;
+            if (highNoteNumber.IsSubsetOf (notesPressed)) {
+                //if (highNoteNumber.Contains(noteNumber)){
+                if (!highNoteNumber.IsSubsetOf (_notesRecorded)) {
+                    _notesRecorded.UnionWith (highNoteNumber);
+                    _smoothedHighNotes[highPointer].ChangeColor (Color.green);
+                    highPointer++;
+                    _highNotesCorrect++;
+                    _summaryMaster.SetHighNotesCorrect (_highNotesCorrect);
+                    _summaryMaster.SetHighPointer (highPointer);
+                    noMatch = false;
+                }
             }
-            if (noteNumber == lowNoteNumber) {
-                _smoothedLowNotes[lowPointer].ChangeColor (Color.green);
-                lowPointer++;
-                _lowNotesCorrect++;
-                _summaryMaster.SetLowNotesCorrect(_lowNotesCorrect);
-                _summaryMaster.SetLowPointer(lowPointer);
-                noMatch = false;
+            //if(lowNoteNumber.Contains(noteNumber)){
+            if (lowNoteNumber.IsSubsetOf (notesPressed)) {
+                if (!lowNoteNumber.IsSubsetOf (_notesRecorded)) {
+                    _notesRecorded.UnionWith (lowNoteNumber);
+                    _smoothedLowNotes[lowPointer].ChangeColor (Color.green);
+                    lowPointer++;
+                    _lowNotesCorrect++;
+                    _summaryMaster.SetLowNotesCorrect (_lowNotesCorrect);
+                    _summaryMaster.SetLowPointer (lowPointer);
+                    noMatch = false;
+                }
             }
 
             if (noMatch) {
                 incorrectNotes++;
-                if (ClosestHigh (noteNumber, highNoteNumber, lowNoteNumber)) {
+                if (ClosestHigh (noteNumber, _highNotes[highPointer], _lowNotes[lowPointer])) {
                     _smoothedHighNotes[highPointer].ChangeColor (Color.red);
+                    //highPointer++;
                 } else {
                     _smoothedLowNotes[lowPointer].ChangeColor (Color.red);
+                    //lowPointer++;
                 }
                 _summaryMaster.SetNotesIncorrect (incorrectNotes);
             }
@@ -299,21 +337,22 @@ namespace summary {
             List<int> notesPerParagraph = new List<int> ();
 
             int noteCount = 0;
-            int measureCount = 0;
+            //int measureCount = 0;
             foreach (List<Note> notes in measures) {
-                measureCount++;
-                if (measureCount >= 5) {
-                    measureCount = 1;
-                    notesPerParagraph.Add (noteCount);
-                    
-                    //noteCount = 0;
-                }
+                // measureCount++;
+                // if (measureCount >= 5) {
+                //     measureCount = 1;
+                //     notesPerParagraph.Add (noteCount);
+
+                //     //noteCount = 0;
+                // }
                 foreach (Note note in notes) {
                     noteCount++;
                 }
+                notesPerParagraph.Add (noteCount);
             }
 
-            notesPerParagraph.Add(noteCount);
+            notesPerParagraph.Add (noteCount);
 
             return notesPerParagraph;
         }

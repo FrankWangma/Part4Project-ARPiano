@@ -32,6 +32,7 @@ namespace control
         private int _paragraphNumber = 1;
         private int _measureNumber = 0;
         private int _measureTotal = 0;
+        private int _allMeasureTotal = 1;
         private int index = 0;
         private int _noteIndex = 0;
         private string _fifth = "";
@@ -80,12 +81,12 @@ namespace control
                         // index++;
                         // HandlePianoColor();
                         _noteIndex = 0;
-                        //_measureTotal++;
                         _reset = true;
                         if (_numberOfPatterns > 1)
                         {
                             _measureTotal++;
                         }
+                        UpdateSummaryMaster();
                     }
                     else if (_nextActionTime >= _secondsPerMeasure)
                     {
@@ -97,6 +98,7 @@ namespace control
                         {
                             _measureTotal++;
                         }
+                        UpdateSummaryMaster();
                     }
 
                     //Handles displaying different patterns
@@ -131,11 +133,16 @@ namespace control
             }
         }
 
+        private void UpdateSummaryMaster(){
+            _allMeasureTotal++;
+            _summaryMaster.SetParagraphNumber(_allMeasureTotal);
+        }
+
         private void HandleParagraphChange()
         {
             parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
             _paragraphNumber++;
-            _summaryMaster.SetParagraphNumber(_paragraphNumber);
+            //_summaryMaster.SetParagraphNumber(_paragraphNumber);
 
             
             Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
@@ -212,6 +219,7 @@ namespace control
             index = 0;
             _noteIndex = 0;
             _measureTotal = 0;
+            _allMeasureTotal = 1;
             _paragraphNumber = 1;
             _summaryMaster.SetParagraphNumber(_paragraphNumber);
             parentObject = GameObject.Find("Canvas_Score");
