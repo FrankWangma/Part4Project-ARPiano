@@ -39,6 +39,9 @@ namespace summary {
         bool _highIncorrect = false;
         bool _lowIncorrect = false;
 
+        int _highNotesTooFast = 0;
+        int _lowNotesTooFast = 0;
+
         // Start is called before the first frame update
         void OnEnable () {
             _symbol = new Note ("D", "4");
@@ -61,6 +64,8 @@ namespace summary {
             _paragraphNumber = 1;
             _highIncorrect = false;
             _lowIncorrect = false;
+            _highNotesTooFast = 0;
+            _lowNotesTooFast = 0;
         }
 
         int noteStatus;
@@ -192,6 +197,21 @@ namespace summary {
         //Method to pass in notes played
         public void updateSheetMusic (int noteNumber, HashSet<int> notesPressed) {
 
+            bool highTooFast = false;
+            bool lowTooFast = false;
+
+            if (highPointer >= _noteNumberHigh[_paragraphNumber - 1]) {
+                _highNotesTooFast++;
+                _summaryMaster.SetHighNotesTooFast (_highNotesTooFast);
+                highTooFast = true;
+            }
+
+            if (lowPointer >= _noteNumberLow[_paragraphNumber - 1]) {
+                _lowNotesTooFast++;
+                _summaryMaster.SetLowNotesTooFast (_lowNotesTooFast);
+                lowTooFast = true;
+            }
+
             bool noMatch = true;
             HashSet<int> highNoteNumber = new HashSet<int> ();
             //List<int> highNoteNumber = new List<int>();
@@ -219,51 +239,13 @@ namespace summary {
                 lowNoteNumber.Add (-999);
             }
 
-            if (highNoteNumber.IsSubsetOf (notesPressed)) {
-                //if (highNoteNumber.Contains(noteNumber)){
-                if (!highNoteNumber.IsSubsetOf (_notesRecorded)) {
-                    _notesRecorded.UnionWith (highNoteNumber);
-                    _smoothedHighNotes[highPointer].ChangeColor (Color.green);
-                    highPointer++;
-                    _highNotesCorrect++;
-                    _summaryMaster.SetHighNotesCorrect (_highNotesCorrect);
-                    _summaryMaster.SetHighPointer (highPointer);
-                    noMatch = false;
-                    _highIncorrect = false;
-                }
-            }
-            //if(lowNoteNumber.Contains(noteNumber)){
-            if (lowNoteNumber.IsSubsetOf (notesPressed)) {
-                if (!lowNoteNumber.IsSubsetOf (_notesRecorded)) {
-                    _notesRecorded.UnionWith (lowNoteNumber);
-                    _smoothedLowNotes[lowPointer].ChangeColor (Color.green);
-                    lowPointer++;
-                    _lowNotesCorrect++;
-                    _summaryMaster.SetLowNotesCorrect (_lowNotesCorrect);
-                    _summaryMaster.SetLowPointer (lowPointer);
-                    noMatch = false;
-                    _lowIncorrect = false;
-                }
-            }
-
-            if (_highIncorrect) {
-                highNoteNumber.Clear ();
-                if (highPointer + 1 < _highNotes.Count) {
-                    highNoteNumber.Add (_highNotes[highPointer + 1]);
-                    if (_smoothedHighNotes[highPointer + 1].GetChordList ().Count > 1) {
-                        foreach (Note note in _smoothedHighNotes[highPointer + 1].GetChordList ()) {
-                            highNoteNumber.Add (ConvertToNumberSingle (note));
-                        }
-                    }
-                } else {
-                    highNoteNumber.Add (-999);
-                }
-
+            if (!highTooFast) {
                 if (highNoteNumber.IsSubsetOf (notesPressed)) {
+                    //if (highNoteNumber.Contains(noteNumber)){
                     if (!highNoteNumber.IsSubsetOf (_notesRecorded)) {
                         _notesRecorded.UnionWith (highNoteNumber);
-                        _smoothedHighNotes[highPointer + 1].ChangeColor (Color.green);
-                        highPointer += 2;
+                        _smoothedHighNotes[highPointer].ChangeColor (Color.green);
+                        highPointer++;
                         _highNotesCorrect++;
                         _summaryMaster.SetHighNotesCorrect (_highNotesCorrect);
                         _summaryMaster.SetHighPointer (highPointer);
@@ -272,30 +254,75 @@ namespace summary {
                     }
                 }
             }
-
-            if (_lowIncorrect) {
-                lowNoteNumber.Clear ();
-                if (lowPointer + 1 < _lowNotes.Count) {
-                    lowNoteNumber.Add (_lowNotes[lowPointer + 1]);
-                    if (_smoothedLowNotes[lowPointer + 1].GetChordList ().Count > 1) {
-                        foreach (Note note in _smoothedLowNotes[lowPointer + 1].GetChordList ()) {
-                            lowNoteNumber.Add (ConvertToNumberSingle (note));
-                        }
-                    }
-                } else {
-                    lowNoteNumber.Add (-999);
-                }
-
+            if (!lowTooFast) {
                 if (lowNoteNumber.IsSubsetOf (notesPressed)) {
                     if (!lowNoteNumber.IsSubsetOf (_notesRecorded)) {
                         _notesRecorded.UnionWith (lowNoteNumber);
-                        _smoothedLowNotes[lowPointer + 1].ChangeColor (Color.green);
-                        lowPointer += 2;
+                        _smoothedLowNotes[lowPointer].ChangeColor (Color.green);
+                        lowPointer++;
                         _lowNotesCorrect++;
                         _summaryMaster.SetLowNotesCorrect (_lowNotesCorrect);
                         _summaryMaster.SetLowPointer (lowPointer);
                         noMatch = false;
                         _lowIncorrect = false;
+                    }
+                }
+            }
+
+            if (!highTooFast) {
+                if (_highIncorrect) {
+                    highNoteNumber.Clear ();
+                    if (highPointer + 1 < _highNotes.Count) {
+                        highNoteNumber.Add (_highNotes[highPointer + 1]);
+                        if (_smoothedHighNotes[highPointer + 1].GetChordList ().Count > 1) {
+                            foreach (Note note in _smoothedHighNotes[highPointer + 1].GetChordList ()) {
+                                highNoteNumber.Add (ConvertToNumberSingle (note));
+                            }
+                        }
+                    } else {
+                        highNoteNumber.Add (-999);
+                    }
+
+                    if (highNoteNumber.IsSubsetOf (notesPressed)) {
+                        if (!highNoteNumber.IsSubsetOf (_notesRecorded)) {
+                            _notesRecorded.UnionWith (highNoteNumber);
+                            _smoothedHighNotes[highPointer + 1].ChangeColor (Color.green);
+                            highPointer += 2;
+                            _highNotesCorrect++;
+                            _summaryMaster.SetHighNotesCorrect (_highNotesCorrect);
+                            _summaryMaster.SetHighPointer (highPointer);
+                            noMatch = false;
+                            _highIncorrect = false;
+                        }
+                    }
+                }
+            }
+
+            if (!lowTooFast) {
+                if (_lowIncorrect) {
+                    lowNoteNumber.Clear ();
+                    if (lowPointer + 1 < _lowNotes.Count) {
+                        lowNoteNumber.Add (_lowNotes[lowPointer + 1]);
+                        if (_smoothedLowNotes[lowPointer + 1].GetChordList ().Count > 1) {
+                            foreach (Note note in _smoothedLowNotes[lowPointer + 1].GetChordList ()) {
+                                lowNoteNumber.Add (ConvertToNumberSingle (note));
+                            }
+                        }
+                    } else {
+                        lowNoteNumber.Add (-999);
+                    }
+
+                    if (lowNoteNumber.IsSubsetOf (notesPressed)) {
+                        if (!lowNoteNumber.IsSubsetOf (_notesRecorded)) {
+                            _notesRecorded.UnionWith (lowNoteNumber);
+                            _smoothedLowNotes[lowPointer + 1].ChangeColor (Color.green);
+                            lowPointer += 2;
+                            _lowNotesCorrect++;
+                            _summaryMaster.SetLowNotesCorrect (_lowNotesCorrect);
+                            _summaryMaster.SetLowPointer (lowPointer);
+                            noMatch = false;
+                            _lowIncorrect = false;
+                        }
                     }
                 }
             }

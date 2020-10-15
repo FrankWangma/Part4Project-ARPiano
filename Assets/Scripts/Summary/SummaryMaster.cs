@@ -22,12 +22,22 @@ namespace summary {
         private int _paragraphNumber = 1;
         private int _highNotesCorrect = 0;
         private int _lowNotesCorrect = 0;
+        private int _highNotesTooFast = 0;
+        private int _lowNotesTooFast = 0;
         private bool _reset = false;
 
         private List<int> _noteNumberHigh = new List<int>();
         private List<int> _noteNumberLow = new List<int>();
         private int _highPointer;
         private int _lowPointer;
+
+        public void SetHighNotesTooFast (int highNotesTooFast){
+            _highNotesTooFast = highNotesTooFast;
+        }
+
+        public void SetLowNotesTooFast (int lowNotesTooFast){
+            _lowNotesTooFast = lowNotesTooFast;
+        }
 
         public void SetHighNotesCorrect (int highNotesCorrect){
             _highNotesCorrect = highNotesCorrect;
@@ -78,6 +88,8 @@ namespace summary {
             summary.Add ("Notes Incorrect: ", _notesIncorrect);
             summary.Add ("High Notes Missed: ", _highNotesMissed);
             summary.Add ("Low Notes Missed: ", _lowNotesMissed);
+            summary.Add("High Notes Too Fast: ", _highNotesTooFast);
+            summary.Add("Low Notes Too Fast: ", _lowNotesTooFast);
             _summary = summary;
         }
 
