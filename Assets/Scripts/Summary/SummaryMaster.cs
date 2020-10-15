@@ -70,8 +70,8 @@ namespace summary {
             Debug.Log("number " + _paragraphNumber);
             int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
             int expectedLow = _noteNumberLow[_paragraphNumber - 2];
-            AddHighNotesMissed (expectedHigh - _highPointer);
-            AddLowNotesMissed (expectedLow - _lowPointer);
+            AddHighNotesMissed (expectedHigh - (_highPointer-1));
+            AddLowNotesMissed (expectedLow - (_lowPointer - 1));
             Dictionary<String, int> summary = new Dictionary<String, int> ();
             summary.Add("High Notes Correct: ", _highNotesCorrect);
             summary.Add("Low Notes Correct: ", _lowNotesCorrect);
