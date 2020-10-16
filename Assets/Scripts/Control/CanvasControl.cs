@@ -296,7 +296,7 @@ namespace control
                 text.text = key + " " + value;
                 text.fontSize = 20;
                 RectTransform textRect = textObject.GetComponent<RectTransform>();
-                textRect.anchoredPosition = new Vector3(0,- textOffset - (-rect.sizeDelta.y /5) * i,0);
+                textRect.anchoredPosition = new Vector3(0,- textOffset - (-rect.sizeDelta.y /6) * i,0);
                 textRect.anchorMin = new Vector2(0.5f, 1);
                 textRect.anchorMax = new Vector2(0.5f, 1);
                 i++;
@@ -352,8 +352,8 @@ namespace control
         {
             //Debug.Log("HI" + beatsPerMeasure);
             //Debug.Log("HI HI " + BPM);
-            float secondsInMinute = 90.0f;
-            //float secondsInMinute = 60.0f;
+            float secondsInMinute = 60.0f;
+            //float secondsInMinute = 60.0f; 
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);
             float secondsPerBeat = secondsInMinute / BPMinute;
