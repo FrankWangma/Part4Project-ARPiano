@@ -209,8 +209,8 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                     // }
                     // Debug.Log("notes" + output);
                     //Debug.Log("Index + " + i + "Notes " + notes.Count + "Chords " + chords.Count);
-                    SetChordColor (notes[i], _chordDatabase.IdentifyChord (chords[i]));
-                    pianoNotes.Add (notes[i]);
+                    // SetChordColor (notes[i], _chordDatabase.IdentifyChord (chords[i]));
+                    // pianoNotes.Add (notes[i]);
                 }
             }
 
