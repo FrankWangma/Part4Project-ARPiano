@@ -86,8 +86,8 @@ namespace summary {
             AddHighNotesMissed (expectedHigh - (_highPointer - 1));
             AddLowNotesMissed (expectedLow - (_lowPointer - 1));
             Dictionary<String, int> summary = new Dictionary<String, int> ();
-            if(_highNotesCorrect < 0){
-                _highNotesCorrect = 0;
+            if(_highNotesMissed < 0){
+                _highNotesMissed = 0;
             }
             if(_lowNotesMissed < 0){
                 _lowNotesMissed = 0;
