@@ -357,7 +357,7 @@ namespace control
         {
             //Debug.Log("HI" + beatsPerMeasure);
             //Debug.Log("HI HI " + BPM);
-            float secondsInMinute = 30.0f;
+            float secondsInMinute = 90.0f;
             //float secondsInMinute = 60.0f; 
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);
