@@ -72,6 +72,7 @@ namespace control
                     RectTransform trans = _sweeperLine.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector2(trans.anchoredPosition.x + (speed * Time.deltaTime), trans.anchoredPosition.y);
 
+
                     //Checks if measure needs to change
                     if (_measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure)
                     {
@@ -98,14 +99,14 @@ namespace control
                         {
                             _measureTotal++;
                         }
-                        UpdateSummaryMaster();
+                            UpdateSummaryMaster();
                     }
 
                     //Handles displaying different patterns
                     if (_nextActionTime >= _patternSplitSeconds * _patternIteration)
                     {
                         index++;
-                        Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
+                        //Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
                         HandlePianoColor();
                         _noteIndex++;
                         //_numberOfPatterns--;

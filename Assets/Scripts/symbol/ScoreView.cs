@@ -102,7 +102,7 @@ namespace symbol
                 }
             }
             Dictionary<GameObject,Color> keysAndColors = new Dictionary<GameObject,Color>();
-            Debug.Log("colors: " + colors.Count + " Notes: " + notes.Count);
+            //Debug.Log("colors: " + colors.Count + " Notes: " + notes.Count);
             // foreach(Color color in colors){
             //     Debug.Log("My Color " + color);
             // }

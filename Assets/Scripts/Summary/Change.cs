@@ -42,6 +42,9 @@ namespace summary {
         int _highNotesTooFast = 0;
         int _lowNotesTooFast = 0;
 
+        private bool highTooFast = false;
+        private bool lowTooFast = false;
+
         // Start is called before the first frame update
         void OnEnable () {
             _symbol = new Note ("D", "4");
@@ -51,7 +54,6 @@ namespace summary {
             _fifth = _noteDatabase.GetFifth ();
             _noteNumberHigh = FindNotesPerParagraph (_noteDatabase.GetHighNotes ());
             _noteNumberLow = FindNotesPerParagraph (_noteDatabase.GetLowNotes ());
-            Debug.Log ("not count " + _noteNumberHigh.Count);
             _summaryMaster.SetNumberHigh (_noteNumberHigh);
             _summaryMaster.SetNumberLow (_noteNumberLow);
             _smoothedHighNotes = SmoothList (_noteDatabase.GetHighNotes ());
@@ -97,7 +99,6 @@ namespace summary {
                     noteNumber = message.data1;
                     noteStatus = message.status;
                     noteNumber = AdjustNote (noteNumber);
-                    Debug.Log (noteNumber);
 
                     //If notes status indicates press, add the note to the hashset
                     //Otherwise, if it detects the note is released, then remove the note from the hashset
@@ -123,7 +124,6 @@ namespace summary {
         private void CheckNotesMissed () {
             if (_paragraphNumber < _summaryMaster.GetParagraphNumber ()) {
                 _paragraphNumber = _summaryMaster.GetParagraphNumber ();
-                Debug.Log ("Para " + _paragraphNumber);
                 int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
                 int expectedLow = _noteNumberLow[_paragraphNumber - 2];
 
@@ -197,8 +197,9 @@ namespace summary {
         //Method to pass in notes played
         public void updateSheetMusic (int noteNumber, HashSet<int> notesPressed) {
 
-            bool highTooFast = false;
-            bool lowTooFast = false;
+            highTooFast = false;
+            lowTooFast = false;
+            bool noMatch = true;
 
             if (highPointer >= _noteNumberHigh[_paragraphNumber - 1]) {
                 _highNotesTooFast++;
@@ -206,13 +207,13 @@ namespace summary {
                 highTooFast = true;
             }
 
+
             if (lowPointer >= _noteNumberLow[_paragraphNumber - 1]) {
                 _lowNotesTooFast++;
                 _summaryMaster.SetLowNotesTooFast (_lowNotesTooFast);
                 lowTooFast = true;
             }
 
-            bool noMatch = true;
             HashSet<int> highNoteNumber = new HashSet<int> ();
             //List<int> highNoteNumber = new List<int>();
             if (highPointer < _highNotes.Count) {
@@ -230,7 +231,7 @@ namespace summary {
             //List<int> lowNoteNumber = new List<int> ();
             if (lowPointer < _lowNotes.Count) {
                 lowNoteNumber.Add (_lowNotes[lowPointer]);
-                if (_smoothedLowNotes[lowPointer].GetChordList ().Count > 0) {
+                if (_smoothedLowNotes[lowPointer].GetChordList ().Count > 1) {
                     foreach (Note note in _smoothedLowNotes[lowPointer].GetChordList ()) {
                         lowNoteNumber.Add (ConvertToNumberSingle (note));
                     }
@@ -300,28 +301,30 @@ namespace summary {
 
             if (!lowTooFast) {
                 if (_lowIncorrect) {
-                    lowNoteNumber.Clear ();
-                    if (lowPointer + 1 < _lowNotes.Count) {
-                        lowNoteNumber.Add (_lowNotes[lowPointer + 1]);
-                        if (_smoothedLowNotes[lowPointer + 1].GetChordList ().Count > 1) {
-                            foreach (Note note in _smoothedLowNotes[lowPointer + 1].GetChordList ()) {
-                                lowNoteNumber.Add (ConvertToNumberSingle (note));
+                    if (lowPointer + 1 < _noteNumberLow[_paragraphNumber - 1]) {
+                        lowNoteNumber.Clear ();
+                        if (lowPointer + 1 < _lowNotes.Count) {
+                            lowNoteNumber.Add (_lowNotes[lowPointer + 1]);
+                            if (_smoothedLowNotes[lowPointer + 1].GetChordList ().Count > 1) {
+                                foreach (Note note in _smoothedLowNotes[lowPointer + 1].GetChordList ()) {
+                                    lowNoteNumber.Add (ConvertToNumberSingle (note));
+                                }
                             }
+                        } else {
+                            lowNoteNumber.Add (-999);
                         }
-                    } else {
-                        lowNoteNumber.Add (-999);
-                    }
 
-                    if (lowNoteNumber.IsSubsetOf (notesPressed)) {
-                        if (!lowNoteNumber.IsSubsetOf (_notesRecorded)) {
-                            _notesRecorded.UnionWith (lowNoteNumber);
-                            _smoothedLowNotes[lowPointer + 1].ChangeColor (Color.green);
-                            lowPointer += 2;
-                            _lowNotesCorrect++;
-                            _summaryMaster.SetLowNotesCorrect (_lowNotesCorrect);
-                            _summaryMaster.SetLowPointer (lowPointer);
-                            noMatch = false;
-                            _lowIncorrect = false;
+                        if (lowNoteNumber.IsSubsetOf (notesPressed)) {
+                            if (!lowNoteNumber.IsSubsetOf (_notesRecorded)) {
+                                _notesRecorded.UnionWith (lowNoteNumber);
+                                _smoothedLowNotes[lowPointer + 1].ChangeColor (Color.green);
+                                lowPointer += 2;
+                                _lowNotesCorrect++;
+                                _summaryMaster.SetLowNotesCorrect (_lowNotesCorrect);
+                                _summaryMaster.SetLowPointer (lowPointer);
+                                noMatch = false;
+                                _lowIncorrect = false;
+                            }
                         }
                     }
                 }
@@ -331,10 +334,14 @@ namespace summary {
                 incorrectNotes++;
                 if (ClosestHigh (noteNumber, _highNotes[highPointer], _lowNotes[lowPointer])) {
                     _smoothedHighNotes[highPointer].ChangeColor (Color.red);
-                    _highIncorrect = true;
+                    if (!highTooFast) {
+                        _highIncorrect = true;
+                    }
                 } else {
                     _smoothedLowNotes[lowPointer].ChangeColor (Color.red);
-                    _lowIncorrect = true;
+                    if (!lowTooFast) {
+                        _lowIncorrect = true;
+                    }
                 }
                 _summaryMaster.SetNotesIncorrect (incorrectNotes);
             }
