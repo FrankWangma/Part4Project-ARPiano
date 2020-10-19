@@ -107,7 +107,7 @@ namespace control
                     {
                         index++;
                         //Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
-                        HandlePianoColor();
+                        HandlePianoColor(                                           );
                         _noteIndex++;
                         //_numberOfPatterns--;
                         _patternIteration++;
@@ -120,6 +120,9 @@ namespace control
                             _measureTotal++;
                         }
                         _nextActionTime -= _secondsPerMeasure;
+                        if(_measureTotal >= _notes.Count){
+                            _measureTotal = _notes.Count - 1;
+                        }
                         _numberOfPatterns = _notes[_measureTotal].Count;
                         //Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
                         _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
@@ -154,6 +157,7 @@ namespace control
             
             if (parentObject.transform.Find("Paragraph" + (_paragraphNumber)) == null)
             {
+                Debug.Log("Paragraph num " + _paragraphNumber);
                 Button startButton = GameObject.Find("startButton").gameObject.GetComponent<Button>();
                 startButton.onClick.Invoke();
                 Button backButton = GameObject.Find("backButton").gameObject.GetComponent<Button>();
@@ -353,7 +357,7 @@ namespace control
         {
             //Debug.Log("HI" + beatsPerMeasure);
             //Debug.Log("HI HI " + BPM);
-            float secondsInMinute = 90.0f;
+            float secondsInMinute = 30.0f;
             //float secondsInMinute = 60.0f; 
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);

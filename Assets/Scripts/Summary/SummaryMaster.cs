@@ -78,6 +78,9 @@ namespace summary {
 
         public void UpdateSummary () {
             Debug.Log("number " + _paragraphNumber);
+            if(_paragraphNumber -2 >= _noteNumberHigh.Count){
+                _paragraphNumber = _noteNumberHigh.Count + 1; 
+            }
             int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
             int expectedLow = _noteNumberLow[_paragraphNumber - 2];
             AddHighNotesMissed (expectedHigh - (_highPointer-1));

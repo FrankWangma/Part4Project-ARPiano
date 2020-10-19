@@ -124,25 +124,27 @@ namespace summary {
         private void CheckNotesMissed () {
             if (_paragraphNumber < _summaryMaster.GetParagraphNumber ()) {
                 _paragraphNumber = _summaryMaster.GetParagraphNumber ();
-                int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
-                int expectedLow = _noteNumberLow[_paragraphNumber - 2];
+                if (_paragraphNumber - 2 < _noteNumberHigh.Count) {
+                    int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
+                    int expectedLow = _noteNumberLow[_paragraphNumber - 2];
 
-                if (highPointer < expectedHigh) {
-                    _summaryMaster.AddHighNotesMissed (expectedHigh - highPointer);
-                    for (int i = highPointer; i < expectedHigh; i++) {
-                        _smoothedHighNotes[i].ChangeColor (Color.red);
+                    if (highPointer < expectedHigh) {
+                        _summaryMaster.AddHighNotesMissed (expectedHigh - highPointer);
+                        for (int i = highPointer; i < expectedHigh; i++) {
+                            _smoothedHighNotes[i].ChangeColor (Color.red);
+                        }
+                        highPointer = expectedHigh;
+                        _summaryMaster.SetHighPointer (highPointer);
                     }
-                    highPointer = expectedHigh;
-                    _summaryMaster.SetHighPointer (highPointer);
-                }
 
-                if (lowPointer < expectedLow) {
-                    _summaryMaster.AddLowNotesMissed (expectedLow - lowPointer);
-                    for (int i = lowPointer; i < expectedLow; i++) {
-                        _smoothedLowNotes[i].ChangeColor (Color.red);
+                    if (lowPointer < expectedLow) {
+                        _summaryMaster.AddLowNotesMissed (expectedLow - lowPointer);
+                        for (int i = lowPointer; i < expectedLow; i++) {
+                            _smoothedLowNotes[i].ChangeColor (Color.red);
+                        }
+                        lowPointer = expectedLow;
+                        _summaryMaster.SetLowPointer (lowPointer);
                     }
-                    lowPointer = expectedLow;
-                    _summaryMaster.SetLowPointer (lowPointer);
                 }
             }
         }
@@ -206,7 +208,6 @@ namespace summary {
                 _summaryMaster.SetHighNotesTooFast (_highNotesTooFast);
                 highTooFast = true;
             }
-
 
             if (lowPointer >= _noteNumberLow[_paragraphNumber - 1]) {
                 _lowNotesTooFast++;
