@@ -26,40 +26,40 @@ namespace summary {
         private int _lowNotesTooFast = 0;
         private bool _reset = false;
 
-        private List<int> _noteNumberHigh = new List<int>();
-        private List<int> _noteNumberLow = new List<int>();
+        private List<int> _noteNumberHigh = new List<int> ();
+        private List<int> _noteNumberLow = new List<int> ();
         private int _highPointer;
         private int _lowPointer;
 
-        public void SetHighNotesTooFast (int highNotesTooFast){
+        public void SetHighNotesTooFast (int highNotesTooFast) {
             _highNotesTooFast = highNotesTooFast;
         }
 
-        public void SetLowNotesTooFast (int lowNotesTooFast){
+        public void SetLowNotesTooFast (int lowNotesTooFast) {
             _lowNotesTooFast = lowNotesTooFast;
         }
 
-        public void SetHighNotesCorrect (int highNotesCorrect){
+        public void SetHighNotesCorrect (int highNotesCorrect) {
             _highNotesCorrect = highNotesCorrect;
         }
 
-        public void SetLowNotesCorrect (int lowNotesCorrect){
+        public void SetLowNotesCorrect (int lowNotesCorrect) {
             _lowNotesCorrect = lowNotesCorrect;
         }
 
-        public void SetHighPointer (int highPointer){
+        public void SetHighPointer (int highPointer) {
             _highPointer = highPointer;
         }
 
-        public void SetLowPointer (int lowPointer){
+        public void SetLowPointer (int lowPointer) {
             _lowPointer = lowPointer;
         }
 
-        public void SetNumberHigh (List<int> noteNumberHigh){
+        public void SetNumberHigh (List<int> noteNumberHigh) {
             _noteNumberHigh = noteNumberHigh;
         }
 
-        public void SetNumberLow (List<int> noteNumberLow){
+        public void SetNumberLow (List<int> noteNumberLow) {
             _noteNumberLow = noteNumberLow;
         }
 
@@ -77,15 +77,21 @@ namespace summary {
         }
 
         public void UpdateSummary () {
-            Debug.Log("number " + _paragraphNumber);
-            if(_paragraphNumber -2 >= _noteNumberHigh.Count){
-                _paragraphNumber = _noteNumberHigh.Count + 1; 
+            Debug.Log ("number " + _paragraphNumber);
+            if (_paragraphNumber - 2 >= _noteNumberHigh.Count) {
+                _paragraphNumber = _noteNumberHigh.Count + 1;
             }
             int expectedHigh = _noteNumberHigh[_paragraphNumber - 2];
             int expectedLow = _noteNumberLow[_paragraphNumber - 2];
-            AddHighNotesMissed (expectedHigh - (_highPointer-1));
+            AddHighNotesMissed (expectedHigh - (_highPointer - 1));
             AddLowNotesMissed (expectedLow - (_lowPointer - 1));
             Dictionary<String, int> summary = new Dictionary<String, int> ();
+            if(_highNotesCorrect < 0){
+                _highNotesCorrect = 0;
+            }
+            if(_lowNotesMissed < 0){
+                _lowNotesMissed = 0;
+            }
             summary.Add("High Notes Correct: ", _highNotesCorrect);
             summary.Add("Low Notes Correct: ", _lowNotesCorrect);
             summary.Add ("Notes Incorrect: ", _notesIncorrect);
