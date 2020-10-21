@@ -232,13 +232,13 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                 note.SetColor (myColor);
                 bool colorAdded = false;
                 //Change color of non-major notes
-                foreach (String diff in diffNotes) {
-                    if (GetNote (note).Equals (diff)) {
-                        note.SetColor (Color.cyan);
-                        colors.Add (Color.cyan);
-                        colorAdded = true;
-                    }
-                }
+                // foreach (String diff in diffNotes) {
+                //     if (GetNote (note).Equals (diff)) {
+                //         note.SetColor (Color.cyan);
+                //         colors.Add (Color.cyan);
+                //         colorAdded = true;
+                //     }
+                // }
                 //note.SetColor(myColor);
                 if (!colorAdded) {
                     colors.Add (myColor);
@@ -299,7 +299,7 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
                     break;
                 case "B":
                     myColor = new Color (0.29F, 0.6F, 0F);
-                    break; //Pink
+                    break; //Dark Green
                 case "C":
                     myColor = Color.magenta;
                     break; //C is magneta

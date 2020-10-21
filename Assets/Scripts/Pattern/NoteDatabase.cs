@@ -33,6 +33,9 @@ namespace Pattern
             PatternAlgorithm pattern = new PatternAlgorithm();
             pattern.DrawPatterns();
 
+
+            //_lowNotes[4][0].GetChordList()[2].ChangeColor(Color.cyan);
+
             //Test code to check method works
             //ChangeNoteColor(1, 0, Color.green, false);
             // _lowNotes[4][0].SetColor(Color.blue);

@@ -100,9 +100,9 @@ namespace Pattern
             addChord("D", "Fsharp", "A", "D Major");
             addChord("E", "Gsharp", "B", "E Major");
             addChord("F", "A", "C", "F Major");
-            //addChord("G", "B", "D", "G Major");
+            addChord("G", "B", "D", "G Major");
             addChord("A", "Csharp", "E", "A Major");
-            //addChord("B", "Dsharp", "Fsharp", "B Major");
+            addChord("B", "Dsharp", "Fsharp", "B Major");
             addChord("Csharp", "F", "Gsharp", "C Sharp Major");
             addChord("Dsharp", "G", "Asharp", "D Sharp Major");
             addChord("Fsharp", "Asharp", "Csharp", "F Sharp");
@@ -118,7 +118,7 @@ namespace Pattern
             addChord("F", "Gsharp", "C", "F Minor");
             addChord("G", "Asharp", "D", "G Minor");
             addChord("A", "C", "E", "A Minor");
-            //addChord("B", "D", "Fsharp", "B Minor");
+            addChord("B", "D", "Fsharp", "B Minor");
             addChord("Csharp", "E", "Asharp", "C Sharp Minor");
             addChord("Dsharp", "Fsharp", "Asharp", "D Sharp Minor");
             addChord("Fsharp", "A", "Csharp", "F Sharp Minor");
@@ -132,9 +132,9 @@ namespace Pattern
             addChord("D", "F", "Gsharp", "D Diminished");
             addChord("E", "G", "Asharp", "E Diminished");
             addChord("F", "Gsharp", "B", "F Diminished");
-            //addChord("G", "Asharp", "Csharp", "G Diminished");
+            addChord("G", "Asharp", "Csharp", "G Diminished");
             addChord("A", "C", "Dsharp", "A Diminished");
-            //addChord("B", "D", "F", "B Diminshed");
+            addChord("B", "D", "F", "B Diminshed");
             addChord("Csharp", "E", "G", "C Sharp Diminished");
             addChord("Dsharp", "Fsharp", "A", "D Sharp Diminished");
             addChord("Fsharp", "A", "C", "F Sharp Diminished");

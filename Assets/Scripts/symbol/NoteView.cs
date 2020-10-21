@@ -300,8 +300,10 @@ namespace symbol
                 }
                 else
                 {
-                    if (extraDuration == 2)
+                    if (extraDuration == 2){
                         DrawSymbol("\uE12C", headPosition, extraPosition);
+                        SetColor(Color.cyan);
+                    }
                     else
                         DrawSymbol("\uE12D", headPosition, extraPosition);
                 }

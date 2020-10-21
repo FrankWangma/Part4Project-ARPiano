@@ -207,12 +207,14 @@ namespace summary {
                 _highNotesTooFast++;
                 _summaryMaster.SetHighNotesTooFast (_highNotesTooFast);
                 highTooFast = true;
+                noMatch = false;
             }
 
             if (lowPointer >= _noteNumberLow[_paragraphNumber - 1]) {
                 _lowNotesTooFast++;
                 _summaryMaster.SetLowNotesTooFast (_lowNotesTooFast);
                 lowTooFast = true;
+                noMatch = false;
             }
 
             HashSet<int> highNoteNumber = new HashSet<int> ();
