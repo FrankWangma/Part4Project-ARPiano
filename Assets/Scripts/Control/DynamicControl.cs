@@ -39,24 +39,15 @@ namespace control
 
         private void DrawScore(string filename)
         {
-            // 解析MusicXml文件
             XmlFacade xmlFacade = new XmlFacade(filename);
-            // 生成乐谱表
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
             List<List<Measure>> scoreList = scoreGenerator.Generate(xmlFacade.GetMeasureList(), Screen.width - 67);
-            // 准备绘制乐谱对象及其他参数
             List<float> screenSize = new List<float>();
             screenSize.Add(Screen.width);
             screenSize.Add(Screen.height);
 
-            // 绘制乐谱视图
             OverlayScoreView scoreView = new OverlayScoreView(scoreList, parentObject, screenSize, _canvasScore, _loadScore);
-
-            // 更改乐符颜色
-    //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
-    //    SymbolControl symbolControl = new SymbolControl(symbol);
-    //    symbolControl.SetColor(Color.red);
         }
     }
 }

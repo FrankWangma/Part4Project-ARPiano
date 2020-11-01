@@ -24,7 +24,6 @@ namespace overlay
             _lowSymbolList = setList[1];
             _setLength = setLength;
             _noteLength = noteLength;
-            //Init();
         }
 
         public GameObject GetParentObject()
@@ -65,7 +64,6 @@ namespace overlay
 
             for (int i = 0; i < _highSymbolList.Count; i++)
             {
-                // 新建HighNote对象作为目录
                 string objName = "HighNote" + (i + 1);
                 GameObject highNoteObj = new GameObject(objName);
                 highNoteObj.transform.SetParent(_parentObject.transform);
@@ -74,7 +72,6 @@ namespace overlay
                     notePosition.y + _paramsGetter.GetTotalHeight(),
                     notePosition.z);
 
-                // 将Set对象赋为下一层的父对象
                 if (_highSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_highSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
@@ -90,7 +87,6 @@ namespace overlay
             }
             for (int i = 0; i < _lowSymbolList.Count; i++)
             {
-                // 新建LowNote对象作为目录
                 string objName = "LowNote" + (i + 1);
                 GameObject lowNoteObj = new GameObject(objName);
                 lowNoteObj.transform.SetParent(_parentObject.transform);
@@ -99,7 +95,6 @@ namespace overlay
                     notePosition.y,
                     notePosition.z);
 
-                // 将Set对象赋为下一层的父对象
                 if (_lowSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_lowSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);
@@ -117,9 +112,6 @@ namespace overlay
 
         private void OnDraw()
         {
-            //Debug.Log("Set List" + _setList.Count);
-            //Debug.Log("HighSymbolList " + _highSymbolList.Count);
-            //Debug.Log("LowSymbolList " + _lowSymbolList.Count);
 
             Vector3 notePosition = Vector3.zero;
             float noteLength = _setLength;
@@ -131,7 +123,6 @@ namespace overlay
 
             for (int i = 0; i < _highSymbolList.Count; i++)
             {
-                // 新建HighNote对象作为目录
                 string objName = "HighNote" + (i + 1);
                 GameObject highNoteObj = new GameObject(objName);
                 highNoteObj.transform.SetParent(_parentObject.transform);
@@ -140,13 +131,9 @@ namespace overlay
                     notePosition.y + _paramsGetter.GetTotalHeight(),
                     notePosition.z);
 
-                // 将Set对象赋为下一层的父对象
                 if (_highSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
-                    //temp fix
-                    //Debug.Log("PARAM " + _paramsGetter.GetSymbolStart());
-                    //NoteView noteView = new NoteView(_highSymbolList[i], (int)noteLength, _highSymbolList[i].GetStartTime(), highNoteObj);
                     _highSymbolList[i].SetSymbolView(noteView);
                 }
                 else if (_highSymbolList[i] is Rest)
@@ -157,7 +144,6 @@ namespace overlay
             }
             for (int i = 0; i < _lowSymbolList.Count; i++)
             {
-                // 新建LowNote对象作为目录
                 string objName = "LowNote" + (i + 1);
                 GameObject lowNoteObj = new GameObject(objName);
                 lowNoteObj.transform.SetParent(_parentObject.transform);
@@ -165,8 +151,7 @@ namespace overlay
                     notePosition.x + _paramsGetter.GetBeatWidth() + noteLength * i,
                     notePosition.y,
                     notePosition.z);
-
-                // 将Set对象赋为下一层的父对象
+                    
                 if (_lowSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_lowSymbolList[i], (int)noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);

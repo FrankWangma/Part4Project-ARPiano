@@ -7,8 +7,6 @@ using xmlParser;
 using Pattern;
 using summary;
 using UnityEngine.UI;
-using summary;
-
 namespace control
 {
     public class CanvasControl : MonoBehaviour
@@ -76,11 +74,8 @@ namespace control
                     //Checks if measure needs to change
                     if (_measureNumber >= 3 && _nextActionTime >= _secondsPerMeasure)
                     {
-                        // _nextActionTime -= _secondsPerMeasure;
                         _measureNumber = 0;
                         HandleParagraphChange();
-                        // index++;
-                        // HandlePianoColor();
                         _noteIndex = 0;
                         _reset = true;
                         if (_numberOfPatterns > 1)
@@ -92,7 +87,6 @@ namespace control
                     else if (_nextActionTime >= _secondsPerMeasure)
                     {
                         _measureNumber++;
-                        //_measureTotal++;
                         _noteIndex = 0;
                         _reset = true;
                         if (_numberOfPatterns > 1)
@@ -106,10 +100,8 @@ namespace control
                     if (_nextActionTime >= _patternSplitSeconds * _patternIteration)
                     {
                         index++;
-                        //Debug.Log("measre " + index + " " + _noteIndex + " " + _measureTotal);
-                        HandlePianoColor(                                           );
+                        HandlePianoColor();
                         _noteIndex++;
-                        //_numberOfPatterns--;
                         _patternIteration++;
                     }
 
@@ -124,7 +116,6 @@ namespace control
                             _measureTotal = _notes.Count - 1;
                         }
                         _numberOfPatterns = _notes[_measureTotal].Count;
-                        //Debug.Log("Hi " + _numberOfPatterns + _measureTotal);
                         _patternSplitSeconds = _secondsPerMeasure / _numberOfPatterns;
                         _patternIteration = 1;
                         _reset = false;
@@ -146,7 +137,6 @@ namespace control
         {
             parentObject.transform.Find("Paragraph" + _paragraphNumber).gameObject.SetActive(false);
             _paragraphNumber++;
-            //_summaryMaster.SetParagraphNumber(_paragraphNumber);
 
             
             Transform nextObject = parentObject.transform.Find("Paragraph" + (_paragraphNumber + 1));
@@ -185,7 +175,6 @@ namespace control
                 }
             }
 
-            //Debug.Log(_noteDatabase.GetColorList(index));
             if (_notes[_measureTotal].Count != 0)
             {
                 _oldKeys = _scoreView.changePianoKeyColor(_noteDatabase.GetColorList(index), _notes[_measureTotal][_noteIndex]);
@@ -285,8 +274,6 @@ namespace control
                 backButton.onClick.Invoke();
             });
 
-            // SummaryAlgorithm algorithm = new SummaryAlgorithm();
-            // algorithm.generateSummary();
             Dictionary<string, int> stats = _summaryMaster.GetSummary();
             _summaryMaster.SetReset();
             int i = 0;
@@ -311,10 +298,7 @@ namespace control
 
         private void DrawScore(string filename)
         {
-            // 解析MusicXml文件
             XmlFacade xmlFacade = new XmlFacade(filename);
-            // 生成乐谱表
-            //Debug.Log("Beat + " + xmlFacade.GetBPM());
 
             _secondsPerMeasure = CalculateSecondsPerMeasure(xmlFacade.GetBeat().GetBeatsPerMeasure(), xmlFacade.GetBPM());
             Debug.Log("seconds " + _secondsPerMeasure);
@@ -331,34 +315,23 @@ namespace control
             ScoreGenerator scoreGenerator =
                 new ScoreGenerator(xmlFacade.GetBeat().GetBeats(), xmlFacade.GetBeat().GetBeatType());
             List<List<Measure>> scoreList = scoreGenerator.Generate(xmlFacade.GetMeasureList(), Screen.width - 67);
-            // 准备绘制乐谱对象及其他参数
             List<float> screenSize = new List<float>();
             screenSize.Add(Screen.width);
             screenSize.Add(Screen.height);
             List<string> scoreInfo = new List<string>();
-            // 乐谱名称和作者信息
             scoreInfo.Add(xmlFacade.GetWorkTitle()); // 0
             scoreInfo.Add(xmlFacade.GetCreator()); // 1
 
-            Debug.Log("Fifths + " + xmlFacade.GetFifths());
-            //Debug.Log("Beat + " + xmlFacade.GetBPM());
             // Adds the created score to the note database so we can work with the notes
             _noteDatabase.AddScoreList(scoreList, xmlFacade.GetFifths());
 
             _scoreView = new ScoreView(scoreList, parentObject, screenSize, scoreInfo, _canvasScore, _loadScore, _overlayCanvas);
-            // 更改乐符颜色
-            //    Symbol symbol = scoreList[0][0].GetMeasureSymbolList()[0][1][2];
-            //    SymbolControl symbolControl = new SymbolControl(symbol);
-            //    symbolControl.SetColor(Color.red);
-            //speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
+    
             speed = _paramsGetter.GetParagraphLength() / (_secondsPerMeasure * 4);
         }
         private float CalculateSecondsPerMeasure(string beatsPerMeasure, string BPM)
         {
-            //Debug.Log("HI" + beatsPerMeasure);
-            //Debug.Log("HI HI " + BPM);
-            float secondsInMinute = 90.0f;
-            //float secondsInMinute = 60.0f; 
+            float secondsInMinute = 60.0f;
             float BPMeasure = float.Parse(beatsPerMeasure);
             float BPMinute = float.Parse(BPM);
             float secondsPerBeat = secondsInMinute / BPMinute;

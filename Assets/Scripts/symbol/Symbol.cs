@@ -4,13 +4,13 @@ namespace symbol
 {
     public abstract class Symbol
     {
-        protected int Duration;     //  符号时长
-        protected int StartTime;    //  符号起始时刻
-        protected int StopTime;     //  符号结束时刻
-        protected int Type;         //  符号类型，1代表全音符/休止符、2代表二分音符/休止符、以此类推
-        protected int Dot;      //  附点
-        protected int SymbolWidth;  //  符号视图宽度
-        protected bool isChord;  //  是否是和弦
+        protected int Duration;
+        protected int StartTime;
+        protected int StopTime;
+        protected int Type;
+        protected int Dot;
+        protected int SymbolWidth;
+        protected bool isChord; 
         protected bool isHigh; //Checks if the symbol is high or low
         protected SymbolView _symbolView = null;
         private Color _color = Color.black; //Controls the color which the note is rendered in

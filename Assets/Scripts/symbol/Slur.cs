@@ -16,7 +16,7 @@ namespace symbol
         public void Operate()
         {
             int temp;
-            Boolean upOrDown = _list[0].GetShift() < 0; // 从五线谱中心往下偏移，说明符干朝上
+            Boolean upOrDown = _list[0].GetShift() < 0;
             int stemEnd;
             if (upOrDown)
             {

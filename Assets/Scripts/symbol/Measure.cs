@@ -9,10 +9,10 @@ namespace symbol
         private Beat _beat;
         private Head _highHead;
         private Head _lowHead;
-        private bool _hasHead; // 小节首部是否有头部信息
-        private bool _hasBeat; // 小节首部是否有拍号信息
-        private int _maxCount; // 小节中高低表乐符数最大值
-        private int _measureLength; // 小节总长度
+        private bool _hasHead;
+        private bool _hasBeat; 
+        private int _maxCount;
+        private int _measureLength; 
 
         public Measure(List<List<List<Symbol>>> measureSymbolList)
         {

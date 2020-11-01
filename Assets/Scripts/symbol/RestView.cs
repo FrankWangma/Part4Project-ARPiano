@@ -19,23 +19,19 @@ namespace symbol
 
         protected override void OnDraw()
         {
-            // 绘制定位光标
             if (Cursor)
             {
                 int tempStart = Start - 2 + Num * _rest.GetSymbolWidth();
                 DrawLine(tempStart, 0, tempStart, ParamsGetter.GetTotalHeight());
             }
 
-            // 乐符的位置
             int yPosition = ParamsGetter.GetStaffCenterPosition();
 
-            // 如果是点，绘制
             if (_rest.GetDot() == 1)
             {
                 DrawPoint(Start + ParamsGetter.GetDotePosition(), yPosition);
             }
 
-            // 乐符的内容
             switch (Type)
             {
                 case 1: DrawSymbol("\uE100", Start, yPosition); break;

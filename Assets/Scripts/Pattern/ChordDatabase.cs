@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using util;
-using UnityEngine;
-using UnityEngine.UI;
-using symbol;
 
 namespace Pattern
 {
@@ -21,8 +17,6 @@ namespace Pattern
             addMajorChords();
             addMinorChords();
             addDiminishedChords();
-            //addSeventhChords();
-            //addMajorSeventhChords();
         }
 
         private void addChord(String firstNote, String secondNote, String thirdNote, String chordName)

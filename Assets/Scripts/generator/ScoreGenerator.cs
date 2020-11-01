@@ -18,13 +18,13 @@ namespace generator
 
         public List<List<Measure>> Generate(List<Measure> measureList, int scoreWidth)
         {
-            List<List<Measure>> scoreList = new List<List<Measure>>(); // 整张乐谱
+            List<List<Measure>> scoreList = new List<List<Measure>>(); 
 
-            int maxMeasureInLine = 4; // 固定一节最多放四个小节
+            int maxMeasureInLine = 4;
 
             for (int i = 0; i < measureList.Count; i += maxMeasureInLine)
             {
-                // 为每一行第一个小节自动添加谱号信息
+               
                 List<Head> headList = measureList[0].GetHead();
                 if (headList != null)
                 {
@@ -32,30 +32,30 @@ namespace generator
                     measureList[i].SetHasHead(true);
                 }
 
-                List<Measure> paragraphList = new List<Measure>(); // 一行
+                List<Measure> paragraphList = new List<Measure>();
                 int measureRest = scoreWidth;
                 for (int j = i; j < i + 4 && j < measureList.Count; j++)
                 {
-                    if (measureList[j].HasHead()) // 去掉谱号长度
+                    if (measureList[j].HasHead())
                     {
                         measureRest -= _paramsGetter.GetHeadWidth();
                     }
-                    if (measureList[j].HasBeat()) // 去掉拍号长度
+                    if (measureList[j].HasBeat()) 
                     {
                         measureRest -= _paramsGetter.GetBeatWidth();
                     }
-                    measureRest -= measureList[j].GetMaxCount() * _paramsGetter.GetUnit(); // 去掉每一个小节中音符压缩到最挤的时候所占的长度
+                    measureRest -= measureList[j].GetMaxCount() * _paramsGetter.GetUnit(); 
                 }
-                // 此时将measureRest剩下的长度平分给每一个小节
+               
                 int averageRest = measureRest / maxMeasureInLine;
                 for (int j = i; j < i + 4 && j < measureList.Count; j++)
                 {
                     int measureLength = measureList[j].GetMaxCount() * _paramsGetter.GetUnit() + averageRest;
-                    if (measureList[j].HasHead()) // 加上谱号长度
+                    if (measureList[j].HasHead()) 
                     {
                         measureLength += _paramsGetter.GetHeadWidth();
                     }
-                    if (measureList[j].HasBeat()) // 加上拍号长度
+                    if (measureList[j].HasBeat()) 
                     {
                         measureLength += _paramsGetter.GetBeatWidth();
                     }
@@ -107,13 +107,13 @@ namespace generator
         {
             List<Symbol> highList = new List<Symbol>();
             List<Symbol> lowList = new List<Symbol>();
-            List<List<Symbol>> setList = new List<List<Symbol>>(); // 一组高音符号和低音符号
-            List<List<List<Symbol>>> measureList = new List<List<List<Symbol>>>(); // 小节
-            List<List<List<List<Symbol>>>> paragraphList = new List<List<List<List<Symbol>>>>(); // 一行
-            List<List<List<List<List<Symbol>>>>> scoreList = new List<List<List<List<List<Symbol>>>>>(); // 整张乐谱
+            List<List<Symbol>> setList = new List<List<Symbol>>(); 
+            List<List<List<Symbol>>> measureList = new List<List<List<Symbol>>>(); 
+            List<List<List<List<Symbol>>>> paragraphList = new List<List<List<List<Symbol>>>>();
+            List<List<List<List<List<Symbol>>>>> scoreList = new List<List<List<List<List<Symbol>>>>>(); 
             int barDuration = _beats * 256 / _beatType;
             int tempBarDuration = 0;
-            int measureNum = 4; // 定义一行最多放置四个小结
+            int measureNum = 4;
             int tempBarNum = 0;
             int tempHighDuration = 0;
             int tempLowDuration = 0;

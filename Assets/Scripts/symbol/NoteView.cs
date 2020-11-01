@@ -7,12 +7,12 @@ namespace symbol
     public class NoteView : SymbolView
     {
         private Note _note;
-        private int _stemX;  //  符干起始横坐标
-        private int _stemY;  //  符干起始纵坐标
-        private int _beamX;  //  符杠起始横坐标
-        private int _beamY;  //  符杠起始纵坐标
-        private int _tailX;  //  符尾起始横坐标
-        private int _tailY;  //  符尾起始纵坐标
+        private int _stemX;
+        private int _stemY;
+        private int _beamX;
+        private int _beamY;
+        private int _tailX;
+        private int _tailY;
 
         public NoteView(Symbol symbol, int width, int start, GameObject parentObject) : base(symbol, width, start, parentObject)
         {
@@ -28,7 +28,6 @@ namespace symbol
 
         protected override void OnDraw()
         {
-            // 绘制定位线
             //This if statement isn't entered
             if (Cursor)
             {
@@ -36,13 +35,10 @@ namespace symbol
                 DrawLine(tempStart, 0, tempStart, ParamsGetter.GetTotalHeight());
             }
 
-            // 乐符纵坐标
             int yPosition =  ParamsGetter.GetStaffCenterPosition() + _note.GetShift();
 
             int shift = _note.GetShift() / ParamsGetter.GetPitchPositionDiff();
-            // 偏移线，当超过6的时候会画线。传入参数为shift，因为以左下角为原点
             DrawShiftLine(shift);
-            // 绘制变音记号
             DrawAccidental(_note.GetAccidental(), yPosition);
 
             if (_note.GetDot() == 1)
@@ -63,7 +59,7 @@ namespace symbol
                     DrawSymbol("\uE12C", Start, yPosition);
                     SetColor(_note.GetColor());
                 }
-                else // 其余的所有
+                else
                 {
                     DrawSymbol("\uE12D", Start, yPosition);
                     SetColor(_note.GetColor());
@@ -71,15 +67,15 @@ namespace symbol
 
                 if (_note.IsUpOrDown())
                 {
-                    _stemX = Start + ParamsGetter.GetNoteRightShift(); // 符干向上时横坐标向右偏移
-                    _stemY = yPosition; // 符干向上时纵坐标与乐符中心纵坐标位置相同
+                    _stemX = Start + ParamsGetter.GetNoteRightShift();
+                    _stemY = yPosition; 
                     _tailX = Start + ParamsGetter.GetNoteTailUpLandscapeShift();
                     _tailY = _stemY + ParamsGetter.GetNoteStemHeight() - ParamsGetter.GetNoteTailDownPortraitShift();
                 }
                 else
                 {
-                    _stemX = Start - ParamsGetter.GetNoteLeftShift(); // 符干向下时横坐标向左偏移
-                    _stemY = yPosition - ParamsGetter.GetNoteStemDownShift(); // 符干向下时纵坐标与乐符中心纵坐标位置偏移
+                    _stemX = Start - ParamsGetter.GetNoteLeftShift();
+                    _stemY = yPosition - ParamsGetter.GetNoteStemDownShift();
                     _tailX = Start - ParamsGetter.GetNoteTailDownLandscapeShift();
                     _tailY = _stemY - ParamsGetter.GetNoteStemHeight() + ParamsGetter.GetNoteTailDownPortraitShift();
                 }
@@ -103,10 +99,10 @@ namespace symbol
                     }
                     DrawChord();
                 }
-                DrawStem(); // 画符干
+                DrawStem();
                 if (_note.IsSlur())
                 {
-                    DrawBeam(); // 画符杠
+                    DrawBeam();
                 }
                 else
                 {
@@ -115,7 +111,6 @@ namespace symbol
             }
         }
 
-        // 绘制偏移线
         private void DrawShiftLine(int shift)
         {
             if (shift > 4)
@@ -138,7 +133,6 @@ namespace symbol
             }
         }
 
-        // 绘制变音记号
         private void DrawAccidental(string accidental, int position)
         {
             switch (accidental)
@@ -150,7 +144,6 @@ namespace symbol
             }
         }
 
-        // 绘制符干
         private void DrawStem()
         {
             if (_note.IsSlur())
@@ -166,11 +159,8 @@ namespace symbol
             }
         }
 
-        // 绘制符杠
         private void DrawBeam()
         {
-            // 绘制符杠，根据之前计算出来的起始x坐标和起始y坐标，画到下一个连音符的x坐标，划的长度为乐符之间的间隔width
-            // 两条符杠之间的间隔
             int beamDiff = -ParamsGetter.GetNoteBeamDiff(_note.IsUpOrDown());
             if (_note.IsLast())
             {
@@ -243,7 +233,6 @@ namespace symbol
             }
         }
 
-        // 绘制符尾
         private void DrawTail()
         {
             if (_note.IsUpOrDown())
@@ -270,14 +259,12 @@ namespace symbol
             }
         }
 
-        // 绘制和弦
         private void DrawChord()
         {
             bool leftOrRight = _note.IsUpOrDown();
             int headPosition = Start;
             int lastPosition = 0;
-//            int chordPaintNum = 0;
-            // 绘制和弦中的其他乐符（最后一个乐符即当前乐符，已经绘制），去掉和弦表中的最后一个乐符
+
             for (int i = 0; i < _note.GetChordList().Count - 1; i++)
             {
                 Note extraNote = _note.GetChordList()[i];
@@ -293,7 +280,7 @@ namespace symbol
                     leftOrRight = !leftOrRight;
                 }
 
-                if (extraDuration == 1) // 全音符
+                if (extraDuration == 1)
                 {
                     DrawSymbol("\uE12B", headPosition, extraPosition);
                     continue;

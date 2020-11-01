@@ -33,9 +33,6 @@ namespace symbol
 
         private void OnDraw()
         {
-            //Debug.Log("Set List" + _setList.Count);
-            //Debug.Log("HighSymbolList " + _highSymbolList.Count);
-            //Debug.Log("LowSymbolList " + _lowSymbolList.Count);
 
             Vector3 notePosition = Vector3.zero;
             _noteLength = _setLength;
@@ -46,11 +43,8 @@ namespace symbol
                 _noteLength = _setLength / _maxCount;
             }
 
-            //Debug.Log("Note Length " + _noteLength);
-
             for (int i = 0; i < _highSymbolList.Count; i++)
             {
-                //新建HighNote对象作为目录
                 string objName = "HighNote" + (i + 1);
                 GameObject highNoteObj = new GameObject(objName);
                 highNoteObj.transform.SetParent(_parentObject.transform);
@@ -59,9 +53,6 @@ namespace symbol
                     notePosition.y + _paramsGetter.GetTotalHeight(),
                     notePosition.z);
 
-                //Debug.Log("Noteposition " + notePosition.x);
-
-                // 将Set对象赋为下一层的父对象
                 if (_highSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_highSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), highNoteObj);
@@ -75,7 +66,6 @@ namespace symbol
             }
             for (int i = 0; i < _lowSymbolList.Count; i++)
             {
-                // 新建LowNote对象作为目录
                 string objName = "LowNote" + (i + 1);
                 GameObject lowNoteObj = new GameObject(objName);
                 lowNoteObj.transform.SetParent(_parentObject.transform);
@@ -84,7 +74,6 @@ namespace symbol
                     notePosition.y,
                     notePosition.z);
 
-                // 将Set对象赋为下一层的父对象
                 if (_lowSymbolList[i] is Note)
                 {
                     NoteView noteView = new NoteView(_lowSymbolList[i], (int)_noteLength, _paramsGetter.GetSymbolStart(), lowNoteObj);

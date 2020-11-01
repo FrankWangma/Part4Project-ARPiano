@@ -5,13 +5,13 @@ namespace symbol
 {
     public class Note : Symbol
     {
-        private string _step;        //  音阶
-        private string _octave;      //  八度
-        private string _beam;        //  符杠
-        private string _accidental;  //  临时
-        private int _shift;          //  与标准音符（三线音符）的位置偏移
-        private int _end;            //  音符最上/下处坐标
-        private Note _lastNote;      //  连音中的上一个音符
+        private string _step;
+        private string _octave;
+        private string _beam;
+        private string _accidental;
+        private int _shift;
+        private int _end;
+        private Note _lastNote;      
         private List<Note> _chordList = new List<Note>();
         private bool _slur;
         private bool _last;

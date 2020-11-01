@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using control;
 using Pattern;
 using symbol;
-using util;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace summary {
     public class SummaryAlgorithm {

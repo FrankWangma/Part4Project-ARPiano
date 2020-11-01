@@ -10,9 +10,6 @@ namespace overlay
 {
     public class OverlayChange : MonoBehaviour
     {
-        //Gets note text object from canvas
-        //public GameObject note;
-
         //Get overlay master
         private OverlayMaster _overlayMaster = OverlayMaster.GetInstance();
 
@@ -41,9 +38,6 @@ namespace overlay
         // Update is called once per frame
         void Update()
         {
-            //HashSet to keep track of current notes pressed    
-            //Reset the list each time
-            //HashSet<int> notesPressed = new HashSet<int>();
 
             //Get queue of notes played
             Queue<MidiJack.MidiMessage> myQueue = MidiDriver.Instance.History;
@@ -91,7 +85,7 @@ namespace overlay
 
                     notesPlaying += " " + note.ToString();
                 }
-                //note.GetComponent<TextMeshProUGUI>().text = notesPlaying;
+
             }
 
         }
@@ -100,7 +94,6 @@ namespace overlay
         public void updateSheetMusic(int noteNumber)
         {
  
-            //Debug.Log("note " + noteNumber);
             int octave = (noteNumber - 12) / 12;
             int stepNum = noteNumber - 12 - (octave * 12);
             string step = "";
@@ -115,23 +108,6 @@ namespace overlay
                 case 9: step = "A"; break;
                 case 11: step = "B"; break;
             }
-            //Debug.Log("stempnum " + stepNum);
-            //Debug.Log("Octave" + octave);
-            //Debug.Log("Step " + step);
-
-            //Legacy code for the piano overlay
-            // ((Note) _symbol).SetOctave(octave.ToString());
-            // ((Note)_symbol).SetStep(step);
-            // if(octave >= 4)
-            // {
-            //     ((Note)_symbol).SetUpOrDown(true);
-            //     _overlayMaster.ModifySetView(position, _symbol, true);
-            // }
-            // else
-            // {
-            //     _overlayMaster.ModifySetView(position, _symbol, false);
-            // }
-            // position++;
         }
     }
 }

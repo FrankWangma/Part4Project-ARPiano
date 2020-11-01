@@ -25,14 +25,14 @@ namespace symbol
 
         private void OnDraw()
         {
-            int shift = 0; // 谱号偏移，如果是高音谱号偏移整个五线谱长度
+            int shift = 0; 
             switch (_head.GetSign())
             {
-                case "G": // 高音符号G
+                case "G":
                     shift = _paramsGetter.GetTotalHeight();
                     DrawSymbol("\uE19E", _paramsGetter.GetClefPortraitShift(), _paramsGetter.GetStaffCenterPosition() + shift);
                     break;
-                case "F": // 低音符号F
+                case "F": 
                     shift = 0;
                     DrawSymbol("\uE19C", _paramsGetter.GetClefPortraitShift(), _paramsGetter.GetStaffCenterPosition() + shift);
                     break;
@@ -54,7 +54,6 @@ namespace symbol
             }
         }
 
-        // 绘制乐符文字
         private void DrawSymbol(string text, float x, float y)
         {
             GameObject mySymbol = GameObject.Instantiate(_commonParams.GetPrefabSymbol(),

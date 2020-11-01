@@ -17,7 +17,6 @@
 
         private void Init() {
             for (int i = 0; i < _length; i ++) {
-//            temp = _ints[i] - 21; // midipitch
                 int temp = _ints[i];
                 switch (temp % 12) {
                     case 0: _steps[i] = "A"; break;
@@ -32,7 +31,7 @@
                     case 9: _steps[i] = "F"; break;
                     case 10: _steps[i] = "G"; break;
                     case 11: _steps[i] = "G"; break;
-//                    default: break;
+                    default: break;
                 }
 
                 if ((temp - 3) < 0) {

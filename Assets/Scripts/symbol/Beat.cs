@@ -2,8 +2,8 @@
 {
     public class Beat
     {
-        private string _beats; // 拍号
-        private string _beatType; // 节拍类型
+        private string _beats;
+        private string _beatType;
 
         public Beat(string beats, string beatType)
         {

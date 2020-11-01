@@ -40,37 +40,28 @@ namespace overlay
 
         private void OnDraw()
         {
-            // 放置两个按钮
             PlaceButton();
 
-            // 绘制乐谱内容
             float startX = 67f / 2;
             float startY = _screenSize[1] - 250;
             Vector3 paragraphPosition = new Vector3(startX, startY, 0);
-            // 遍历scoreList，对每一行来绘制
             for (int i = 0; i < _scoreList.Count; i++)
             {
-                // 新建paragraph画布，每一行有自己的画布
                 string objName = "Paragraph" + (i + 1);
                 GameObject paragraphObject = new GameObject(objName);
                 Canvas paragraphCanvas = paragraphObject.AddComponent<Canvas>();
                 paragraphCanvas.transform.SetParent(_parentObject.transform);
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
-                // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
                 rect.position = new Vector3(paragraphPosition.x,
                     paragraphPosition.y - 2 * _paramsGetter.GetTotalHeight() * i,
                     paragraphPosition.z);
 
-                // 将paragraph画布对象赋为下一层的父对象
-                // 绘制每一行的视图'
-                //Debug.Log("ScoreList" + _scoreList.Count);
                 _overlayParagraph = new OverlayParagraph(_scoreList[i], paragraphObject);
             }
             _overlayMaster.SetScoreView(this);
         }
 
-        // 放置两个button按钮作为返回上一个场景，以及退出
         private void PlaceButton()
         {
             //Button to create single note
@@ -91,13 +82,6 @@ namespace overlay
                 _symbol.SetType("quarter");
                 ((Note)_symbol).SetUpOrDown(false);
                 _overlayMaster.ModifySetView(position, _symbol, false);
-                //position++;
-                //startTime = startTime + 8;
-                //if (startTime >= 64)
-                //{
-                //    position++;
-                //    startTime = 0;
-                //}
             });
         }
     }

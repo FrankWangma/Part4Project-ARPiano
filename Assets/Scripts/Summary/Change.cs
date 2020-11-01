@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 namespace summary {
     public class Change : MonoBehaviour {
-        //Gets note text object from canvas
-        //public GameObject note;
 
         //Get overlay master
         private SummaryMaster _summaryMaster = SummaryMaster.GetInstance ();
@@ -81,9 +79,6 @@ namespace summary {
 
         // Update is called once per frame
         void Update () {
-            //HashSet to keep track of current notes pressed    
-            //Reset the list each time
-            //HashSet<int> notesPressed = new HashSet<int>();
 
             //Get queue of notes played
             Queue<MidiJack.MidiMessage> myQueue = MidiDriver.Instance.GetHistory ();
@@ -218,7 +213,6 @@ namespace summary {
             }
 
             HashSet<int> highNoteNumber = new HashSet<int> ();
-            //List<int> highNoteNumber = new List<int>();
             if (highPointer < _highNotes.Count) {
                 highNoteNumber.Add (_highNotes[highPointer]);
                 if (_smoothedHighNotes[highPointer].GetChordList ().Count > 1) {
@@ -231,7 +225,6 @@ namespace summary {
             }
 
             HashSet<int> lowNoteNumber = new HashSet<int> ();
-            //List<int> lowNoteNumber = new List<int> ();
             if (lowPointer < _lowNotes.Count) {
                 lowNoteNumber.Add (_lowNotes[lowPointer]);
                 if (_smoothedLowNotes[lowPointer].GetChordList ().Count > 1) {
@@ -245,7 +238,6 @@ namespace summary {
 
             if (!highTooFast) {
                 if (highNoteNumber.IsSubsetOf (notesPressed)) {
-                    //if (highNoteNumber.Contains(noteNumber)){
                     if (!highNoteNumber.IsSubsetOf (_notesRecorded)) {
                         _notesRecorded.UnionWith (highNoteNumber);
                         _smoothedHighNotes[highPointer].ChangeColor (Color.green);
@@ -434,13 +426,6 @@ namespace summary {
             int noteCount = 0;
             //int measureCount = 0;
             foreach (List<Note> notes in measures) {
-                // measureCount++;
-                // if (measureCount >= 5) {
-                //     measureCount = 1;
-                //     notesPerParagraph.Add (noteCount);
-
-                //     //noteCount = 0;
-                // }
                 foreach (Note note in notes) {
                     noteCount++;
                 }

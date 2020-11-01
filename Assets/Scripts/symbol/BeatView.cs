@@ -28,8 +28,6 @@ namespace symbol
             DrawText(_beat.GetBeats(), _paramsGetter.GetBeatPortraitShift(), _paramsGetter.GetStaffCenterPosition() + _paramsGetter.GetUnit() + _paramsGetter.GetTotalHeight());
             DrawText(_beat.GetBeatType(), _paramsGetter.GetBeatPortraitShift(), _paramsGetter.GetStaffCenterPosition() - _paramsGetter.GetUnit() + _paramsGetter.GetTotalHeight());
         }
-
-        // 绘制乐符文字
         protected void DrawText(string text, float x, float y)
         {
             GameObject mySymbol = GameObject.Instantiate(_commonParams.GetPrefabSymbol(),

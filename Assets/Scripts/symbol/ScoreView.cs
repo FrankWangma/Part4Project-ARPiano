@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using util;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using control;
 using Pattern;
 using summary;
 namespace symbol
@@ -53,26 +51,20 @@ namespace symbol
 
         private void OnDraw()
         {
-            // 放置两个按钮
             PlaceButton();
-            // 绘制乐谱信息
             DrawScoreInfo();
             
             DrawScoreBackground();
-            // 绘制乐谱内容
             float startX = 67f / 2;
             float startY = _screenSize[1] - 250;
             Vector3 paragraphPosition = new Vector3(startX, startY, 0);
-            // 遍历scoreList，对每一行来绘制
             for (int i = 0; i < _scoreList.Count; i++)
             {
-                // 新建paragraph画布，每一行有自己的画布
                 string objName = "Paragraph" + (i + 1);
                 GameObject paragraphObject = new GameObject(objName);
                 Canvas paragraphCanvas = paragraphObject.AddComponent<Canvas>();
                 paragraphCanvas.transform.SetParent(_parentObject.transform);
                 RectTransform rect = paragraphCanvas.GetComponent<RectTransform>();
-                // 设置位置为以画布左下角为坐标原点
                 rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.zero; rect.pivot = new Vector2(0.5f, 0.5f);
                 int offset = 0;
                 if(i % 2 != 0) {
@@ -82,9 +74,7 @@ namespace symbol
                     paragraphPosition.y + offset,
                     paragraphPosition.z);
 
-                // 将paragraph画布对象赋为下一层的父对象
-                // 绘制每一行的视图'
-                //Debug.Log("ScoreList" + _scoreList.Count);
+
                 ParagraphView paragraphView = new ParagraphView(_scoreList[i], paragraphObject);
                 _paragraphs.Add(paragraphObject);
             }
@@ -102,13 +92,7 @@ namespace symbol
                 }
             }
             Dictionary<GameObject,Color> keysAndColors = new Dictionary<GameObject,Color>();
-            //Debug.Log("colors: " + colors.Count + " Notes: " + notes.Count);
-            // foreach(Color color in colors){
-            //     Debug.Log("My Color " + color);
-            // }
-            // foreach(Note note in notes){
-            //     Debug.Log("Note " + note.GetStep());
-            // }
+
             for(int i = 0; i < colors.Count; i++) {
                 
                 //If the color if black, continue to next iteration
@@ -161,7 +145,6 @@ namespace symbol
             }
         }
 
-        // 绘制乐谱信息
         private void DrawScoreInfo()
         {
             Vector2 worktitlePosition = new Vector2(_screenSize[0] / 2, _screenSize[1] - 50);
@@ -324,11 +307,8 @@ namespace symbol
                 
         }
 
-        // 放置两个button按钮作为返回上一个场景，以及退出
         private void PlaceButton()
         {
-            // 返回按钮
-            //Not working?
             GameObject backButtonObject = GameObject.Instantiate(_commonParams.GetPrefabFileButton(),
                 _parentObject.transform.position, _commonParams.GetPrefabFileButton().transform.rotation);
             backButtonObject.gameObject.name = "backButton";
@@ -341,8 +321,6 @@ namespace symbol
             Button backButton = backButtonObject.GetComponent<Button>();
             backButton.onClick.AddListener(delegate
             {
-                //SceneManager.LoadScene("LoadScore", LoadSceneMode.Additive);
-                //SceneManager.UnloadSceneAsync("DrawScore");
                 _canvasScore.SetActive(false);
                 _loadScore.SetActive(true);
                 _overlayCanvas.SetActive(false);
