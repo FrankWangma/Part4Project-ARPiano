@@ -74,9 +74,7 @@ namespace xmlParser
 
                 XmlReaderSettings readerSettings = new XmlReaderSettings();
                 readerSettings.ProhibitDtd = false;
-//                readerSettings.DtdProcessing = DtdProcessing.Ignore;
                 XmlReader xmlReader = XmlReader.Create(_filename, readerSettings);
-//                XmlReader xmlReader = XmlReader.Create(_filename);
 
                 while (xmlReader.Read())
                 {
@@ -86,18 +84,18 @@ namespace xmlParser
                         {
                             case "work-title": _workTitle = xmlReader.ReadString(); break;
                             case "creator": _creator = xmlReader.ReadString(); break;
-                            case "divisions": _divisions = xmlReader.ReadString(); break; //Debug.Log("Divisions " + _divisions); break;
+                            case "divisions": _divisions = xmlReader.ReadString(); break;
                             case "fifths": _fifths = xmlReader.ReadString(); break;
                             case "beats": _beats = xmlReader.ReadString(); break;
                             case "beat-type": _beatType = xmlReader.ReadString(); break;
                             case "clef": _clef = xmlReader.GetAttribute("number"); break;
                             case "sign": _sign = xmlReader.ReadString(); break;
                             case "line": _line = xmlReader.ReadString(); break;
-                            case "step": _step = xmlReader.ReadString(); break; //Debug.Log("Step " + _step); break;
-                            case "octave": _octave = xmlReader.ReadString(); break; //Debug.Log("Octave " + _octave); break;
-                            case "duration": _duration = xmlReader.ReadString(); break; //Debug.Log("Duration " + _duration);break;
-                            case "type": _type = xmlReader.ReadString(); break; //Debug.Log("Type " + _type);break;
-                            case "accidental": _accidental = xmlReader.ReadString(); break; //Debug.Log("Accidental " + _accidental); break;
+                            case "step": _step = xmlReader.ReadString(); break;
+                            case "octave": _octave = xmlReader.ReadString(); break; 
+                            case "duration": _duration = xmlReader.ReadString(); break;
+                            case "type": _type = xmlReader.ReadString(); break;
+                            case "accidental": _accidental = xmlReader.ReadString(); break;
                             case "staff": _staff = xmlReader.ReadString(); break;
                             case "stem": _stem = xmlReader.ReadString(); break;
                             case "per-minute":_bpm = xmlReader.ReadString(); break;
@@ -108,11 +106,11 @@ namespace xmlParser
                                     _beam = xmlReader.ReadString();
                                 }
                                 break;
-                            case "rest": // 休止符，由于休止符是self closing <rest /> 的，所以放在这里
+                            case "rest":
                                 _symbol = new Rest();
                                 _symbol.SetChord(false);
                                 break;
-                            case "chord": // 和弦，由于和弦也是self closing <chord /> 的，所以也放在这里
+                            case "chord":
                                 _isChord = true; break;
                             
                         }
@@ -123,14 +121,12 @@ namespace xmlParser
                     {
                         if (xmlReader.Name.Equals("time"))
                         {
-                            // 节拍
                             _beat = new Beat(_beats, _beatType);
                             _measureBeat = new Beat(_beats, _beatType);
                         }
 
                         if (xmlReader.Name.Equals("clef"))
                         {
-                            // 谱号
                             if (_clef.Equals("1"))
                             {
                                 _highHead = new Head(_fifths, _sign, _line);
@@ -147,7 +143,6 @@ namespace xmlParser
 
                         if (xmlReader.Name.Equals("pitch"))
                         {
-                            //  音高
                             _symbol = new Note(_step, _octave);
                             _symbol.SetChord(_isChord);
                             _isChord = false;
@@ -155,20 +150,18 @@ namespace xmlParser
 
                         if (xmlReader.Name.Equals("dot"))
                         {
-                            _symbol.SetDot(1); // 附点
+                            _symbol.SetDot(1);
                         }
 
                         if (xmlReader.Name.Equals("note"))
                         {
-                            //  音符，包括音符及休止符
-                            //Debug.Log("If divisions " + _divisions);
+
                             _symbol.SetDuration(_divisions, _duration);
                             _symbol.SetType(_type);
 
                             bool isNote = _symbol is Note;
                             if (isNote)
                             {
-                                //Debug.Log("If acccidental " + _accidental);
                                 ((Note) _symbol).SetAccidental(_accidental);
                                 _accidental = "";
                                 if (_stem.Equals("up")) ((Note) _symbol).SetUpOrDown(true);
@@ -218,12 +211,10 @@ namespace xmlParser
                                 }
                             }
                         }
-                        if (xmlReader.Name.Equals("measure")) // 小节结束
+                        if (xmlReader.Name.Equals("measure"))
                         {
-                            // 整合这一个小节中的乐符
                             int maxCount = ArrangeMeasure();
 
-                            // 存入小节
                             Measure measure = new Measure(_measureSymbolList);
                             measure.SetMaxCount(maxCount);
                             if (_measureBeat == null)
@@ -247,7 +238,6 @@ namespace xmlParser
 
                             _measureList.Add(measure);
 
-                            // 将相应List清零，下一个小节再重新赋值
                             //Clear measure list and get ready for next section
                             _highSymbolMeasure = new List<Symbol>();
                             _lowSymbolMeasure = new List<Symbol>();
@@ -363,7 +353,6 @@ namespace xmlParser
                     _slur.GetList().Add((Note) _symbol);
                     ((Note) _symbol).SetLastNote((Note) symbolList[symbolList.Count - 1]);
                     ((Note) _symbol).SetSlur(true);
-//                    ((Note) _symbol).SetLast(true);
                     ((Note) _symbol).SetNext(true);
                 }
                     break;
@@ -388,7 +377,6 @@ namespace xmlParser
             _beam = "";
         }
 
-        // 将小节中按照音符时长分组，返回整个小节的总duration
         private int ArrangeMeasure()
         {
             int i = 0;

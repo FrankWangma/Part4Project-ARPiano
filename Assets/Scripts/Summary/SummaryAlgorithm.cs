@@ -29,18 +29,6 @@ namespace summary {
 
             _playedNotes = _summaryMaster.GetNotesPlayed ();
 
-            for (int i = 0; i < _highNotes.Count; i++) {
-                Debug.Log ("high " + _highNotes[i] + " " + i);
-            }
-
-            for (int i = 0; i < _lowNotes.Count; i++) {
-                Debug.Log ("low " + _lowNotes[i] + " " + i);
-            }
-
-            for (int i = 0; i < _playedNotes.Count; i ++){
-                Debug.Log("played " + _playedNotes[i] + " " + i);
-            }
-
             RunSummary ();
 
             Dictionary<String, int> summary = new Dictionary<String, int> ();
