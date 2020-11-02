@@ -207,22 +207,25 @@ if is it NOT a 7th, and there are TWO duplicate notes or greater, we add the mos
             }
 
             List<Color> colors = new List<Color> ();
+
+            //COMMENT OUT FOR LOOP TO UNCOLOUR NOTES
             foreach (Note note in notes) {
                 note.SetColor (myColor);
                 bool colorAdded = false;
                 //Change color of non-major notes
-                // foreach (String diff in diffNotes) {
-                //     if (GetNote (note).Equals (diff)) {
-                //         note.SetColor (Color.cyan);
-                //         colors.Add (Color.cyan);
-                //         colorAdded = true;
-                //     }
-                // }
-                //note.SetColor(myColor);
+                foreach (String diff in diffNotes) {
+                    if (GetNote (note).Equals (diff)) {
+                        note.SetColor (Color.cyan);
+                        colors.Add (Color.cyan);
+                        colorAdded = true;
+                    }
+                }
+                note.SetColor(myColor);
                 if (!colorAdded) {
                     colors.Add (myColor);
                 }
             }
+            // END COMMENT OUT HERE
 
             _noteDatabase.AddColorsToList (colors);
         }
